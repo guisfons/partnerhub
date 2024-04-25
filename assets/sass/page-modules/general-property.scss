@@ -1,0 +1,26 @@
+@import '../abstracts/variables';
+
+.general-property {
+    & > div {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+
+            button {
+                margin-left: auto;
+            }
+        }
+    }
+
+    .gallery {
+        border: .1rem solid $darkblue;
+        border-radius: 1rem;
+        padding: 2rem;
+    }
+}

@@ -1,0 +1,75 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+}
+
+body {
+    box-sizing: border-box;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+    background-color: $grey;
+}
+
+main {
+    position: relative;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+h1, h2, h3, h4 {
+    color: $cyan;
+}
+
+h4 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 3rem;
+    width: 100%;
+}
+
+section {
+    margin: 5rem auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+}
+
+.wrapper {
+    margin: 0 auto;
+    width: 80%;
+    max-width: 1350px;
+}
+
+body:not([data-role="administrator"]):not([data-role="editor"]) {
+    .add-row, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .upload-file, form:has(.upload-file) {
+        display: none !important;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    form h4:contain('Add backup') {
+        display: none;
+    }
+}
+
+body:not([data-role=revenuemanager]) [data-menu="pricing-sheet"] {
+    display: none;
+}

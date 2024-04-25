@@ -1,0 +1,59 @@
+.button {
+    background-image: transparent;
+    border-radius: .5rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+input[type=submit], .upload-file, .upload-items, .upload-gallery, .repeater-table form ~ span, .repeater-table form span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 1rem;
+    background-color: $cyan;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: "Poppins",sans-serif;
+    color: $white !important;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    position: relative;
+
+    width: fit-content;
+    margin: 1rem 0 1rem auto;
+    cursor: pointer;
+}
+
+input[type=text], input[type=password], textarea, select {
+    max-width: 25rem;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0;
+    border: 0.1rem solid $lightbluegray;
+    outline: none;
+    margin: 1rem 0;
+    background-color: $white;
+}
+
+input[type=color] {
+    border: none;
+    height: 4rem;
+    padding: 0;
+}
+
+.add-row {
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+    cursor: pointer;
+    font-weight: 600;
+    color: $darkblue;
+
+    margin-top: 4rem;
+}

@@ -1,0 +1,69 @@
+table {
+    padding: 2rem;
+    background-color: $white;
+    border-radius: 1rem;
+    border: .1rem solid $darkblue;
+    width: 100%;
+    font-size: 1.3rem;
+
+    td {
+        width: 50%;
+    }
+
+    form {
+        display: flex;
+        gap: 1rem;
+        flex-direction: row !important;
+        align-items: center;
+    }
+
+    &.repeater-table, &.single-table {
+        tr {
+            td {
+                &:not(:only-child):last-of-type {
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 1rem;
+    
+                    a, span:not(.color):not(.repeater-table form ~ span) {
+                        color: $darkblue;
+                        font-weight: 600;
+                        cursor: pointer;
+                        white-space: nowrap;
+
+                        &.material-symbols-outlined {
+                            font-size: 2rem;
+                        }
+                    }
+                }
+
+                &:only-child {
+                    width: 100%;
+                }
+
+                span:has(.color) {
+                    display: flex;
+                    align-items: center;
+                    gap: 2rem;
+                }
+            }
+        }
+
+        form span {
+            margin-left: 0;
+            color: $white !important;
+        }
+    }
+
+    &.repeater-table tbody tr:first-of-type {
+
+    }
+
+    .color {
+        display: flex;
+        width: 5rem;
+        height: 3.7rem;
+    }
+}

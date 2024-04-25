@@ -1,0 +1,60 @@
+@mixin min($screen) {
+    @media only screen and (min-width: $screen+"px") {
+        @content;
+    }
+}
+
+@mixin max($screen) {
+    @media only screen and (max-width: $screen+"px") {
+        @content;
+    }
+}
+
+.mobile-only {
+    @include min(801) {
+        display: none !important;
+    }
+}
+
+.desktop-only {
+    @include max(800) {
+        display: none !important;
+    }
+}
+
+.content {
+    opacity: 0;
+    visibility: hidden;
+
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+
+    height: 0;
+    overflow: hidden;
+    transition: .3s ease-in-out;
+
+    &--active {
+        opacity: 1;
+        visibility: visible;
+        overflow: initial;
+        
+        position: relative;
+        left: 0;
+
+        height: initial;
+        transform: none;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 5rem;
+    }
+}
+
+.learning-subjects {
+    display: flex;
+    flex-direction: row !important;
+    width: fit-content !important;
+}
