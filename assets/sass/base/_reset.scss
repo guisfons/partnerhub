@@ -14,8 +14,9 @@ html {
 body {
     box-sizing: border-box;
     position: relative;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: $grey;
+    overflow-x: hidden;
 }
 
 main {
@@ -30,6 +31,10 @@ img {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+button {
+    all: unset;
 }
 
 h1, h2, h3, h4 {

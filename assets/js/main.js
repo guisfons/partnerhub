@@ -1,33 +1,4 @@
 $(document).ready(function() {
-    if(localStorage.getItem('menu')) {
-        let menuItem = localStorage.getItem('menu')
-        $('span[data-menu='+menuItem+']').addClass('header__item--active')
-        $('.content[data-content='+menuItem+']').addClass('content--active')
-    } else {
-        $('span[data-menu=administration]').addClass('header__item--active')
-        $('.content[data-content=administration]').addClass('content--active')
-    }
-
-    $('.header__item').on('click', function() {
-        $('.header__item').removeClass('header__item--active')
-
-        if($(this).parent().hasClass('header__submenu')) {
-            $('.header__item').removeClass('header__item--active')
-            $('.header__submenu span').removeClass('header__item--active')
-            $(this).closest('.header__item').addClass('header__item--active')
-            $(this).addClass('header__item--active')
-        } else {
-            $(this).addClass('header__item--active')
-        }
-        
-        $('.content').removeClass('content--active')
-        $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
-
-        let menu = $(this).data('menu')
-
-        localStorage.setItem('menu', menu)
-    })
-
     $('.gallery__images:not(.gallery__images--noslider)').each(function() {
         $(this).slick({
             infinite: false,
@@ -111,22 +82,12 @@ $(document).ready(function() {
         copyToClipboard($(this).parent().find('a').attr('href'))
     })
 
-    $('.news__category').on('click', function() {
-        let category = $(this).data('category')
-
-        $('.news__category').removeClass('news__category--active')
-        $(this).toggleClass('news__category--active')
-
-        if(category == 'all') {
-            $(this).closest('.news__items').find('.news__container .news__item').show()
-        } else {
-            $(this).closest('.news__items').find('.news__container .news__item').hide()
-            $(this).closest('.news__items').find('.news__container .news__item:not([data-category="'+category+'"])').show()
-        }
-    })
+    
 
     window.history.replaceState("","",window.location.href)
 
+    header()
+    bulletinboard()
     linkUpdate()
     reverseTables()
 })
@@ -146,6 +107,53 @@ function showLoadingScreen() {
 
 function hideLoadingScreen() {
     $('.loading-screen').removeClass('loading-screen--active');
+}
+
+function header() {
+    if(localStorage.getItem('menu')) {
+        let menuItem = localStorage.getItem('menu')
+        $('span[data-menu='+menuItem+']').addClass('header__item--active')
+        $('.content[data-content='+menuItem+']').addClass('content--active')
+    } else {
+        $('span[data-menu=administration]').addClass('header__item--active')
+        $('.content[data-content=administration]').addClass('content--active')
+    }
+
+    $('.header__item').on('click', function() {
+        $('.header__item').removeClass('header__item--active')
+
+        if($(this).parent().hasClass('header__submenu')) {
+            $('.header__item').removeClass('header__item--active')
+            $('.header__submenu span').removeClass('header__item--active')
+            $(this).closest('.header__item').addClass('header__item--active')
+            $(this).addClass('header__item--active')
+        } else {
+            $(this).addClass('header__item--active')
+        }
+        
+        $('.content').removeClass('content--active')
+        $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
+
+        let menu = $(this).data('menu')
+
+        localStorage.setItem('menu', menu)
+    })
+}
+
+function bulletinboard() {
+    $('.news__category-item').on('click', function() {
+        let category = $(this).data('category')
+
+        $('.news__category-item').removeClass('news__category-item--active')
+        $(this).toggleClass('news__category-item--active')
+
+        if(category == 'all') {
+            $(this).closest('.news__items').find('.news__container .news__item').show()
+        } else {
+            $(this).closest('.news__items').find('.news__container .news__item[data-category="'+category+'"]').show()
+            $(this).closest('.news__items').find('.news__container .news__item:not([data-category="'+category+'"])').hide()
+        }
+    })
 }
 
 function copyToClipboard(text) {

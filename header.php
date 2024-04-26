@@ -68,14 +68,7 @@ if(is_user_logged_in()) {
 		echo '<a href="'.esc_url(wp_logout_url()).'" class="header__logout"><span class="material-symbols-outlined">logout</span></a></header>';
 	}
 
-	if (is_front_page()) {
-		echo
-		'<header class="header">
-			<figure><img src="'.get_template_directory_uri().'/assets/img/standard-logo.webp" alt="Logo">PartnerHub</figure>
-			<span>Administrative Dashboard</span>
-			<a href="'.esc_url(wp_logout_url()).'" class="header__logout"><span class="material-symbols-outlined">logout</span></a>
-		</header>';
-	}
+	if (is_front_page()) { get_sidebar('sidebar'); }
 }
 ?>
 	<main>
