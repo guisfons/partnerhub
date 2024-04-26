@@ -58,6 +58,10 @@ function header() {
 }
 
 function aside() {
+    $('.aside button').on('click', function() {
+        $('.aside').toggleClass('aside--active')
+    })
+
     $('.card__header').on('click', function() {
         $(this).parent().toggleClass('card--minimal')
         $(this).siblings().slideToggle(100, 'linear')

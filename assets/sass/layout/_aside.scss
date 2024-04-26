@@ -17,6 +17,8 @@
     background-color: $darkwhite;
     box-shadow: 10px 0px 54px -1px rgba(0,0,0,0.17);
 
+    transition: .3s ease-in-out;
+
     button {
         position: absolute;
         top: 0;
@@ -56,5 +58,14 @@
 
     & ~ main {
         margin-left: 32.5rem;
+        transition: .3s ease-in-out;
+    }
+
+    &--active {
+        transform: translateX(-32.5rem);
+
+        & ~ main {
+            margin-left: 0;
+        }
     }
 }
