@@ -1,93 +1,10 @@
 $(document).ready(function() {
-    $('.gallery__images:not(.gallery__images--noslider)').each(function() {
-        $(this).slick({
-            infinite: false,
-            slidesToShow: 1,
-            arrows: true,
-            dots: true,
-            adaptiveHeight: true
-        })
-    })
-
-    $('.card__header').on('click', function() {
-        $(this).parent().toggleClass('card--minimal')
-        $(this).siblings().slideToggle(100, 'linear')
-    })
-
-    $('body').on('click', '.download-images', function() {
-        let btn = $(this)
-        let files = []
-
-        btn.closest('.gallery').find('tbody').find('tr img').each(function() {
-            files.push({name: $(this)[0].src.split('/').pop(), content: $(this)[0].src})
-        })
-                
-        // Create a new JSZip instance
-        var zip = new JSZip();
-        
-        // Add files to the zip from the array
-        files.forEach(function(file) {
-            zip.file(file.name, file.content);
-        });
-        
-        // Generate the zip file content
-        zip.generateAsync({ type: "blob" }).then(function (blob) {
-            // Create a download link
-            var link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = $(document).attr('title').split('— ').pop() + ' - ' + btn.closest('.gallery').find('h4').text() + ".zip";
-            
-            // Append the link to the document
-            document.body.appendChild(link);
-            
-            // Trigger a click on the link to start the download
-            link.click();
-            
-            // Remove the link from the document
-            document.body.removeChild(link);
-        });
-    })
-
-    $('body').on('click', '.gallery__images img', function() {
-        let galleryContainer = $(this).closest('.gallery')
-        galleryContainer.append('<div class="gallery__popup"><button class="gallery__popup-close"><span class="material-symbols-outlined">close</span></button></div>')
-
-        if(galleryContainer.find('.gallery__images--noslider').length > 0) {
-            $(this).closest('.gallery__images').removeClass('gallery__images--noslider').clone().appendTo(galleryContainer.find('.gallery__popup'))
-            $(this).closest('.gallery__images').addClass('gallery__images--noslider')
-        } else {
-            $(this).closest('.gallery__images').slick('unslick').clone().appendTo(galleryContainer.find('.gallery__popup'))
-            $(this).closest('.gallery__images').slick({
-                infinite: false,
-                slidesToShow: 1,
-                arrows: true,
-                dots: true,
-                adaptiveHeight: true
-            })
-        }
-
-        $(this).closest('.gallery__images').parent().find('.gallery__popup .gallery__images').slick({
-            infinite: false,
-            slidesToShow: 1,
-            arrows: true,
-            dots: true,
-        })
-    })
-
-    $('body').on('click', '.gallery__popup-close', function() {
-        $(this).parent().remove()
-    })
-
-    $('body').on('click', '.material-symbols-outlined:contains("share")', function() {
-        copyToClipboard($(this).parent().find('a').attr('href'))
-    })
-
-    
-
     window.history.replaceState("","",window.location.href)
 
     header()
+    aside()
     bulletinboard()
+    actions()
     linkUpdate()
     reverseTables()
 })
@@ -140,6 +57,13 @@ function header() {
     })
 }
 
+function aside() {
+    $('.card__header').on('click', function() {
+        $(this).parent().toggleClass('card--minimal')
+        $(this).siblings().slideToggle(100, 'linear')
+    })
+}
+
 function bulletinboard() {
     $('.news__category-item').on('click', function() {
         let category = $(this).data('category')
@@ -153,6 +77,93 @@ function bulletinboard() {
             $(this).closest('.news__items').find('.news__container .news__item[data-category="'+category+'"]').show()
             $(this).closest('.news__items').find('.news__container .news__item:not([data-category="'+category+'"])').hide()
         }
+    })
+}
+
+function actions() {
+    downloadImages()
+    gallery()
+
+    $('body').on('click', '.material-symbols-outlined:contains("share")', function() {
+        copyToClipboard($(this).parent().find('a').attr('href'))
+    })
+}
+
+function downloadImages() {
+    $('body').on('click', '.download-images', function() {
+        let btn = $(this)
+        let files = []
+
+        btn.closest('.gallery').find('tbody').find('tr img').each(function() {
+            files.push({name: $(this)[0].src.split('/').pop(), content: $(this)[0].src})
+        })
+                
+        // Create a new JSZip instance
+        var zip = new JSZip();
+        
+        // Add files to the zip from the array
+        files.forEach(function(file) {
+            zip.file(file.name, file.content);
+        });
+        
+        // Generate the zip file content
+        zip.generateAsync({ type: "blob" }).then(function (blob) {
+            // Create a download link
+            var link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = $(document).attr('title').split('— ').pop() + ' - ' + btn.closest('.gallery').find('h4').text() + ".zip";
+            
+            // Append the link to the document
+            document.body.appendChild(link);
+            
+            // Trigger a click on the link to start the download
+            link.click();
+            
+            // Remove the link from the document
+            document.body.removeChild(link);
+        });
+    })
+}
+
+function gallery() {
+    $('.gallery__images:not(.gallery__images--noslider)').each(function() {
+        $(this).slick({
+            infinite: false,
+            slidesToShow: 1,
+            arrows: true,
+            dots: true,
+            adaptiveHeight: true
+        })
+    })
+
+    $('body').on('click', '.gallery__images img', function() {
+        let galleryContainer = $(this).closest('.gallery')
+        galleryContainer.append('<div class="gallery__popup"><button class="gallery__popup-close"><span class="material-symbols-outlined">close</span></button></div>')
+
+        if(galleryContainer.find('.gallery__images--noslider').length > 0) {
+            $(this).closest('.gallery__images').removeClass('gallery__images--noslider').clone().appendTo(galleryContainer.find('.gallery__popup'))
+            $(this).closest('.gallery__images').addClass('gallery__images--noslider')
+        } else {
+            $(this).closest('.gallery__images').slick('unslick').clone().appendTo(galleryContainer.find('.gallery__popup'))
+            $(this).closest('.gallery__images').slick({
+                infinite: false,
+                slidesToShow: 1,
+                arrows: true,
+                dots: true,
+                adaptiveHeight: true
+            })
+        }
+
+        $(this).closest('.gallery__images').parent().find('.gallery__popup .gallery__images').slick({
+            infinite: false,
+            slidesToShow: 1,
+            arrows: true,
+            dots: true,
+        })
+    })
+
+    $('body').on('click', '.gallery__popup-close', function() {
+        $(this).parent().remove()
     })
 }
 
