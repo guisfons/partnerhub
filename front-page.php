@@ -1,6 +1,7 @@
 <?php
 get_header();
 loadModulesCssForTemplate('home.min.css');
+
 if(is_user_logged_in()) {
 	$user = wp_get_current_user();
 	if ( in_array( 'administrator', (array) $user->roles ) || in_array('editor', (array) $user->roles) || in_array('contributor', (array) $user->roles) || in_array('revenuemanager', (array) $user->roles) ) {
