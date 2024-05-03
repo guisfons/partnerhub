@@ -108,13 +108,12 @@
         h1 {
             margin-right: auto;
         }
-        
-        figure {
+
+        a {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1rem;
-            position: relative;
 
             font-size: 1.3rem;
             font-weight: 700;
@@ -122,6 +121,24 @@
             text-align: center;
             color: $dim_gray;
 
+            &:first-of-type {
+                span {
+                    background-color: $coral;
+                    border-radius: 50%;
+                    
+                    width: 1.5rem;
+                    height: 1.5rem;
+
+                    display: block;
+
+                    right: 0.9rem;
+                    top: 0.8rem;
+                }
+            }
+        }
+        
+        figure {
+            position: relative;
             span {
                 position: absolute;
                 top: 0;

@@ -39,36 +39,8 @@ if ( !empty( $user->roles ) && is_array( $user->roles ) ) {
 <body <?php body_class($post->post_name ?? ''); ?> data-role="<?php echo $user_role; ?>">
 
 <?php
-if(is_user_logged_in()) {
-	if(is_single()) {
-		echo '<header class="header"><a href="'.get_home_url().'" class="header__home"><span class="material-symbols-outlined">home</span></a>';
-			if(is_singular('hotels')) {
-			echo
-			'<span data-menu="administration" class="header__item">Administration</span>
-			<span data-menu="general-property" class="header__item">General Property Info</span>
-			<span>
-				<span data-menu="revenue-distribution" class="header__item">RegiÔtels Deliverables</span>
-	
-				<div class="header__submenu">
-					<span data-menu="revenue-distribution" class="header__item">Revenue & Distribution</span>
-					<span data-menu="digital-marketing" class="header__item">Digital Marketing</span>
-					<span data-menu="online-sales" class="header__item">Online Sales</span>
-				</div>
-			</span>
-			<span>
-				<span data-menu="siteminder" class="header__item">Pricing Sheet</span>
-				<div class="header__submenu">
-					<span data-menu="siteminder" class="header__item">Siteminder</span>
-					<span data-menu="dirs21" class="header__item">Dirs21</span>
-					<span data-menu="cubilis" class="header__item">Cubilis</span>
-					<span data-menu="hoteliersguru" class="header__item">HoteliersGuru</span>
-				</div>
-			</span>';
-		}
-		echo '<a href="'.esc_url(wp_logout_url()).'" class="header__logout"><span class="material-symbols-outlined">logout</span></a></header>';
-	}
-
-	if (is_front_page() || is_page('messages')) { get_sidebar('sidebar'); }
+if(is_user_logged_in() && is_front_page() || is_page('messages') || is_singular('hotels')) {
+	get_sidebar('sidebar');
 }
 ?>
 	<main>

@@ -2,7 +2,7 @@ $(document).ready(function() {
     window.history.replaceState("","",window.location.href)
 
     panelIds()
-    header()
+    // header()
     aside()
     bulletinboard()
     actions()
@@ -81,6 +81,43 @@ function aside() {
     $('.card__header').on('click', function() {
         // $(this).parent().toggleClass('card--minimal')
         $(this).siblings().slideToggle(100, 'linear')
+    })
+
+    if (window.location.hash && $('body').hasClass('single-hotels')) {
+        sectionId = window.location.hash
+        let menuItem = $(sectionId).closest('section').data('content')
+
+        $('span[data-menu='+menuItem+']').addClass('aside__item--active')
+        $('.content[data-content='+menuItem+']').addClass('content--active')
+    } else {
+        if(localStorage.getItem('menu')) {
+            let menuItem = localStorage.getItem('menu')
+            $('span[data-menu='+menuItem+']').addClass('aside__item--active')
+            $('.content[data-content='+menuItem+']').addClass('content--active')
+        } else {
+            $('span[data-menu=administration]').addClass('aside__item--active')
+            $('.content[data-content=administration]').addClass('content--active')
+        }
+    }
+
+    $('.aside__item').on('click', function() {
+        $('.aside__item').removeClass('aside__item--active')
+
+        if($(this).parent().hasClass('aside__submenu')) {
+            $('.aside__item').removeClass('aside__item--active')
+            $('.aside__submenu span').removeClass('aside__item--active')
+            $(this).closest('.aside__item').addClass('aside__item--active')
+            $(this).addClass('aside__item--active')
+        } else {
+            $(this).addClass('aside__item--active')
+        }
+        
+        $('.content').removeClass('content--active')
+        $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
+
+        let menu = $(this).data('menu')
+
+        localStorage.setItem('menu', menu)
     })
 }
 
