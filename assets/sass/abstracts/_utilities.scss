@@ -58,3 +58,10 @@
     flex-direction: row !important;
     width: fit-content !important;
 }
+
+.title {
+    font-size: 3.4rem;
+    color: $dark_slate_gray;
+    font-weight: 700;
+    text-transform: uppercase;
+}

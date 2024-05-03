@@ -4,6 +4,7 @@ $( document ).ready(function() {
         let formData = new FormData()
         let fileInput = $(this).parent().find('.file')[0]
         let form = $(this).closest('form')
+        let sectionName = $(this).closest('.card').find('h3').text()
 
         let postId = form.data('post-id')
         let fieldKey = form.data('field-key')
@@ -15,6 +16,7 @@ $( document ).ready(function() {
             formData.append('file', fileInput.files[0])
             formData.append('postId', postId)
             formData.append('fieldKey', fieldKey)
+            formData.append('sectionname', sectionName)
 
             if(btn.hasClass('upload-repeater-file')) {
                 formData.append('rowId', rowId)

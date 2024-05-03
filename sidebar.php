@@ -1,10 +1,8 @@
 <aside class="aside">
     <button>
-        <span></span>
-        <span></span>
-        <span></span>
+		<span class="material-symbols-outlined"></span>
     </button>
-    <figure><img src="<?= get_template_directory_uri(); ?>/assets/img/standard-logo.webp" alt="Logo">PartnerHub</figure>
+    <figure class="aside__logo"><img src="<?= get_template_directory_uri(); ?>/assets/img/logo.webp" alt="Logo">PartnerHub</figure>
 
     <?php
     $user = wp_get_current_user();
@@ -20,7 +18,7 @@
 		$query = new WP_Query($args);
 
 		if ($query->have_posts()) :
-			echo '<nav class="hotels"><h2>Hotels</h2>';
+			echo '<div class="aside__hotels"><h2>Hotels <span></span></h2><nav style="display: none;">';
 			
 			$hotels_by_country = array();
 			
@@ -37,7 +35,7 @@
 			
 
 			foreach ($hotels_by_country as $country => $hotels) {
-				echo '<div class=""><div class="card__header"><span class="material-symbols-outlined">add</span><h4>'.$country.'</h4></div><div class="card__body" style="display: none;">';
+				echo '<div class="aside__country"><div class="card__header"><h4>'.$country.'</h4></div><div class="card__body" style="display: none;">';
 				foreach ($hotels as $hotel) {
 					echo $hotel;
 				}
@@ -45,7 +43,7 @@
 			}
 			
 			wp_reset_postdata();
-			echo '</nav>';
+			echo '</nav></div>';
 		endif;
     }
     ?>

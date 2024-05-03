@@ -65,34 +65,63 @@ function ks_register_post_types(){
             'show_in_rest' => false,  // @info inherited from old version
         ),
 
-        // 'eventos' => array(
+        'tickets' => array(
 
-        //     'labels' => array(
-        //         'name'               => __('Eventos'),
-        //         'singular_name'      => __('Evento'),
-        //         'menu_name'          => __('Eventos'),
-        //         'name_admin_bar'     => __('Eventos'),
-        //         'add_new'            => __('Novo Evento'),
-        //         'add_new_item'       => __('Novo Evento'),
-        //         'new_item'           => __('Novo Evento'),
-        //         'edit_item'          => __('Editar Evento'),
-        //         'view_item'          => __('Ver Evento'),
-        //         'all_items'          => __('Eventos'),
-        //         'search_items'       => __('Procurar por Eventos'),
-        //         'parent_item_colon'  => __('Eventos pai:'),
-        //         'not_found'          => __('Nenhum Evento encontrado.'),
-        //         'not_found_in_trash' => __('Nenhum Evento encontrado na lixeira.')
-        //     ),
-        //     'menu_icon' => 'dashicons-admin-site-alt',
-        //     'description' => __('Eventos'),
-        //     'rest_base' =>'custom/eventos',
-        //     'has_archive' => 'biblioteca/eventos',
-        //     'rewrite'     => [
-        //         'slug' => 'eventos',
-        //     ],
-        //     'supports'    => array('title', 'editor', 'thumbnail', 'excerpt'),
-        //     'show_in_rest' => false,  // @info inherited from old version
-        // ),
+            'labels' => array(
+                'name'               => __('Tickets'),
+                'singular_name'      => __('Ticket'),
+                'menu_name'          => __('Tickets'),
+                'name_admin_bar'     => __('Tickets'),
+                'add_new'            => __('New Ticket'),
+                'add_new_item'       => __('New Ticket'),
+                'new_item'           => __('New Ticket'),
+                'edit_item'          => __('Edit Ticket'),
+                'view_item'          => __('See Ticket'),
+                'all_items'          => __('Tickets'),
+                'search_items'       => __('Search for Tickets'),
+                'parent_item_colon'  => __('Tickets parent:'),
+                'not_found'          => __('No Ticket found.'),
+                'not_found_in_trash' => __('No Ticket found in bin.')
+            ),
+            'menu_icon' => 'dashicons-tickets',
+            'description' => __('Tickets'),
+            'rest_base' =>'custom/tickets',
+            'has_archive' => 'biblioteca/tickets',
+            'rewrite'     => [
+                'slug' => 'tickets',
+            ],
+            'supports'    => array('title', 'editor', 'thumbnail', 'excerpt', 'author'),
+            'show_in_rest' => false,  // @info inherited from old version
+        ),
+
+        'notifications' => array(
+
+            'labels' => array(
+                'name'               => __('Notifications'),
+                'singular_name'      => __('Notification'),
+                'menu_name'          => __('Notifications'),
+                'name_admin_bar'     => __('Notifications'),
+                'add_new'            => __('New Notification'),
+                'add_new_item'       => __('New Notification'),
+                'new_item'           => __('New Notification'),
+                'edit_item'          => __('Edit Notification'),
+                'view_item'          => __('See Notification'),
+                'all_items'          => __('Notifications'),
+                'search_items'       => __('Search for Notifications'),
+                'parent_item_colon'  => __('Notifications parent:'),
+                'not_found'          => __('No Notification found.'),
+                'not_found_in_trash' => __('No Notification found in bin.')
+            ),
+            'menu_icon' => 'dashicons-bell',
+            'description' => __('Notifications'),
+            'rest_base' =>'custom/notifications',
+            'has_archive' => 'biblioteca/notifications',
+            'rewrite'     => [
+                'slug' => 'notifications',
+            ],
+            'supports'    => array('title', 'editor', 'thumbnail', 'excerpt', 'author'),
+            'show_in_rest' => false,  // @info inherited from old version
+        ),
 
 		'bulletin_board' => array(
 

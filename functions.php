@@ -314,6 +314,7 @@ function handle_file_upload_and_update_field() {
         $postId = $_POST['postId'];
         $fieldKey = $_POST['fieldKey'];
         $rowIndex = isset($_POST['rowId']) ? intval($_POST['rowId']) : 0;
+        $section_name = $_POST['sectionname'];
         $current_year = date('Y');
         $current_month = date('m');
         $post = get_post($postId);
@@ -340,6 +341,8 @@ function handle_file_upload_and_update_field() {
                 $uploaded_file = $_FILES['file'];
 
                 $file_name = sanitize_file_name( $uploaded_file['name'] );
+                $file_tmp_name = $_FILES["file"]["tmp_name"];
+                $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
 
                 // Upload the file and get the attachment ID
                 $attachment_id = media_handle_upload('file', 0);
@@ -356,10 +359,22 @@ function handle_file_upload_and_update_field() {
                     $destination = $year_month_folder_path . '/' . basename($file_path);
 
                     rename($file_path, $destination);
-
+                    
                     update_field($fieldKey, $attachment_id, $postId);
+                    
+                    $image_extensions = array("jpg", "jpeg", "png", "gif", "bmp", "svg", "webp");
+                    if (!in_array(strtolower($file_extension), $image_extensions)) {
+                        $new_post = array(
+                            'post_title'    => $file_name,
+                            'post_content'  => $post_name . '<br/>' . $section_name,
+                            'post_status'   => 'publish',
+                            'post_author'   => get_current_user_id(),
+                            'post_type'     => 'notifications',
+                        );
 
-                    // Send a response back to the front end
+                        wp_insert_post($new_post);
+                    }
+
                     wp_send_json_success(array('message' => 'File uploaded successfully!', 'file_url' => $file_url, 'file_name' => $file_name));
                 }
             } else {
@@ -388,6 +403,7 @@ function handle_file_upload_and_update_field() {
                         $file_url = wp_get_attachment_url($fileAttachmentId);
                         $file_path = get_attached_file($fileAttachmentId);
                         $filename = pathinfo($file_url, PATHINFO_BASENAME);
+                        $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
 
                         // Move the file to the post folder
                         $destination = $year_month_folder_path . '/' . basename($file_path);
@@ -397,6 +413,18 @@ function handle_file_upload_and_update_field() {
                         // Update the ACF repeater field
                         update_field($fieldKey, $repeaterFieldValues, $postId);
 
+                        $image_extensions = array("jpg", "jpeg", "png", "gif", "bmp", "svg", "webp");
+                        if (!in_array(strtolower($file_extension), $image_extensions)) {
+                            $new_post = array(
+                                'post_title'    => $filename,
+                                'post_content'  => $post_name . '<br/>' . $section_name,
+                                'post_status'   => 'publish',
+                                'post_author'   => get_current_user_id(),
+                                'post_type'     => 'notifications',
+                            );
+
+                            wp_insert_post($new_post);
+                        }
 
                         // Send a success response
                         wp_send_json_success(array('message' => 'File uploaded successfully!', 'file_url' => $file_url, 'file_name' => $filename));
@@ -720,6 +748,7 @@ function my_handle_attachment($file_handler,$post_id,$set_thu=false) {
     return $attach_id;
   }
 
+add_action('admin_init', 'restrict_dashboard_access');
 function restrict_dashboard_access() {
     if (!current_user_can('manage_options') && $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php') {
         wp_redirect(home_url());
@@ -727,4 +756,33 @@ function restrict_dashboard_access() {
     }
 }
 
-add_action('admin_init', 'restrict_dashboard_access');
+add_action('wp_ajax_ajax_search', 'ajax_search_callback');
+add_action('wp_ajax_nopriv_ajax_search', 'ajax_search_callback');
+function ajax_search_callback() {
+    $search_query = sanitize_text_field($_POST['search']);
+    $args = array(
+        'post_type' => 'notifications',
+        's' => $search_query,
+        'posts_per_page' => -1,
+    );
+    $query = new WP_Query($args);
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $hotel = explode('<br/>', get_the_content())[0];
+            $section = strtolower(str_replace(' ', '-', explode('<br/>', get_the_content())[1]));
+            
+            echo
+            '<div class="notifications__item">
+                <figure>
+                    <span class="material-symbols-outlined">account_circle</span>
+                </figure>
+                <article data-user="'.(!empty(wp_get_current_user()->user_firstname) ? wp_get_current_user()->user_firstname : wp_get_current_user()->display_name).'"><a href="'. get_home_url(). '/hotels/' . $hotel . '/#' . $section .'" title="'.get_the_title().'">'.get_the_title().'</a></article>
+            </div>';
+        }
+    } else {
+        echo 'No results found';
+    }
+    wp_reset_postdata();
+    die();
+}

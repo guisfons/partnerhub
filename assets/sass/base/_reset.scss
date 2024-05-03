@@ -35,6 +35,7 @@ a {
 
 button {
     all: unset;
+    box-sizing: border-box;
 }
 
 h1, h2, h3, h4 {
@@ -50,7 +51,7 @@ h3 {
     width: 100%;
 }
 
-section {
+body:not(.home) section {
     margin: 5rem auto !important;
     display: flex;
     flex-direction: column;

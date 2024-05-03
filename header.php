@@ -68,7 +68,7 @@ if(is_user_logged_in()) {
 		echo '<a href="'.esc_url(wp_logout_url()).'" class="header__logout"><span class="material-symbols-outlined">logout</span></a></header>';
 	}
 
-	if (is_front_page()) { get_sidebar('sidebar'); }
+	if (is_front_page() || is_page('messages')) { get_sidebar('sidebar'); }
 }
 ?>
 	<main>

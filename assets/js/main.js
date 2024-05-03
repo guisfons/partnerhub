@@ -1,12 +1,16 @@
 $(document).ready(function() {
     window.history.replaceState("","",window.location.href)
 
+    panelIds()
     header()
     aside()
     bulletinboard()
     actions()
     linkUpdate()
     reverseTables()
+    searchPosts()
+
+    // feed('https://www.regiotels.com/feed/')
 })
 
 document.addEventListener("DOMContentLoaded", function(event) { 
@@ -27,13 +31,21 @@ function hideLoadingScreen() {
 }
 
 function header() {
-    if(localStorage.getItem('menu')) {
-        let menuItem = localStorage.getItem('menu')
+    if (window.location.hash && $('body').hasClass('single-hotels')) {
+        sectionId = window.location.hash
+        let menuItem = $(sectionId).closest('section').data('content')
+
         $('span[data-menu='+menuItem+']').addClass('header__item--active')
         $('.content[data-content='+menuItem+']').addClass('content--active')
     } else {
-        $('span[data-menu=administration]').addClass('header__item--active')
-        $('.content[data-content=administration]').addClass('content--active')
+        if(localStorage.getItem('menu')) {
+            let menuItem = localStorage.getItem('menu')
+            $('span[data-menu='+menuItem+']').addClass('header__item--active')
+            $('.content[data-content='+menuItem+']').addClass('content--active')
+        } else {
+            $('span[data-menu=administration]').addClass('header__item--active')
+            $('.content[data-content=administration]').addClass('content--active')
+        }
     }
 
     $('.header__item').on('click', function() {
@@ -62,8 +74,12 @@ function aside() {
         $('.aside').toggleClass('aside--active')
     })
 
+    $('.aside__hotels h2').on('click', function() {
+        $(this).siblings('nav').slideToggle(100, 'linear')
+    })
+
     $('.card__header').on('click', function() {
-        $(this).parent().toggleClass('card--minimal')
+        // $(this).parent().toggleClass('card--minimal')
         $(this).siblings().slideToggle(100, 'linear')
     })
 }
@@ -76,12 +92,57 @@ function bulletinboard() {
         $(this).toggleClass('news__category-item--active')
 
         if(category == 'all') {
-            $(this).closest('.news__items').find('.news__container .news__item').show()
+            $(this).closest('.news__board').find('.news__container .news__item').show()
         } else {
-            $(this).closest('.news__items').find('.news__container .news__item[data-category="'+category+'"]').show()
-            $(this).closest('.news__items').find('.news__container .news__item:not([data-category="'+category+'"])').hide()
+            $(this).closest('.news__board').find('.news__container .news__item[data-category="'+category+'"]').show()
+            $(this).closest('.news__board').find('.news__container .news__item:not([data-category="'+category+'"])').hide()
         }
     })
+
+    $('.news__board button').on('click', function() {
+        $('.news__bulletin').toggleClass('news__bulletin--active')
+        $('.news__bulletin > div').hide()
+    })
+
+    $('.news__bulletin').on('submit', function() {
+        $('.news__bulletin').toggleClass('news__bulletin--active')
+        $('.news__bulletin > div').show()
+        location.reload()
+    })
+
+    $('.news__bulletin-close').on('click', function() {
+        $('.news__bulletin').toggleClass('news__bulletin--active')
+        $('.news__bulletin > div').show()
+    })
+}
+
+function feed(feedUrl) {
+    fetch(feedUrl)
+        .then(response => response.text()) // Get the raw XML response
+        .then(xml => {
+            // Parse the XML response
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xml, 'text/xml');
+            // Extract feed information from the XML document
+            const title = xmlDoc.querySelector('channel > title').textContent;
+            const link = xmlDoc.querySelector('channel > link').textContent;
+            const items = xmlDoc.querySelectorAll('item');
+            const feedItems = [];
+            items.forEach(item => {
+                const itemTitle = item.querySelector('title').textContent;
+                const itemLink = item.querySelector('link').textContent;
+                // You can extract more item information here if needed
+                feedItems.push({ title: itemTitle, link: itemLink });
+            });
+            // Construct the feed information object
+            const feedInfo = { title, link, items: feedItems };
+            // Process the feed information
+            console.log(feedInfo);
+            // Display feed information on your web page
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
 }
 
 function actions() {
@@ -210,5 +271,32 @@ function linkUpdate() {
     
             $(this).attr('href', 'http://' + window.location.hostname + '/wp-content/uploads/' +window.location.pathname.split('/').filter(Boolean).pop() + '/2024/04/' + filelink)
         }
+    })
+}
+
+function panelIds() {
+    $('main > section h3').each(function() {
+        $(this).closest('.card').attr('id', $(this).text().replace(/\s+/g, '-').toLowerCase())
+    })
+}
+
+function removeHash() {
+    history.replaceState("", document.title, window.location.pathname + window.location.search)
+}
+
+function searchPosts() {
+    $('.notifications input[type=search]').on('input', function(){
+        var query = $(this).val();
+        $.ajax({
+            url: '/wp-admin/admin-ajax.php',
+            type: 'POST',
+            data: {
+                'action': 'ajax_search',
+                'search': query
+            },
+            success: function(response) {
+                $('.notifications__tasks').html(response);
+            }
+        })
     })
 }
