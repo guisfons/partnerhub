@@ -18,7 +18,7 @@
 		$query = new WP_Query($args);
 
 		if ($query->have_posts()) :
-			echo '<div class="aside__hotels"><h2>Hotels <span></span></h2><nav style="display: none;">';
+			echo '<div class="aside__hotels"><h2>Hotels <span></span></h2><nav>';
 			
 			$hotels_by_country = array();
 			
@@ -35,7 +35,7 @@
 			
 
 			foreach ($hotels_by_country as $country => $hotels) {
-				echo '<div class="aside__country"><div class="card__header"><h4>'.$country.'</h4></div><div class="card__body" style="display: none;">';
+				echo '<div class="aside__country"><div class="card__header"><span class="material-symbols-outlined">add</span><h4>'.$country.'</h4></div><div class="card__body" style="display: none;">';
 				foreach ($hotels as $hotel) {
 					echo $hotel;
 				}

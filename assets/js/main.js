@@ -9,7 +9,7 @@ $(document).ready(function() {
     linkUpdate()
     reverseTables()
     searchPosts()
-
+    api()
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -299,4 +299,8 @@ function searchPosts() {
             }
         })
     })
+}
+
+function api() {
+    linkedinApi()
 }
