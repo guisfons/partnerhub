@@ -4,6 +4,7 @@ $(document).ready(function() {
     panelIds()
     // header()
     aside()
+    breadcrumb()
     bulletinboard()
     actions()
     linkUpdate()
@@ -125,11 +126,25 @@ function aside() {
             let menu = $(this).data('menu')
             localStorage.setItem('menu', menu)
         }
+
+        breadcrumb()
     })
 }
 
 function breadcrumb() {
-    
+    $('.breadcrumb > *:nth-child(n+3)').remove()
+    let activeContent = $('.content--active').data('content')
+    let breadcrumbLastItem = '<span>' + $('.aside__item[data-menu='+activeContent+']').find('h4').text() + '</span>'
+    let breadcrumbItem
+
+    if($('.aside__item[data-menu='+activeContent+']').parent('.aside__submenu').length) {
+        console.log(activeContent);
+        breadcrumbItem = '<span>' + $('.aside__item[data-menu='+activeContent+']').parent('.aside__submenu').parent().find('.aside__item h4').first().text() + '</span>'
+    } else {
+        breadcrumbItem = ''
+    }
+
+    $('.breadcrumb > *:last-child').after(breadcrumbItem + breadcrumbLastItem)
 }
 
 function bulletinboard() {
