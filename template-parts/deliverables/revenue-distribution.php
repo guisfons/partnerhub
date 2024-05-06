@@ -1,4 +1,4 @@
-<section data-content="revenue-distribution" class="wrapper regiotels-deliverables content">
+<section data-content="revenue-distribution" class="regiotels-deliverables content">
 	<h2>Revenue & Distribution</h2>
     <?php
     get_template_part('template-parts/deliverables/revenue-distribution/revenue-distribution');

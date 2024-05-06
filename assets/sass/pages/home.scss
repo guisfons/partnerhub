@@ -15,19 +15,11 @@
         }
     }
 
-    main > .card {
-        // border: .1rem solid $darkblue;
-        box-shadow: 0 0 2rem 0 rgb(0 0 0 / 17%);
-    }
-
-    .card {
-        box-shadow: 0 0 2rem 0 rgb(0 0 0 / 17%);
-    }
-
     main {
         display: flex;
         flex-wrap: wrap;
         gap: 5rem;
+        margin: 0 auto;
 
         section:first-of-type {
             margin-top: 5rem;
@@ -77,6 +69,7 @@
 
     h2 {
         width: 100%;
+        color: $dark_slate_gray;
     }
 
     .card {

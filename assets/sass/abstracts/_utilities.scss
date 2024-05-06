@@ -35,6 +35,10 @@
     overflow: hidden;
     transition: .3s ease-in-out;
 
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+
     &--active {
         opacity: 1;
         visibility: visible;
@@ -45,11 +49,14 @@
 
         height: initial;
         transform: none;
+
+        margin: 5rem auto !important;
     }
 
     h2 {
-        text-align: center;
-        font-size: 5rem;
+        font-size: 3.5rem;
+        text-transform: uppercase;
+        color: $dark_slate_gray;
     }
 }
 
@@ -59,9 +66,31 @@
     width: fit-content !important;
 }
 
-.title {
-    font-size: 3.4rem;
-    color: $dark_slate_gray;
-    font-weight: 700;
+.breadcrumb {
+    display: flex;
+    gap: 1rem;
+
+    font-size: 2rem;
+    font-weight: 500;
+    color: $dark_dim_grey;
     text-transform: uppercase;
+
+    & * {
+        display: flex;
+        gap: 1rem;
+        cursor: default;
+
+        &:not(:last-child)::after {
+            content: '>';
+        }
+
+        &:last-child {
+            font-weight: 700;
+            color: $cyan;
+        }
+    }
+
+    a {
+        cursor: pointer;
+    }
 }

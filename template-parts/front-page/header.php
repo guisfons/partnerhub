@@ -1,5 +1,5 @@
 <?php $user = wp_get_current_user(); ?>
-<section class="wrapper header-user">
+<section class="header-user">
     <h1 class="title">ADMINISTRATIVE DASHBOARD</h1>
     <a href="/">
         <figure>

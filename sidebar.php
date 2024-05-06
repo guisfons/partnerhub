@@ -1,30 +1,30 @@
-<aside class="aside">
+<aside class="aside aside--active">
 	<button>
 		<span class="material-symbols-outlined"></span>
 	</button>
 	<?php
 	if (is_singular('hotels')) {
 		echo
-		'<span data-menu="administration" class="aside__item">Administration</span>
-		<span data-menu="general-property" class="aside__item">General Property Info</span>
+		'<nav class="aside__menu"><span data-menu="administration" class="aside__item"><span class="material-symbols-outlined">add</span><h4>Administration</h4></span>
+		<span data-menu="general-property" class="aside__item"><span class="material-symbols-outlined">add</span><h4>General Property Info</h4></span>
 		<span>
-			<span data-menu="revenue-distribution" class="aside__item">RegiÔtels Deliverables</span>
+			<span class="aside__item"><span class="material-symbols-outlined">add</span><h4>RegiÔtels Deliverables</h4></span>
 
-			<div class="aside__submenu">
-				<span data-menu="revenue-distribution" class="aside__item">Revenue & Distribution</span>
-				<span data-menu="digital-marketing" class="aside__item">Digital Marketing</span>
-				<span data-menu="online-sales" class="aside__item">Online Sales</span>
+			<div class="aside__submenu" style="display: none;">
+				<span data-menu="revenue-distribution" class="aside__item"><h4>Revenue & Distribution</h4></span>
+				<span data-menu="digital-marketing" class="aside__item"><h4>Digital Marketing</h4></span>
+				<span data-menu="online-sales" class="aside__item"><h4>Online Sales</h4></span>
 			</div>
 		</span>
 		<span>
-			<span data-menu="siteminder" class="aside__item">Pricing Sheet</span>
-			<div class="aside__submenu">
-				<span data-menu="siteminder" class="aside__item">Siteminder</span>
-				<span data-menu="dirs21" class="aside__item">Dirs21</span>
-				<span data-menu="cubilis" class="aside__item">Cubilis</span>
-				<span data-menu="hoteliersguru" class="aside__item">HoteliersGuru</span>
+			<span class="aside__item"><span class="material-symbols-outlined">add</span><h4>Pricing Sheet</h4></span>
+			<div class="aside__submenu" style="display: none;">
+				<span data-menu="siteminder" class="aside__item"><h4>Siteminder</h4></span>
+				<span data-menu="dirs21" class="aside__item"><h4>Dirs21</h4></span>
+				<span data-menu="cubilis" class="aside__item"><h4>Cubilis</h4></span>
+				<span data-menu="hoteliersguru" class="aside__item"><h4>HoteliersGuru</h4></span>
 			</div>
-		</span>';
+		</span></nav>';
 	} else {
 	?>
 

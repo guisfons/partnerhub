@@ -1,4 +1,5 @@
-<section data-content="general-property" class="wrapper general-property content">
+<section data-content="general-property" class="general-property content">
+    <h2>General Property Info</h2>
     <?php
     get_template_part('template-parts/general-property/onboarding');
     get_template_part('template-parts/general-property/corporate-identity');

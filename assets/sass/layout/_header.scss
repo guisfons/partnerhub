@@ -103,10 +103,14 @@
         align-items: flex-end;
         flex-wrap: wrap;
         gap: 1rem 2rem;
-        max-width: 100% !important;
+        width: 100%;
         
         h1 {
             margin-right: auto;
+            font-size: 3.4rem;
+            color: $dark_slate_gray;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         a {

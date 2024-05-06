@@ -103,22 +103,33 @@ function aside() {
     $('.aside__item').on('click', function() {
         $('.aside__item').removeClass('aside__item--active')
 
-        if($(this).parent().hasClass('aside__submenu')) {
+        if($(this).siblings().hasClass('aside__submenu')) {
+            $(this).siblings().slideToggle(100, 'linear')
             $('.aside__item').removeClass('aside__item--active')
             $('.aside__submenu span').removeClass('aside__item--active')
             $(this).closest('.aside__item').addClass('aside__item--active')
             $(this).addClass('aside__item--active')
+            
+            if($(this).find('span').text() == 'add') {
+                $(this).find('span').text('remove')
+            } else {
+                $(this).find('span').text('add')
+            }
         } else {
             $(this).addClass('aside__item--active')
         }
-        
-        $('.content').removeClass('content--active')
-        $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
 
-        let menu = $(this).data('menu')
-
-        localStorage.setItem('menu', menu)
+        if($(this).data('menu')) {
+            $('.content').removeClass('content--active')
+            $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
+            let menu = $(this).data('menu')
+            localStorage.setItem('menu', menu)
+        }
     })
+}
+
+function breadcrumb() {
+    
 }
 
 function bulletinboard() {
@@ -339,5 +350,5 @@ function searchPosts() {
 }
 
 function api() {
-    linkedinApi()
+    // linkedinApi()
 }

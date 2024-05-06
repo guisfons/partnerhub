@@ -1,4 +1,4 @@
-<section data-content="online-sales" class="wrapper regiotels-deliverables content">
+<section data-content="online-sales" class="regiotels-deliverables content">
 	<h2>Online Sales</h2>
     <?php $post_id = get_the_ID(); ?>
     <div class="card regiotels-deliverables__online-sales">

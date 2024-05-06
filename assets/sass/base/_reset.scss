@@ -9,6 +9,14 @@
 html {
     font-size: 62.5%;
     scroll-behavior: smooth;
+
+    @include max (1600) {
+        font-size: 55%;
+    }
+
+    @include max (1366) {
+        font-size: 48%;
+    }
 }
 
 body {
@@ -21,6 +29,10 @@ body {
 
 main {
     position: relative;
+    
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1280px;
 }
 
 img {
@@ -51,17 +63,10 @@ h3 {
     width: 100%;
 }
 
-body:not(.home) section {
-    margin: 5rem auto !important;
-    display: flex;
-    flex-direction: column;
-    gap: 5rem;
-}
-
 .wrapper {
     margin: 0 auto;
-    width: 80%;
-    max-width: 1350px;
+    width: 90%;
+    max-width: 1280px;
 }
 
 body:not([data-role="administrator"]):not([data-role="editor"]) {

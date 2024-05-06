@@ -2,7 +2,7 @@
 $currentDate = new DateTime();
 $weekOfMonth = ceil($currentDate->format('d') / 7);
 ?>
-<section data-content="dirs21" class="wrapper dirs21 content">
+<section data-content="dirs21" class="dirs21 content">
 	<h2>DIRS21</h2>
     <div class="card pricing-sheet__hq">
         <div class="card__header"><h3>HQ Rev Pricing Sheet</h3></div>

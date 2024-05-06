@@ -18,6 +18,8 @@
 
     transition: .3s ease-in-out;
 
+    transform: translateX(-32.5rem);
+
     button {
         position: absolute;
         top: 0;
@@ -42,14 +44,10 @@
             transition: .3s ease-in-out;
 
             &::after {
-                content: '\eac3';
+                content: '\eac9';
             }
         }
 
-    }
-
-    &--active button span::after {
-        content: '\eac9';
     }
 
     &__logo {
@@ -68,20 +66,27 @@
     }
 
     & ~ main {
-        margin-left: 32.5rem;
+        margin-left: 0 !important;
         transition: .3s ease-in-out;
         padding: 5rem;
+        max-width: 1280px;
     }
-
+    
     &--active {
-        transform: translateX(-32.5rem);
+        transform: translateX(0);
 
         & ~ main {
-            margin-left: 0;
+            margin-left: 32.5rem !important;
+            max-width: calc(100% - 32.5rem);
+            width: 90%;
+        }
+
+        button span::after {
+            content: '\eac3';
         }
     }
 
-    &__hotels {
+    &__hotels, &__menu {
         width: 100%;
 
         h2 {
@@ -188,13 +193,55 @@
 
     }
 
+    &__submenu {
+        margin-top: 2.5rem;
+        padding-left: 3.1rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    &__menu {
+        display: flex;
+        flex-direction: column;
+
+        gap: 2rem;
+    }
+
     &__item {
         font-size: 2.4rem;
+        line-height: 1;
         color: $slate_gray;
         font-weight: 500;
 
-        &::before {
-            content: '\e145';
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+
+        cursor: pointer;
+
+        span {
+            background-color: $cyan;
+            font-size: 2rem;
+            color: $white;
+
+            min-width: 2.4rem;
+            min-height: 2.4rem;
+            max-width: 2.4rem;
+            max-height: 2.4rem;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-wrap: break-word;
+        }
+
+        &--active, &--active h4 {
+            color: $cyan;
+            font-weight: 500;
         }
     }
 }
