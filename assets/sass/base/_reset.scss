@@ -84,3 +84,7 @@ body:not([data-role="administrator"]):not([data-role="editor"]) {
 body:not([data-role=revenuemanager]) [data-menu="pricing-sheet"] {
     display: none;
 }
+
+.single-hotels aside ~ main {
+    padding-top: 10rem;
+}

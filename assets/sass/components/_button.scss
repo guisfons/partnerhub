@@ -47,13 +47,29 @@ input[type=color] {
     padding: 0;
 }
 
-.add-row {
-    display: inline-block;
-    width: 100%;
-    text-align: right;
+.view-btn, .deleteRowBtn, .add-row, .upload-file {
+    color: $white !important;
+    font-size: 2rem !important;
+    font-weight: 600 !important;
+    border-radius: .7rem !important;
+    padding: 1rem 3.5rem !important;
     cursor: pointer;
-    font-weight: 600;
-    color: $darkblue;
+}
 
+.add-row {
+    background-color: $mustard !important;
     margin-top: 4rem;
+}
+
+.view-btn, .upload-file {
+    background-color: $cyan;
+}
+
+.deleteRowBtn {
+    background-color: $red !important;
+}
+
+.share-btn {
+    color: $dark_slate_gray !important;
+    font-size: 2.6rem !important;
 }

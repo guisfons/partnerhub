@@ -7,6 +7,7 @@ $(document).ready(function() {
     breadcrumb()
     bulletinboard()
     actions()
+    fileIcons()
     linkUpdate()
     reverseTables()
     searchPosts()
@@ -332,7 +333,7 @@ function linkUpdate() {
             }
             let filelink = url.substring(url.lastIndexOf('/') + 1)
     
-            $(this).attr('href', 'http://' + window.location.hostname + '/wp-content/uploads/' +window.location.pathname.split('/').filter(Boolean).pop() + '/2024/04/' + filelink)
+            $(this).attr('href', 'http://' + window.location.hostname + '/wp-content/uploads/' +window.location.pathname.split('/').filter(Boolean).pop() + '/2024/05/' + filelink)
         }
     })
 }
@@ -366,4 +367,44 @@ function searchPosts() {
 
 function api() {
     // linkedinApi()
+}
+
+function fileIcons() {
+    let color
+
+    $('a[href$=".pdf"]').each(function() {
+        color = '#fc5f4c'
+        $(this).closest('tr').find('td:first-of-type').prepend('<figure><svg id="eB0JEjPqx6d1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 39 49" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">\
+        <path d="M4.615079,2.653579L27.5022,2.570655l8.872906,10.531393v32.920968h-31.760027v-43.369437Z" fill="none" stroke="#434343" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>\
+        <path d="M26.38157,2.570652v10.531393h9.993536L27.5022,2.570652h-1.12063Z" transform="translate(0 0.000003)" fill="#434343" stroke="#434343" stroke-width="0.5" stroke-linejoin="round"/>\
+        <path d="M2.031101,24.296836L31.958601,24.5v14.422172h-29.9275v-14.625336Z" fill="'+color+'" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\
+        </svg></figure>')
+    });
+
+    $('a[href$=".xls"], a[href$=".xlsx"]').each(function() {
+        color = '#107c41'
+        $(this).closest('tr').find('td:first-of-type').prepend('<figure><svg id="eB0JEjPqx6d1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 39 49" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">\
+        <path d="M4.615079,2.653579L27.5022,2.570655l8.872906,10.531393v32.920968h-31.760027v-43.369437Z" fill="none" stroke="#434343" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>\
+        <path d="M26.38157,2.570652v10.531393h9.993536L27.5022,2.570652h-1.12063Z" transform="translate(0 0.000003)" fill="#434343" stroke="#434343" stroke-width="0.5" stroke-linejoin="round"/>\
+        <path d="M2.031101,24.296836L31.958601,24.5v14.422172h-29.9275v-14.625336Z" fill="'+color+'" stroke="'+color+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\
+        </svg></figure>')
+    });
+
+    $('table tr td').each(function() {
+        if($(this).find('figure').length > 0) {
+            $(this).css('padding-left', '5.5rem');
+        }
+
+        $(this).find('a').each(function() {
+            if($(this).text() == 'View') {
+                $(this).addClass('view-btn')
+            }
+        })
+
+        $(this).find('.material-symbols-outlined').each(function() {
+            if($(this).text() == 'share') {
+                $(this).addClass('share-btn')
+            }
+        })
+    })
 }
