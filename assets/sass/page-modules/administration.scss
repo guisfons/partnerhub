@@ -16,19 +16,18 @@
         }
     }
 
-
     &__info {
         display: flex;
         flex-direction: column;
         gap: 3rem;
         
-        & > div {
+        .card__body {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 3rem;
 
-            form {
+            & > form {
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;

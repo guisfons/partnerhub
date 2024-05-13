@@ -611,6 +611,7 @@ function handle_delete_repeater_row() {
         $postId = isset($_POST['postId']) ? intval($_POST['postId']) : 0;
         $fieldKey = isset($_POST['fieldKey']) ? sanitize_text_field($_POST['fieldKey']) : '';
         $rowId = isset($_POST['rowId']) ? intval($_POST['rowId']) : 0;
+        $filename = isset($_POST['fileName']) ? sanitize_text_field($_POST['fileName']) : '';
 
         // Check if the post ID, field key, and row index are valid
         if ($postId > 0 && !empty($fieldKey) && $rowId > 0) {
@@ -619,6 +620,21 @@ function handle_delete_repeater_row() {
 
             // Remove the specified row from the repeater field
             if ($rowId <= count($repeaterFieldValues)) {
+                $query = new WP_Query(array(
+                    'post_type' => 'notifications',
+                    'post_status' => 'publish',
+                    'posts_per_page' => 1,
+                    'title' => $filename
+                ));
+    
+                if ($query->have_posts()) {
+                    $post = $query->posts[0];
+                    $post_id = $post->ID;
+                } else {
+                    $post_id = '';
+                }
+
+                wp_delete_post($post_id, true);
 
                 delete_row($fieldKey, $rowId, $postId);
                 wp_send_json_success('Row removed from repeater field successfully!');
@@ -751,7 +767,19 @@ function my_handle_attachment($file_handler,$post_id,$set_thu=false) {
 add_action('admin_init', 'restrict_dashboard_access');
 function restrict_dashboard_access() {
     if (!current_user_can('manage_options') && $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php') {
-        wp_redirect(home_url());
+        $user = wp_get_current_user();    
+
+        if(in_array( 'contributor', (array) $user->roles )) {
+            $posts = get_posts(array(
+                'posts_per_page'    => -1,
+                'post_type'     => 'hotels',
+                'meta_key'      => 'user',
+                'meta_value'    => in_array(get_current_user_id(), get_user_id),
+            ));    
+        } else {
+            wp_redirect(home_url());
+        }
+
         exit;
     }
 }
@@ -785,4 +813,340 @@ function ajax_search_callback() {
     }
     wp_reset_postdata();
     die();
+}
+
+function get_file_icon($url) {
+    $icon = '';
+    if (!empty($url)) {
+        $info = new SplFileInfo($url);
+        switch ($info->getExtension()) {
+            case 'pdf':
+                $color = '#fc5f4c';
+                break;
+            case 'xls':
+            case 'xlsx':
+                $color = '#107c41';
+                break;
+            default:
+                $color = '#434343';
+        }
+        $icon = '<figure><svg id="eB0JEjPqx6d1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 39 49" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"><path d="M4.615079,2.653579L27.5022,2.570655l8.872906,10.531393v32.920968h-31.760027v-43.369437Z" fill="none" stroke="#434343" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.38157,2.570652v10.531393h9.993536L27.5022,2.570652h-1.12063Z" transform="translate(0 0.000003)" fill="#434343" stroke="#434343" stroke-width="0.5" stroke-linejoin="round"/><path d="M2.031101,24.296836L31.958601,24.5v14.422172h-29.9275v-14.625336Z" fill="'.$color.'" stroke="'.$color.'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></figure>';
+    }
+    return $icon;
+}
+
+function get_service_url($url, $post_id) {
+    if (!empty($url)) {
+        $path_parts = explode('/', $url);
+        $uploads_index = array_search('uploads', $path_parts);
+        $new_path_parts = array_merge(
+            array_slice($path_parts, 0, $uploads_index + 1),
+            array(get_post_field('post_name', $post_id)),
+            array_slice($path_parts, $uploads_index + 1)
+        );
+        return implode('/', $new_path_parts);
+    }
+    return '';
+}
+
+function render_file_row($service, $x, $post_id, $field_key, $file_field_key) {
+    $icon = get_file_icon($service['url']);
+    $service_url = get_service_url($service['url'], $post_id);
+
+    echo '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="table__row">
+        <span class="table__row-title">'.$icon.$service['filename'].'</span>
+        <div class="table__row-controls">
+            <button class="table__row-controls-view" data-url="'.$service_url.'">View</button>
+            <button class="table__row-controls-delete">Remove</button>
+            <button class="table__row-controls-share"><span class="material-symbols-outlined">share</span></button>
+        </div>
+    </div>';
+}
+
+function render_empty_file_row($x, $post_id, $field_key, $file_field_key) {
+    echo
+    '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="table__row">
+        <div class="table__row-form">
+            <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="file-field" enctype="multipart/form-data">
+                <input type="file" class="file" accept="application/pdf">
+                <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>
+            </form>
+        </div>
+        <div class="table__row-controls">
+            <button class="table__row-controls-delete">Remove</button>
+        </div>
+    </div>';
+}
+
+function show_tables($post_id, $section_title, $repeater_title, $field_name, $subfield_name, $model) {
+    $output = '';
+    $field_key = acf_get_field($field_name)['key'];
+    if(!empty(acf_get_field($subfield_name)['key'])) {
+        $file_field_key = acf_get_field($subfield_name)['key'];
+    }
+
+    $rows = get_field($field_name);
+    ob_start();
+    ?>
+    <div class="card__header"><h3><?= $section_title; ?></h3></div>
+    <div class="card__body">
+        <?php
+        if($model == '') {
+            if ($rows):
+                $last_row = end($rows);
+                $last_row_field = $last_row[$subfield_name];
+                $last_row_index = count($rows);
+
+                if (!empty($last_row_field['url'])):
+                    $icon = get_file_icon($last_row_field['url']);
+                    ?>
+                    <div class="table table--new">
+                        <div class="table__header">New</div>
+                        <div class="table__body">
+                            <div data-row-index="<?= $last_row_index; ?>" data-post-id="<?= $post_id; ?>" data-field-key="<?= $field_key; ?>" data-file-field-key="<?= $file_field_key; ?>" class="table__row">
+                                <span class="table__row-title"><?= $icon . $last_row_field['filename']; ?></span>
+
+                                <div class="table__row-controls">
+                                    <button class="table__row-controls-view" data-url="<?= get_service_url($last_row_field['url'], $post_id); ?>">View</button>
+                                    <button class="table__row-controls-delete">Remove</button>
+                                    <button class="table__row-controls-share"><span class="material-symbols-outlined">share</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                endif;
+            endif;
+            echo
+            '<div class="table">
+                <div class="table__header"></div>
+                <div class="table__body">';
+            if($model == '') {
+                if (have_rows($field_name)):
+                    $x = 1;
+                    while (have_rows($field_name)): the_row();
+                        $service = get_sub_field($subfield_name);
+                        $icon = '';
+                        $service_url = '';
+
+                        if (!empty($service)) {
+                            if (!empty($service['url'])) {
+                                $icon = get_file_icon($service['url']);
+                                $service_url = get_service_url($service['url'], $post_id);
+                            }
+
+                            if ($last_row_index !== $x) {
+                                render_file_row($service, $x, $post_id, $field_key, $file_field_key);
+                            }
+                        } else {
+                            render_empty_file_row($x, $post_id, $field_key, $file_field_key);
+                        }
+                        $x++;
+                    endwhile;
+                endif;
+                echo
+                    '</div>
+                    <div class="table__foot"><span class="table__foot-addrow" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'">Add '.$repeater_title.'</span></div>
+                </div>';
+            }
+        }
+
+        if($model == 'single') {
+            if(!empty(get_field($field_name))) {
+                $filename = get_field($field_name)['filename'];
+                $url = get_field($field_name)['url'];
+                $key = acf_get_field($field_name)['key'];
+                $icon = get_file_icon($url);
+                
+                echo
+                '<div class="table">
+                    <div class="table__header"></div>
+                    <div class="table__body">
+                        <div data-post-id="'. $post_id .'" data-field-key="'. $field_key .'" data-file-field-key="'. $file_field_key .'" class="table__row">
+                            <span class="table__row-title">'. $icon . $filename.'</span>
+                            <div class="table__row-controls">
+                                <button class="table__row-controls-view" data-url="'. get_service_url($url, $post_id).'">View</button>
+                                <button class="table__row-controls-delete">Remove</button>
+                                <button class="table__row-controls-share"><span class="material-symbols-outlined">share</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>';
+            } else {
+                echo
+                '<div class="table">
+                    <div class="table__header"></div>
+                    <div class="table__body">
+                        <div class="table__row">
+                            <div class="table__row-form">
+                                <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="file-field" enctype="multipart/form-data">
+                                    <input type="file" class="file" accept="application/pdf">
+                                    <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>';
+            }
+        }
+
+        if($model == 'colour') {
+            $field_key = acf_get_field($field_name)['key'];
+            $title_field_key = acf_get_field($field_name)['sub_fields'][0]['key'];
+            $color_field_key = acf_get_field($field_name)['sub_fields'][1]['key'];
+
+            echo
+            '<div class="table">
+                <div class="table__header"></div>
+                <div class="table__body">';
+
+            if (have_rows($field_name)):
+                list($subfield1, $subfield2) = explode(',', $subfield_name, 2);
+                $subfield1 = get_sub_field($subfield1);
+                $subfield2 = get_sub_field($subfield2);
+
+                $x = 1;
+                while (have_rows($field_name)): the_row();
+                    $title = get_sub_field('title');
+                    $colour = get_sub_field('colour');
+
+                    if(!empty($title)) {
+                        echo
+                        '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-title-key="'.$title_field_key.'" data-color-key="'.$color_field_key.'" class="table__row">
+                            <span class="table__row-title">
+                                <span>
+                                    <input type="text" class="title-field" placeholder="'.$title.'" value="'.$title.'" disabled>
+                                    <span class="table__row-colour color-field" style="background-color: '.$colour.'"></span>
+                                </span>
+                            </span>
+                            <div class="table__row-controls">
+                                <button class="table__row-controls-delete">Remove</button>
+                            </div>
+                        </div>';
+                    } else {
+                        echo
+                        '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-title-key="'.$title_field_key.'" data-color-key="'.$color_field_key.'" class="table__row">
+                            <div class="table__row-form">
+                                <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-field-key="'.$field_key.'" data-title-key="'.$title_field_key.'" data-color-key="'.$color_field_key.'">
+                                    <input type="text" class="title-field" placeholder="Colour Title" value="Colour Title" required>
+                                    <input type="color" class="color-field" required>
+                                    <button type="button" class="table__row-controls-upload">Submit</button>
+                                </form>
+                            </div>
+                            <div class="table__row-controls">
+                                <button class="table__row-controls-delete">Remove</button>
+                            </div>
+                        </div>';
+                    }
+                    $x++;
+                endwhile;
+            endif;
+            echo
+                '</div>
+                <div class="table__foot"><span class="table__foot-addrow table__foot-addrow--color" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-title-key="'. $title_field_key. '" data-color-key="'. $color_field_key. '">Add '.$repeater_title.'</span></div>
+            </div>';
+        }
+
+        if($model == 'font') {
+            $field_key = acf_get_field($field_name)['key'];
+            $title_field_key = acf_get_field($field_name)['sub_fields'][0]['key'];
+            $color_field_key = acf_get_field($field_name)['sub_fields'][1]['key'];
+
+            echo
+            '<div class="table">
+                <div class="table__header"></div>
+                <div class="table__body">';
+
+            if (have_rows($field_name)):
+                list($subfield1, $subfield2) = explode(',', $subfield_name, 2);
+                $subfield1 = get_sub_field($subfield1);
+                $subfield2 = get_sub_field($subfield2);
+
+                $x = 1;
+                while (have_rows($field_name)): the_row();
+                    $title = get_sub_field('title');
+                    $font = get_sub_field('font');
+
+                    if(!empty($title)) {
+                        echo
+                        '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-title-key="'.$title_field_key.'" data-color-key="'.$color_field_key.'" class="table__row">
+                            <span class="table__row-title">
+                                <span>
+                                    <strong>Font name:</strong> '.$title.' <strong>Font family: </strong>'.$font.'
+                                </span>
+                            </span>
+                            <div class="table__row-controls">
+                                <button class="table__row-controls-delete">Remove</button>
+                            </div>
+                        </div>';
+                    } else {
+                        echo
+                        '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-title-key="'.$title_field_key.'" data-color-key="'.$color_field_key.'" class="table__row">
+                            <div class="table__row-form">
+                                <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-field-key="'.$field_key.'" data-title-key="'.$title_field_key.'" data-font-key="'.$color_field_key.'">
+                                    <input type="text" class="title-field" placeholder="Font name" value="Font Title" required>
+                                    <input type="text" class="font-field" placeholder="Font family" value="Font family" required>
+                                    <button type="button" class="table__row-controls-upload">Submit</button>
+                                </form>
+                            </div>
+                            <div class="table__row-controls">
+                                <button class="table__row-controls-delete">Remove</button>
+                            </div>
+                        </div>';
+                    }
+                    $x++;
+                endwhile;
+            endif;
+            echo
+                '</div>
+                <div class="table__foot"><span class="table__foot-addrow table__foot-addrow--font" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-title-key="'. $title_field_key. '" data-color-key="'. $color_field_key. '">Add '.$repeater_title.'</span></div>
+            </div>';
+        }
+        
+    echo '</div></div>';
+
+    $output = trim(ob_get_clean());
+    return $output;
+}
+
+function show_gallery($post_id, $section_title, $field_name) {
+    echo '<div class="card__header"><h3>'.$section_title.'</h3></div><div class="card__body"><div class="table table--gallery"><div class="table__header"></div><div class="table__body">';
+    $images = get_field($field_name);
+    $field_key = acf_get_field($field_name)['key'];
+    $file_array = preg_replace("/[^a-zA-Z]+/", "", $section_title);
+
+    if ($images) :
+        foreach ($images as $image) :
+            $image_title = $image['alt'];
+            $image_url = $image['url'];
+            $image_filename = $image['filename'];
+
+            echo
+            '<div class="table__row">
+                <span class="table__row-title">
+                    ' . $image_filename . '
+                    <figure style="display: none;"><img style="display: none;" lazy="load" src="' . $image_url . '" alt="' . $image_title . '"></figure>
+                </span>
+                <div class="table__row-controls"><a href="' . $image_url . '" title="' . $image_title . '" target="_blank">View</a></div>
+            </div>';
+        endforeach;
+        echo
+        '</div><div class="table__foot">
+            <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
+            <span class="download-images"><span class="material-symbols-outlined">download</span></span>
+            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
+                <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
+                <button type="button" class="upload-gallery">Submit</button>
+            </form>
+        </div>';
+    else :
+        echo
+        '</div><div class="table__foot">
+            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
+                <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
+                <button type="button" class="upload-gallery">Submit</button>
+            </form>
+        </div>';
+    endif;
+    echo '</div></div></div>';
 }

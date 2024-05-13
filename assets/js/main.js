@@ -7,11 +7,12 @@ $(document).ready(function() {
     breadcrumb()
     bulletinboard()
     actions()
-    fileIcons()
+    // fileIcons()
     linkUpdate()
     reverseTables()
     searchPosts()
     api()
+    charts()
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -72,38 +73,59 @@ function header() {
 }
 
 function aside() {
-    $('.aside button').on('click', function() {
+    $('.aside__button').on('click', function() {
         $('.aside').toggleClass('aside--active')
     })
 
-    $('.aside__hotels h2').on('click', function() {
-        $(this).siblings('nav').slideToggle(100, 'linear')
+    $('[data-menu], .aside__item').on('click', function() {
+        if($('body').data('role') == 'contributor') {
+            if(typeof $(this).data('menu') !== 'undefined') {
+                $('.home__hotel').addClass('home__hotel--active')
+                $('main > section:not(.home__hotel)').hide()
+            } else {
+                $('.home__hotel').removeClass('home__hotel--active')
+                $('main > section:not(.home__hotel)').show()
+            }
+        }
     })
 
     $('.card__header').on('click', function() {
-        // $(this).parent().toggleClass('card--minimal')
-        $(this).siblings().slideToggle(100, 'linear')
+        if(!$(this).parent().hasClass('card--noresize')) {
+            $(this).siblings().slideToggle(100, 'linear')
+        }
     })
 
     if (window.location.hash && $('body').hasClass('single-hotels')) {
         sectionId = window.location.hash
         let menuItem = $(sectionId).closest('section').data('content')
 
-        $('span[data-menu='+menuItem+']').addClass('aside__item--active')
+        $('[data-menu='+menuItem+']').addClass('aside__item--active')
         $('.content[data-content='+menuItem+']').addClass('content--active')
     } else {
         if(localStorage.getItem('menu')) {
             let menuItem = localStorage.getItem('menu')
-            $('span[data-menu='+menuItem+']').addClass('aside__item--active')
+            $('[data-menu='+menuItem+']').addClass('aside__item--active')
             $('.content[data-content='+menuItem+']').addClass('content--active')
         } else {
-            $('span[data-menu=administration]').addClass('aside__item--active')
+            $('[data-menu=administration]').addClass('aside__item--active')
             $('.content[data-content=administration]').addClass('content--active')
         }
     }
 
-    $('.aside__item').on('click', function() {
-        $('.aside__item').removeClass('aside__item--active')
+    $('[data-menu], .aside__item').on('click', function() {
+        $(this).siblings('.aside__item-submenu').slideToggle(100, 'linear')
+        
+        if($(this).hasClass('aside__item')) {
+            $('[data-menu], .aside__item').removeClass('aside__item--active')
+        }
+
+        if($(this).siblings().hasClass('aside__item--active')) {
+            $(this).siblings().removeClass('aside__item--active')
+        }
+
+        if($(this).siblings().hasClass('aside__nav')) {
+            $(this).siblings('.aside__nav').slideToggle(100, 'linear')
+        }
 
         if($(this).siblings().hasClass('aside__submenu')) {
             $(this).siblings().slideToggle(100, 'linear')
@@ -121,7 +143,7 @@ function aside() {
             $(this).addClass('aside__item--active')
         }
 
-        if($(this).data('menu')) {
+        if($(this).data('menu') !== undefined) {
             $('.content').removeClass('content--active')
             $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
             let menu = $(this).data('menu')
@@ -133,13 +155,12 @@ function aside() {
 }
 
 function breadcrumb() {
-    $('.breadcrumb > *:nth-child(n+3)').remove()
+    $('.breadcrumb > *:nth-child(n+4)').remove()
     let activeContent = $('.content--active').data('content')
-    let breadcrumbLastItem = '<span>' + $('.aside__item[data-menu='+activeContent+']').find('h4').text() + '</span>'
+    let breadcrumbLastItem = '<span>' + $('[data-menu='+activeContent+']').text() + '</span>'
     let breadcrumbItem
 
     if($('.aside__item[data-menu='+activeContent+']').parent('.aside__submenu').length) {
-        console.log(activeContent);
         breadcrumbItem = '<span>' + $('.aside__item[data-menu='+activeContent+']').parent('.aside__submenu').parent().find('.aside__item h4').first().text() + '</span>'
     } else {
         breadcrumbItem = ''
@@ -213,8 +234,12 @@ function actions() {
     downloadImages()
     gallery()
 
-    $('body').on('click', '.material-symbols-outlined:contains("share")', function() {
-        copyToClipboard($(this).parent().find('a').attr('href'))
+    $('body').on('click', '.table__row-controls-view', function() {
+        window.open($(this).data('url'), '_blank').focus();
+    })
+
+    $('body').on('click', '.table__row-controls-share', function() {
+        copyToClipboard($(this).parent().find('.table__row-controls-view').data('url'))
     })
 }
 
@@ -299,7 +324,7 @@ function gallery() {
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
     .then(function() {
-        console.log('Text copied to clipboard: ' + text);
+        // console.log('Text copied to clipboard: ' + text);
         alert("Link copied to clipboard: " + text);
     })
     .catch(function(err) {
@@ -309,11 +334,11 @@ function copyToClipboard(text) {
 }
 
 function reverseTables() {
-    let tbody = $('.repeater-table tbody');
+    let tbody = $('.table:not(.table--new) .table__body');
 
     tbody.each(function() {
-        let rows = $(this).find('tr').get();
-        let lastIndex = rows.length - 1;
+        let rows = $(this).find('.table__row').get();
+        let lastIndex = rows.length;
 
         if (lastIndex > 0) {
             let rowsToReverse = rows.slice(0, lastIndex);
@@ -407,4 +432,111 @@ function fileIcons() {
             }
         })
     })
+}
+
+function charts() {
+    let xValues = []
+    let yValues = []
+    let labelValues, labelPrices
+
+    pricingPerDay = pricingPerDay.slice(Math.max(pricingPerDay.length - 30, 0))
+
+    labelValues = pricingPerDay.map(item => item.label);
+    labelPrices = pricingPerDay.map(item => item.value);
+    
+    $.each(labelValues, function(key, value){
+        xValues.push(value)
+    })
+
+    $.each(labelPrices, function(key, value){
+        yValues.push(value)
+    })
+
+    var ctx = document.querySelector('#pricingPerDayChart').getContext('2d')
+    var pricingPerDayChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: xValues,
+            datasets: [{
+                label: 'Room Pricing Per Day',
+                data: yValues,
+                backgroundColor: [
+                    '#5ABEBF'
+                ],
+                borderColor: [
+                    '#5ABEBF'
+                ],
+                fill: false,
+                tension: 0.1,
+                borderWidth: 3,
+                pointStyle: false,
+                pointRadius: 5,
+                pointHoverRadius: 10,
+                spanGaps: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            },
+        }
+    })
+
+    pricingPerDay = availabilityPerDay.slice(Math.max(availabilityPerDay.length - 30, 0))
+
+    labelValues = availabilityPerDay.map(item => item.label);
+    labelPrices = availabilityPerDay.map(item => item.value);
+    
+    xValues.length = 0
+
+    $.each(labelValues, function(key, value){
+        xValues.push(value)
+    })
+
+    yValues.length = 0
+
+    $.each(labelPrices, function(key, value){
+        yValues.push(value)
+    })
+
+    var ctx = document.querySelector('#availabilityPerDayChart').getContext('2d')
+    var availabilityPerDayChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: xValues,
+            datasets: [{
+                label: 'Room Availability Per Day',
+                data: yValues,
+                backgroundColor: [
+                    '#5ABEBF'
+                ],
+                borderColor: [
+                    '#5ABEBF'
+                ],
+                fill: false,
+                tension: 0.1,
+                borderWidth: 3,
+                pointStyle: false,
+                pointRadius: 5,
+                pointHoverRadius: 10,
+                spanGaps: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            },
+        }
+    })
+
 }

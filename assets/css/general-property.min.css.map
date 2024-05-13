@@ -1,1 +1,1 @@
-{"version":3,"sources":["../sass/page-modules/general-property.scss"],"names":[],"mappings":"AAGI,sBACI,mBAAA,CAAA,mBAAA,CAAA,YAAA,CACA,2BAAA,CAAA,4BAAA,CAAA,yBAAA,CAAA,qBAAA,CACA,QAAA,CAEA,2BACI,mBAAA,CAAA,mBAAA,CAAA,YAAA,CACA,2BAAA,CAAA,4BAAA,CAAA,yBAAA,CAAA,qBAAA,CACA,QAAA,CACA,UAAA,CAEA,kCACI,gBAAA,CAKZ,2BACI,0BAAA,CACA,kBAAA,CACA,YAAA","file":"general-property.min.css"}
+{"version":3,"sources":["../sass/page-modules/general-property.scss"],"names":[],"mappings":"AAGI,2BACI,0BAAA,CACA,kBAAA,CACA,YAAA","file":"general-property.min.css"}

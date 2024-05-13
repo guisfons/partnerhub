@@ -10,7 +10,7 @@ $( document ).ready(function() {
         let fieldKey = form.data('field-key')
         let fileFieldKey = form.data('file-field-key')
 
-        let rowId = $(this).closest('tr').data('row-index')
+        let rowId = $(this).closest('.table__row').data('row-index')
 
         if (fileInput.files.length > 0) {
             formData.append('file', fileInput.files[0])
@@ -22,7 +22,7 @@ $( document ).ready(function() {
                 formData.append('rowId', rowId)
                 formData.append('fileFieldKey', fileFieldKey)
 
-                form = btn.closest('tr')
+                form = btn.closest('.table__row')
             }
 
             // Perform AJAX request with jQuery
@@ -42,10 +42,20 @@ $( document ).ready(function() {
                     
                     let fileUrl = response.data.file_url
                     let filename = response.data.file_name
+
+                    fileUrl = getServiceUrl(fileUrl);
                     
-                    // let updatedHtml = '<figure class="administration__info-iframe"><iframe src="'+fileUrl+'" loading="lazy"></iframe><span class="remove-file" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove file</span><a href="'+fileUrl+'" target="_blank">See full screen</a><span class="material-symbols-outlined">share</span></figure>'
-                    let updatedHtml = '<table class="single-table"><tr><td>'+filename+'</td><td><a href="'+fileUrl+'" title="'+filename+'" target="_blank">View</a><span class="remove-file" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove file</span><span class="material-symbols-outlined">share</span></td></tr></table>'
-                    let updatedRepeaterHtml = '<tr data-row-index="'+rowId+'"><td>'+filename+'</td><td><a href="'+fileUrl+'" target="_blank">View</a><span class="deleteRowBtn" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span><span class="material-symbols-outlined">share</span></td></tr>'
+                    let updatedHtml =
+                    '<table class="single-table"><tr><td>'+filename+'</td><td><a href="'+fileUrl+'" title="'+filename+'" target="_blank">View</a><span class="remove-file" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove file</span><span class="material-symbols-outlined">share</span></td></tr></table>'
+                    let updatedRepeaterHtml =
+                        '<div data-row-index="'+rowId+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-file-field-key="'+fileFieldKey+'" class="table__row">\
+                            <span class="table__row-title">'+filename+'</span>\
+                            <div class="table__row-controls">\
+                                <button class="table__row-controls-view" data-url="'+fileUrl+'">View</button>\
+                                <button class="table__row-controls-delete">Remove</button>\
+                                <button class="table__row-controls-share"><span class="material-symbols-outlined">share</span></button>\
+                            </div>\
+                        </div>';
 
                     if(btn.hasClass('upload-repeater-file')) {
                         alert('File uploaded successfully!')
@@ -95,12 +105,22 @@ $( document ).ready(function() {
         })
     })
 
-    $('.add-row').on('click', function() {
+    $('.table__foot-addrow').on('click', function() {
         let addBtn = $(this)
         let postId = $(this).data('post-id')
         let fieldKey = $(this).data('field-key')
-        let rowId = parseInt($(this).closest('tbody').find('tr:nth-last-of-type(2)').data('row-index'))
-        let rowIdAdded
+        let rowId, rowIdAdded
+
+        if($(this).closest('.card__body').find('.table--new').length == 0) {
+            if($(this).closest('.table').find('.table__row').length > 0) {
+                rowId = parseInt($(this).closest('.table').find('.table__row:first-of-type').data('row-index'))+parseInt(1)
+            } else {
+                rowId = parseInt(1)
+            }
+        } else {
+            rowId = parseInt($(this).closest('.card__body').find('.table--new .table__row').data('row-index'))+parseInt(1);
+        }
+
         let fileFieldKey = $(this).data('file-field-key')
 
         if($(this).data('file-field-key') !== '') {
@@ -109,11 +129,11 @@ $( document ).ready(function() {
             fileFieldKey = fieldKey
         }
 
-        if($(this).closest('tbody').find('tr').length > 1) {
-            if(addBtn.hasClass('add-row--color') || addBtn.hasClass('add-row--font')) {
-                rowIdAdded = parseInt($(this).closest('tbody').find('tr:nth-last-of-type(2)').data('row-index'))+parseInt(1)
+        if($(this).closest('.table').find('.table__body .table__row').length > 1) {
+            if(addBtn.hasClass('table__foot-addrow--color') || addBtn.hasClass('table__foot-addrow--font')) {
+                rowIdAdded = parseInt($(this).closest('.table').find('.table__row:first-of-type').data('row-index'))+parseInt(1)
             } else {
-                rowIdAdded = parseInt($(this).closest('.card__body').find('.single-table tbody tr').data('row-index'))+parseInt(1)
+                rowIdAdded = parseInt($(this).closest('.card__body').find('.table--new .table__row').data('row-index'))+parseInt(1)
             }
         } else {
             rowIdAdded = parseInt(1)
@@ -121,7 +141,7 @@ $( document ).ready(function() {
 
         let url = ''
 
-        if(addBtn.hasClass('add-row--items')) {
+        if(addBtn.hasClass('table__foot-addrow--items')) {
             url = ''
         } else {
             url = '/wp-admin/admin-ajax.php?action=add_repeater_row'
@@ -140,25 +160,71 @@ $( document ).ready(function() {
                 hideLoadingScreen();
             },
             success: function(response) {
-                // Update the table after successful addition of a new row
-                if(addBtn.hasClass('add-row--color')) {
+                let tableRowNew =
+                '<div data-row-index="'+rowId+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-file-field-key="'+fileFieldKey+'" class="table__row">\
+                    <span class="table__row-title"></span>\
+                    <div class="table__row-form">\
+                        <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-file-field-key="'+fileFieldKey+'" class="file-field" enctype="multipart/form-data">\
+                            <input type="file" class="file" accept="application/pdf">\
+                            <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>\
+                        </form>\
+                    </div>\
+                    <div class="table__row-controls">\
+                        <button class="table__row-controls-delete">Remove</button>\
+                    </div>\
+                </div>';
+
+                let tableNew = 
+                '<div class="table table--new">\
+                    <div class="table__header">New</div>\
+                    <div class="table__body">'+tableRowNew+'</div>\
+                </div>';
+
+                if(addBtn.hasClass('table__foot-addrow--color')) {
                     title = addBtn.data('title-key')
                     color = addBtn.data('color-key')
-                    addBtn.closest('tbody').find('tr:last-of-type').before('<tr data-row-index="'+rowIdAdded+'"><td><form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'"><input type="text" class="title-field" placeholder="Colour Title" value="Colour Title" required="required"><input type="color" class="color-field" required="required"><button type="button" class="upload-items">Submit</button><span class="deleteRowBtn" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span></form></td></tr>')
-                } else if(addBtn.hasClass('add-row--font')) {
-                    console.log(postId);
+                    addBtn.closest('.card__body').find('.table__body').prepend(
+                        '<div data-row-index="'+rowIdAdded+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'" class="table__row">\
+                            <span class="table__row-title"></span>\
+                            <div class="table__row-form">\
+                            <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'">\
+                                    <input type="text" class="title-field" placeholder="Colour Title" value="Colour Title" required>\
+                                    <input type="color" class="color-field" required>\
+                                    <button type="button" class="table__row-controls-upload">Submit</button>\
+                                </form>\
+                            </div>\
+                            <div class="table__row-controls">\
+                                <button class="table__row-controls-delete">Remove</button>\
+                            </div>\
+                        </div>\
+                    ')
+                } else if(addBtn.hasClass('table__foot-addrow--font')) {
                     title = addBtn.data('title-key')
                     font = addBtn.data('font-key')
-                    addBtn.closest('tbody').find('tr:last-of-type').before('<tr data-row-index="'+rowIdAdded+'"><td><form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-font-key="'+font+'"><input type="text" class="title-field" placeholder="Font name" value="Font Title" required=""><input type="text" class="font-field" placeholder="Font family" value="Font family" required=""><button type="button" class="upload-items">Submit</button><span class="deleteRowBtn" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span></form></td></tr>')
+                    addBtn.closest('.table').find('.table__body').prepend(
+                        '<div data-row-index="'+rowIdAdded+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+font+'" class="table__row">\
+                            <span class="table__row-title"></span>\
+                            <div class="table__row-form">\
+                                <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'">\
+                                    <input type="text" class="title-field" placeholder="Font name" value="Font Title" required="">\
+                                    <input type="text" class="font-field" placeholder="Font family" value="Font family" required="">\
+                                    <button type="button" class="table__row-controls-upload">Submit</button>\
+                                </form>\
+                            </div>\
+                            <div class="table__row-controls">\
+                                <button class="table__row-controls-delete">Remove</button>\
+                            </div>\
+                        </div>\
+                    ')
                 } else {
-                    if(addBtn.closest('.card__body').find('.single-table tbody tr').length == 0) {
-                        addBtn.closest('.card__body').prepend('<table class="single-table"><thead><tr><td><h4>New</h4></td><td></td></tr></thead><tbody><tr></tr></tbody></table>')
+                    if(addBtn.closest('.card__body').find('.table--new').length == 0) {
+                        addBtn.closest('.card__body').prepend(tableNew)
+                    } else {
+                        let oldNew = addBtn.closest('.card__body').find('.table--new .table__row')
+                        addBtn.closest('.card__body').find('.table--new .table__row').remove()
+                        addBtn.closest('.card__body').find('.table--new .table__body').prepend(tableRowNew)
+                        addBtn.closest('.table').find('.table__body').prepend(oldNew)
                     }
-
-                    let oldNew = addBtn.closest('.card__body').find('.single-table tbody tr')
-                    addBtn.closest('.card__body').find('.single-table tbody tr').remove()
-                    addBtn.closest('.card__body').find('.single-table tbody').prepend('<tr data-row-index="'+rowIdAdded+'"><td>Add file</td><td><form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-file-field-key="'+fileFieldKey+'" class="file-field" enctype="multipart/form-data"><input type="file" class="file" accept="application/pdf"><button type="button" class="upload-file upload-repeater-file">Upload file</button></form><span class="deleteRowBtn" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-file-field-key="'+fileFieldKey+'">Remove</span></td></tr>')
-                    addBtn.closest('tbody').prepend(oldNew)
 
                     linkUpdate()
                 }
@@ -170,7 +236,7 @@ $( document ).ready(function() {
 
     });
     
-    $('body').on('click', '.upload-items', function() {
+    $('body').on('click', '.table__row-controls-upload', function() {
         let btn = $(this)
         let form = $(this).closest('form')
         let postId = form.data('post-id')
@@ -178,7 +244,7 @@ $( document ).ready(function() {
         let titleFieldKey = form.data('title-key')
         let colorFieldKey = form.data('color-key')
         let fontFieldKey = form.data('font-key')
-        let rowId = $(this).closest('tr').data('row-index')
+        let rowId = $(this).closest('.table__row').data('row-index')
         let title = $(this).parent().find('.title-field').val()
         let color, font, type = ''
 
@@ -196,7 +262,6 @@ $( document ).ready(function() {
             type = 'font'
         }
 
-
         $.ajax({
             type: 'POST',
             url: '/wp-admin/admin-ajax.php?action=multiple_update_repeater_items',
@@ -210,9 +275,22 @@ $( document ).ready(function() {
             success: function(response) {
                 // Update the table after successful addition of a new row
                 if(btn.closest('form').find('.color-field').length !== 0) {
-                    btn.closest('tr').html('<td><span><input type="text" placeholder="'+title+'" value="'+title+'" disabled><span class="color" style="background-color: '+color+'"></span></span></td><td><span class="deleteRowBtn" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span></td>')
+                    btn.closest('.table__row-form').html(
+                    '<span class="table__row-title">\
+                        <span>\
+                            <input type="text" placeholder="'+title+'" value="'+title+'" disabled>\
+                            <span class="table__row-colour color-field" style="background-color: '+color+'"></span>\
+                        </span>\
+                    </span>')
                 } else if(btn.closest('form').find('.font-field').length !== 0) {
-                    btn.closest('tr').html('<td><strong>Font name:</strong> '+title+' <strong>Font family:</strong> '+font+'</td><td><span class="deleteRowBtn" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span></td>')
+                    btn.closest('.table__row-form').html(
+                    '<div data-row-index="'+rowId+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+titleFieldKey+'" data-color-key="'+fontFieldKey+'" class="table__row">\
+                        <span class="table__row-title">\
+                            <span>\
+                                <strong>Font name:</strong> '+title+' <strong>Font family: </strong>'+font+'\
+                            </span>\
+                        </span>\
+                    </div>')
                 }
             },
             error: function(error) {
@@ -221,18 +299,20 @@ $( document ).ready(function() {
         });
     })
     
-    $('body').on('click', '.deleteRowBtn', function() {
+    $('body').on('click', '.deleteRowBtn, .table__row-controls-delete', function() {
         let rmBtn = $(this)
-        let postId = $(this).data('post-id')
-        let fieldKey = $(this).data('field-key')
-        let rowId = parseInt($(this).closest('tr').data('row-index'))
-        let userId = $(this).data('user-id')
+        let postId = $(this).closest('.table__row').data('post-id')
+        let fieldKey = $(this).closest('.table__row').data('field-key')
+        let rowId = parseInt($(this).closest('.table__row').data('row-index'))
+        let fileName = $(this).closest('.table__row').find('.table__row-title').text()
+
+        // let userId = $(this).data('user-id')
 
         // Delete the row via AJAX
         $.ajax({
             type: 'POST',
             url: '/wp-admin/admin-ajax.php?action=delete_repeater_row',
-            data: { postId: postId, fieldKey: fieldKey, rowId: rowId, userId: userId },
+            data: { postId: postId, fieldKey: fieldKey, rowId: rowId, fileName: fileName },
             beforeSend: function () {
                 showLoadingScreen();
             },
@@ -240,10 +320,16 @@ $( document ).ready(function() {
                 hideLoadingScreen();
             },
             success: function(response) {
-                let currentRow = rmBtn.closest('tr')
-                currentRow.remove()
+                let currentRow = rmBtn.closest('.table__row')
 
-                let rows = rmBtn.closest('tbody').find('[data-row-index]')
+                if(rmBtn.closest('.table').hasClass('table--new')) {
+                    currentRow.closest('.table--new').remove()
+                } else {
+                    currentRow.remove()
+                }
+
+                let rows = rmBtn.closest('.table__body').find('[data-row-index]')
+
                 rows.each(function(i) {
                     $(this).attr('data-row-index', i + 1)
                 })
@@ -310,49 +396,22 @@ $( document ).ready(function() {
                         $('<span class="remove-images" data-field-key="'+fieldKey+'">Remove images</span><span class="download-images"><span class="material-symbols-outlined">download</span></span>').insertBefore(btn.parent())
                     }
 
-                    if(btn.closest('.gallery').find('tbody tr').length == 0) {
-                        if(type == 'logos[]') {
-                            btn.closest('.gallery').find('h4').after('<div class="gallery__images gallery__images--noslider"></div>')
-                            $.each(filteredImageUrls, function(i, value) {
-                                btn.closest('.gallery').find('.gallery__images').append('<figure><img src="'+value+'" alt="'+value.split('/').pop()+'"></figure>')
-                            })
-                        } else {
-                            btn.closest('.gallery').find('h4').after('<div class="gallery__images"></div>')
-                            $.each(filteredImageUrls, function(i, value) {
-                                btn.closest('.gallery').find('tbody').prepend('<tr><td>'+value+'</td><td><a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a></td></tr>')
-                            })
-                            
-                            // setTimeout(function() {
-                            //     btn.closest('.gallery').find('.gallery__images').slick({
-                            //         infinite: false,
-                            //         slidesToShow: 1,
-                            //         arrows: true,
-                            //         dots: true,
-                            //         adaptiveHeight: true
-                            //     })
-                            // }, 300)
-                        }
+                    if(type == 'logos[]') {
+                        btn.closest('.gallery').find('h4').after('<div class="gallery__images gallery__images--noslider"></div>')
+                        $.each(filteredImageUrls, function(i, value) {
+                            btn.closest('.gallery').find('.gallery__images').append('<figure><img src="'+value+'" alt="'+value.split('/').pop()+'"></figure>')
+                        })
                     } else {
-                        if(type == 'logos[]') {
-                            $.each(filteredImageUrls, function(i, value) {
-                                btn.closest('.gallery').find('.gallery__images').append('<figure><a href="'+value+'" target="_blank"><img src="'+value+'" alt="'+value.split('/').pop()+'"></a></figure>')
-                            })
-                        } else {
-                            // btn.closest('.gallery').find('.gallery__images').slick('unslick')
-                            $.each(filteredImageUrls, function(i, value) {
-                                // btn.closest('.gallery').find('.gallery__images').append('<figure><img src="'+value+'" alt="'+value.split('/').pop()+'"></figure>')
-                                btn.closest('.gallery').find('tbody').prepend('<tr><td>'+value+'</td><td><a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a></td></tr>')
-                            })
-
-                            // btn.closest('.gallery').find('.gallery__images').slick({
-                            //     infinite: false,
-                            //     slidesToShow: 1,
-                            //     arrows: true,
-                            //     dots: true,
-                            //     adaptiveHeight: true
-                            // })
-                        }         
-                        
+                        $.each(filteredImageUrls, function(i, value) {
+                            btn.closest('.table--gallery').find('.table__body').append(
+                            '<div class="table__row">\
+                                <span class="table__row-title">\
+                                    '+value.split('/').pop()+'\
+                                    <figure style="display: none;"><img style="display: none;" lazy="load" src="'+value+'" alt="'+value.split('/').pop()+'"></figure>\
+                                </span>\
+                                <div class="table__row-controls"><a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a></div>\
+                            </div>')
+                        })
                     }
                 },
                 error: function(xhr, status, error) {
@@ -388,7 +447,8 @@ $( document ).ready(function() {
             },
             success: function(response) {
                 // btn.closest('.gallery').find('.gallery__images').empty()
-                btn.closest('.gallery').find('tbody').empty()
+                btn.closest('.table--gallery').find('.table__body').empty()
+                btn.closest('.gallery').find('.gallery__images').remove()
                 btn.siblings(':not(form)').remove()
                 btn.remove()
                 alert('Images deleted.')
@@ -400,3 +460,15 @@ $( document ).ready(function() {
         });
     })
 })
+
+function getServiceUrl(url) {
+    if (url) {
+        var pathParts = url.split('/');
+        var uploadsIndex = pathParts.indexOf('uploads');
+        if (uploadsIndex !== -1) {
+            pathParts.splice(uploadsIndex + 1, 0, $('.breadcrumb span[data-post-name]').data('post-name'));
+            return pathParts.join('/');
+        }
+    }
+    return '';
+}

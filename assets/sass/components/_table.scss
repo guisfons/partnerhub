@@ -1,111 +1,211 @@
-table {
-    position: relative;
-    border-radius: 1.2rem;
-    // border: .1rem solid $darkblue;
-    border-spacing: 0;
+.table {
     width: 100%;
-    font-size: 2.2rem;
-    font-weight: 500;
-
-    td {
-        width: 50%;
+    
+    &:not(.table--new) {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
     }
 
-    tbody tr:first-of-type {
-        background-color: $gainsboro;
+    & > *:empty { display: none; }
+
+    &__header {
         
-        td {
-            border-radius: 1.2rem 0 0 1.2rem;
-            padding: 2rem;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        &:not(:empty) {
+            background-color: $gainsboro;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
         }
     }
 
-    form {
+    &__row {
         display: flex;
+        justify-content: space-between;
         gap: 1rem;
-        flex-direction: row !important;
-        align-items: center;
-    }
 
-    &.repeater-table, &.single-table {
-        tr {
-            td {
-                position: relative;
+        &-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 50%;
+
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: $dark_slate_gray;
+
+            &:empty { display: none; }
+
+            figure {
+                width: 4rem;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+
+            & > span {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                font-size: 1.7rem;
+                white-space: nowrap;
+            }
+        }
+
+        &-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+            width: 50%;
+
+            &-view, &-delete, &-upload { @include btn; }
+
+            &-view, &-upload {
+                background-color: $cyan;
+            }
+
+            &-delete {
+                background-color: $red;
+            }
+
+            &-upload {
+                margin-left: auto;
+            }
+
+            &-share {
+                cursor: pointer;
                 
-                &:not(:only-child):last-of-type {
-                    display: flex;
-                    width: 100%;
-                    align-items: center;
-                    justify-content: flex-end;
-                    gap: 1rem;
-    
-                    a, span:not(.color):not(.repeater-table form ~ span) {
-                        color: $darkblue;
-                        font-weight: 600;
-                        cursor: pointer;
-                        white-space: nowrap;
-
-                        &.material-symbols-outlined {
-                            font-size: 2rem;
-                        }
-                    }
-                }
-
-                &:only-child {
-                    width: 100%;
-                }
-
-                span:has(.color) {
-                    display: flex;
-                    align-items: center;
-                    gap: 2rem;
-                }
-
-                figure {
-                    max-width: 4rem;
-                    width: 4rem;
-                    max-height: 4.9rem;
-
-                    position: absolute;
-                    left: 0;
+                span {
+                    font-size: 3rem;
                 }
             }
         }
 
-        form span {
-            margin-left: 0;
-            color: $white !important;
+        &-form {
+            width: 100%;
+
+            form {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            & ~ .table__row-controls { width: fit-content; }
         }
-    }
 
-    .color {
-        display: flex;
-        width: 5rem;
-        height: 3.7rem;
-    }
-
-    &.single-table {
-        background-color: $gainsboro;
-        margin-top: 2.3rem;
-
-        thead h4 {
-            position: absolute;
-            top: -3.3rem;
-            left: 1rem;
-
+        &-upload {
             display: flex;
             align-items: center;
             justify-content: center;
 
-            width: 12.5rem;
-            height: 3.3rem;
-            border-radius: 1rem 1rem 0 0;
-            background-color: $green;
+            padding: 1.2rem 1.5rem;
+            border: none;
+            border-radius: 1rem;
+            background-color: $cyan;
 
-            color: #fff;
+            font-size: 2rem;
+            font-weight: 600;
+            color: $white !important;
+            white-space: nowrap;
+
+            position: relative;
+            margin-left: auto;
+
+            width: fit-content;
+            cursor: pointer;
+        }
+
+        &-colour {
+            display: block;
+            width: 6rem;
+            height: 3.4rem;
+        }
+    }
+
+    &__foot {
+        display: flex;
+        justify-content: flex-end;
+
+        &-addrow {
+            background-color: $mustard !important;
+        }
+    }
+
+    &--new {
+        position: relative;
+
+        .table__header {
+            width: fit-content;
+            padding: 1rem 3rem;
+            margin-left: 1rem;
+            background-color: $green;
+            border-radius: 1rem 1rem 0 0;
+            
             font-size: 2rem;
             font-weight: 800;
             text-transform: uppercase;
+            color: $white;
+        }   
+    }
+
+    &--gallery {
+        .table {
+            &__row {
+                background-color: $gainsboro;
+    
+                &:first-of-type {
+                    border-radius: 1rem 1rem 0 0;
+                }
+    
+                &:last-of-type {
+                    border-radius: 0 0 1rem 1rem;
+                }
+    
+                &-title {
+                    font-size: 1.5rem;
+                }
+    
+                &-controls {
+                    a {
+                        @include btn;
+                        font-size: 1.7rem;
+                        background-color: $cyan;
+                    }
+                }
+            }
+
+            &__foot {
+                gap: 1rem;
+                align-items: center;
+
+                span {
+                    font-size: 1.7rem;
+                    font-weight: 700;
+                    color: $darkblue;
+                    cursor: pointer;
+        
+                    &:last-of-type {
+                        font-size: 2.5rem;
+                    }
+                }
+        
+                form {
+                    max-width: 45rem;
+                    width: 100%;
+                    margin-left: auto;
+                }
+            }
         }
     }
 }

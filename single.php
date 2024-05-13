@@ -12,14 +12,16 @@ if(is_user_logged_in()) {
 	$user = wp_get_current_user();
     get_header();
     if(is_singular('hotels')) {
-        echo '<nav class="breadcrumb"><a href="'.get_home_url().'" title="Home">Home</a><span>'.get_field('country').'</span></nav>';
+        echo '<nav class="breadcrumb"><a href="'.get_home_url().'" title="Home">Home</a><span>'.get_field('country').'</span><span data-post-name="'.get_post_field( 'post_name', get_post() ).'">'.get_the_title().'</span></nav>';
         while ( have_posts() ) : the_post();
-            if(in_array( 'administrator', (array) $user->roles ) || in_array(get_current_user_id(), get_field('user'))) {
+            if(in_array( 'administrator', (array) $user->roles ) || in_array('headofoperations', (array) $user->roles) || in_array(get_current_user_id(), get_field('user'))) {
                 loadModulesCssForTemplate('administration.min.css');
                 get_template_part('template-parts/administration');
         
                 loadModulesCssForTemplate('general-property.min.css');
-                get_template_part('template-parts/general-property');
+                get_template_part('template-parts/general-info');
+
+                get_template_part('template-parts/property-info');
         
                 get_template_part('template-parts/regiotels-deliverables');
 
