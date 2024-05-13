@@ -6,7 +6,6 @@ define('ASSETS_VERSION','1');
  * Dequeue unused scripts and styles
  */
 function themeFiles() {
-
     wp_deregister_script('jquery');
     wp_dequeue_style('wp-block-library');
     
@@ -20,6 +19,7 @@ function themeFiles() {
     wp_enqueue_script( 'jszip', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js', array(), '3.1.5', true );
     wp_enqueue_script( 'slick', get_stylesheet_directory_uri() . '/assets/lib/slick.min.js', array('jquery'), '1.8.1', true );
     wp_enqueue_script( 'api', get_template_directory_uri() . '/assets/js/api.js', array('jquery'), '1.0', true);
+    wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array('main-js'), '1.0', true);
     wp_enqueue_script( 'main-js', get_stylesheet_directory_uri() . '/assets/js/main.js', array('jquery', 'slick'), '1.0', true );
     wp_enqueue_script( 'acf-functions', get_stylesheet_directory_uri() . '/assets/js/acf-functions.js', array('jquery'), '1.0', true );
 }

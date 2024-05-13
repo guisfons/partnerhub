@@ -36,6 +36,23 @@
             text-transform: uppercase;
         }
     }
+
+    &[data-role="contributor"] {
+        .home__hotel {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+            transition: .3s ease-in-out;
+            width: 100%;
+
+            &--active {
+                opacity: 1;
+                visibility: visible;
+                height: fit-content;
+            }
+        }
+    }
 }
 
 

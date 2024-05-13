@@ -6,29 +6,29 @@
     cursor: pointer;
 }
 
-input[type=submit], .upload-file, .upload-items, .upload-gallery, .repeater-table form ~ span, .repeater-table form span, .news__board button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+// input[type=submit],  .table__row-controls-upload, .upload-gallery, .repeater-table form ~ span, .repeater-table form span, .news__board button {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
 
-    padding: 1rem 1.5rem;
-    border: none;
-    border-radius: 1rem;
-    background-color: $cyan;
+//     padding: 1rem 1.5rem;
+//     border: none;
+//     border-radius: 1rem;
+//     background-color: $cyan;
 
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-family: "Poppins",sans-serif;
-    color: $white !important;
-    text-transform: uppercase;
-    white-space: nowrap;
+//     font-size: 1.5rem;
+//     font-weight: 700;
+//     font-family: "Poppins",sans-serif;
+//     color: $white !important;
+//     text-transform: uppercase;
+//     white-space: nowrap;
 
-    position: relative;
+//     position: relative;
 
-    width: fit-content;
-    margin: 1rem 0 1rem auto;
-    cursor: pointer;
-}
+//     width: fit-content;
+//     margin: 1rem 0 1rem auto;
+//     cursor: pointer;
+// }
 
 input[type=text], input[type=password], textarea, select {
     max-width: 25rem;
@@ -47,7 +47,7 @@ input[type=color] {
     padding: 0;
 }
 
-.view-btn, .deleteRowBtn, .add-row, .upload-file {
+.view-btn, .deleteRowBtn, .table__foot-addrow {
     color: $white !important;
     font-size: 2rem !important;
     font-weight: 600 !important;
@@ -56,12 +56,7 @@ input[type=color] {
     cursor: pointer;
 }
 
-.add-row {
-    background-color: $mustard !important;
-    margin-top: 4rem;
-}
-
-.view-btn, .upload-file {
+.view-btn {
     background-color: $cyan;
 }
 

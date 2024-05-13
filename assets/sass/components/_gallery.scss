@@ -134,16 +134,15 @@
         }
     }
 
+    .repeater-table {
+        width: 100%;
+    }
+
     &__control {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 2rem;
-
-        form {
-            flex-direction: row !important;
-            align-items: center;
-        }
     }
 
     &__popup {
@@ -196,8 +195,16 @@
     }
     
     &-field {
-        width: fit-content !important;
-        margin-left: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        width: 100% !important;
+
+        .upload-gallery {
+            @include btn;
+            background-color: $mustard;
+        }
     }
 
     .download-images {
