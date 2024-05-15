@@ -13,6 +13,7 @@ $(document).ready(function() {
     searchPosts()
     api()
     charts()
+    dragNDrop()
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -77,17 +78,6 @@ function aside() {
         $('.aside').toggleClass('aside--active')
     })
 
-    $('[data-menu], .aside__item').on('click', function() {
-        if($('body').data('role') == 'contributor') {
-            if(typeof $(this).data('menu') !== 'undefined') {
-                $('.home__hotel').addClass('home__hotel--active')
-                $('main > section:not(.home__hotel)').hide()
-            } else {
-                $('.home__hotel').removeClass('home__hotel--active')
-                $('main > section:not(.home__hotel)').show()
-            }
-        }
-    })
 
     $('.card__header').on('click', function() {
         if(!$(this).parent().hasClass('card--noresize')) {
@@ -438,89 +428,39 @@ function charts() {
     let xValues = []
     let yValues = []
     let labelValues, labelPrices
+    let monthlyRoomSold, roomSold
 
-    pricingPerDay = pricingPerDay.slice(Math.max(pricingPerDay.length - 30, 0))
+    // pricingPerDay = pricingPerDay.slice(Math.max(pricingPerDay.length - 30, 0))
 
-    labelValues = pricingPerDay.map(item => item.label);
-    labelPrices = pricingPerDay.map(item => item.value);
+    // labelValues = pricingPerDay.map(item => item.label);
+    // labelPrices = pricingPerDay.map(item => item.value);
     
-    $.each(labelValues, function(key, value){
-        xValues.push(value)
-    })
+    // $.each(labelValues, function(key, value){
+    //     xValues.push(value)
+    // })
 
-    $.each(labelPrices, function(key, value){
-        yValues.push(value)
-    })
+    // $.each(labelPrices, function(key, value){
+    //     yValues.push(value)
+    // })
 
-    var ctx = document.querySelector('#pricingPerDayChart').getContext('2d')
-    var pricingPerDayChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: xValues,
-            datasets: [{
-                label: 'Room Pricing Per Day',
-                data: yValues,
-                backgroundColor: [
-                    '#5ABEBF'
-                ],
-                borderColor: [
-                    '#5ABEBF'
-                ],
-                fill: false,
-                tension: 0.1,
-                borderWidth: 3,
-                pointStyle: false,
-                pointRadius: 5,
-                pointHoverRadius: 10,
-                spanGaps: true,
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
+    xValues = [2024, 2023, 2022, 2021, 2020, 2019,]
+    yValues = [89, 151, 217, 0, 0, 393]
 
-            scales: {
-                y: {
-                    beginAtZero: false
-                }
-            },
-        }
-    })
-
-    pricingPerDay = availabilityPerDay.slice(Math.max(availabilityPerDay.length - 30, 0))
-
-    labelValues = availabilityPerDay.map(item => item.label);
-    labelPrices = availabilityPerDay.map(item => item.value);
-    
-    xValues.length = 0
-
-    $.each(labelValues, function(key, value){
-        xValues.push(value)
-    })
-
-    yValues.length = 0
-
-    $.each(labelPrices, function(key, value){
-        yValues.push(value)
-    })
-
-    var ctx = document.querySelector('#availabilityPerDayChart').getContext('2d')
-    var availabilityPerDayChart = new Chart(ctx, {
+    var ctx = document.querySelector('#monthlyRoomSoldChart').getContext('2d')
+    var monthlyRoomSoldChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: xValues,
             datasets: [{
-                label: 'Room Availability Per Day',
+                label: 'Monthly Rooms Sold',
                 data: yValues,
-                backgroundColor: [
-                    '#5ABEBF'
-                ],
-                borderColor: [
-                    '#5ABEBF'
-                ],
+                backgroundColor: ['#25475C', '#236666', '#236666', '', '', '#A8A2A2'],
+                // borderColor: [
+                //   '#5ABEBF'
+                // ],
                 fill: false,
                 tension: 0.1,
-                borderWidth: 3,
+                // borderWidth: 3,
                 pointStyle: false,
                 pointRadius: 5,
                 pointHoverRadius: 10,
@@ -539,4 +479,75 @@ function charts() {
         }
     })
 
+    // pricingPerDay = availabilityPerDay.slice(Math.max(availabilityPerDay.length - 30, 0))
+
+    // labelValues = availabilityPerDay.map(item => item.label);
+    // labelPrices = availabilityPerDay.map(item => item.value);
+    
+    // xValues.length = 0
+
+    // $.each(labelValues, function(key, value){
+    //     xValues.push(value)
+    // })
+
+    // yValues.length = 0
+
+    // $.each(labelPrices, function(key, value){
+    //     yValues.push(value)
+    // })
+
+    xValues = ['Hotel Direct', 'Hotel Web Direct', 'Booking.com', 'Expedia', 'Other']
+    yValues = [7, 17, 55, 7, 17];
+    var ctx = document.querySelector('#roomSoldChart').getContext('2d')
+    var roomSoldChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: xValues,
+            datasets: [{
+                label: 'Room Sold per Channel',
+                data: yValues,
+                backgroundColor: ['#27465B', '#276566', '#038A89', '#59BFC4', '#BFBEBE'],
+                // borderColor: [
+                //     '#5ABEBF'
+                // ],
+                // fill: false,
+                // tension: 0.1,
+                borderWidth: 0,
+                
+                // spanGaps: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    })
+
+}
+
+function dragNDrop() {
+    var dropZone = $('#drop-zone');
+
+    dropZone.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    dropZone.on('dragover dragenter', function() {
+      $(this).addClass('drag-over');
+    });
+
+    dropZone.on('dragleave dragend drop', function() {
+      $(this).removeClass('drag-over');
+    });
+
+    dropZone.on('drop', function(e) {
+      var files = e.originalEvent.dataTransfer.files;
+      handleFiles(files);
+    });
+
+    function handleFiles(files) {
+      // Handle dropped files here
+      console.log(files);
+    }
 }

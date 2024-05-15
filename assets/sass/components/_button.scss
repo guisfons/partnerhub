@@ -46,25 +46,3 @@ input[type=color] {
     height: 4rem;
     padding: 0;
 }
-
-.view-btn, .deleteRowBtn, .table__foot-addrow {
-    color: $white !important;
-    font-size: 2rem !important;
-    font-weight: 600 !important;
-    border-radius: .7rem !important;
-    padding: 1rem 3.5rem !important;
-    cursor: pointer;
-}
-
-.view-btn {
-    background-color: $cyan;
-}
-
-.deleteRowBtn {
-    background-color: $red !important;
-}
-
-.share-btn {
-    color: $dark_slate_gray !important;
-    font-size: 2.6rem !important;
-}

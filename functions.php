@@ -658,6 +658,25 @@ function handle_add_images_to_gallery() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $postId = isset($_POST['postId']) ? intval($_POST['postId']) : 0;
         $galleryFieldKey = isset($_POST['fieldKey']) ? sanitize_text_field($_POST['fieldKey']) : '';
+        $current_year = date('Y');
+        $current_month = date('m');
+        $post = get_post($postId);
+        $post_name = $post->post_name;
+
+        $upload_dir = wp_upload_dir();
+
+        $post_folder_path = $upload_dir['basedir'] . '/' . $post_name;
+        // $post_folder_path .= '/' . $current_year . '/' . $current_month;
+
+        if (!file_exists($post_folder_path)) {
+            mkdir($post_folder_path, 0755, true);
+        }
+
+        $year_month_folder_path = $post_folder_path . '/' . $current_year . '/' . $current_month;
+        // Check if the folder exists, create it if not
+        if (!file_exists($year_month_folder_path)) {
+            mkdir($year_month_folder_path, 0755, true);
+        }
 
         $files = $_FILES[$_POST['nameField']];
 
@@ -688,6 +707,14 @@ function handle_add_images_to_gallery() {
 
                         // Upload each file using media_handle_upload and get the attachment ID
                         $attach_id = media_handle_upload($_POST['nameField'], $postId);
+
+                        $file_url = wp_get_attachment_url($attach_id);
+                        $file_path = get_attached_file($attach_id);
+
+                        // Move the file to the post folder
+                        $destination = $year_month_folder_path . '/' . basename($file_path);
+
+                        rename($file_path, $destination);
 
                         // Store the attachment ID in the array
                         if (is_numeric($attach_id)) {
@@ -766,21 +793,30 @@ function my_handle_attachment($file_handler,$post_id,$set_thu=false) {
 
 add_action('admin_init', 'restrict_dashboard_access');
 function restrict_dashboard_access() {
-    if (!current_user_can('manage_options') && $_SERVER['PHP_SELF'] != '/wp-admin/admin-ajax.php') {
-        $user = wp_get_current_user();    
-
-        if(in_array( 'contributor', (array) $user->roles )) {
+    if (!current_user_can('manage_options') && !is_admin()) {
+        $user = wp_get_current_user();
+        
+        if(in_array('contributor', (array)$user->roles)) {
             $posts = get_posts(array(
-                'posts_per_page'    => -1,
-                'post_type'     => 'hotels',
-                'meta_key'      => 'user',
-                'meta_value'    => in_array(get_current_user_id(), get_user_id),
-            ));    
+                'posts_per_page' => -1,
+                'post_type' => 'hotels',
+                'meta_query' => array(
+                    array(
+                        'key' => 'user',
+                        'value' => get_current_user_id(),
+                        'compare' => '=',
+                    ),
+                ),
+            ));
+
+            if(empty($posts)) {
+                wp_redirect(home_url());
+                exit;
+            }
         } else {
             wp_redirect(home_url());
+            exit;
         }
-
-        exit;
     }
 }
 
@@ -962,7 +998,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                 '<div class="table">
                     <div class="table__header"></div>
                     <div class="table__body">
-                        <div data-post-id="'. $post_id .'" data-field-key="'. $field_key .'" data-file-field-key="'. $file_field_key .'" class="table__row">
+                        <div data-post-id="'. $post_id .'" data-field-key="'. $key .'" class="table__row">
                             <span class="table__row-title">'. $icon . $filename.'</span>
                             <div class="table__row-controls">
                                 <button class="table__row-controls-view" data-url="'. get_service_url($url, $post_id).'">View</button>
@@ -979,9 +1015,9 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     <div class="table__body">
                         <div class="table__row">
                             <div class="table__row-form">
-                                <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="file-field" enctype="multipart/form-data">
+                                <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" class="file-field" enctype="multipart/form-data">
                                     <input type="file" class="file" accept="application/pdf">
-                                    <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>
+                                    <button type="button" class="table__row-upload upload-file">Upload file</button>
                                 </form>
                             </div>
                         </div>

@@ -4,11 +4,21 @@
 
     <div class="notifications__tasks">
         <?php
+
+        $post = get_post(get_the_ID());
+
+        if(is_singular('hotels')) {
+            $content = $post->post_name;
+        } else {
+            $content = '';
+        }
+
         $args = array(
             'post_type' => 'notifications',
             'posts_per_page' => 20,
             'orderby' => 'date',
-            'order' => 'DESC'
+            'order' => 'DESC',
+            's' => $content,
         );
         
         $query = new WP_Query($args);
@@ -19,13 +29,19 @@
                 $query->the_post();
                 $hotel = explode('<br/>', get_the_content())[0];
                 $section = strtolower(str_replace(' ', '-', explode('<br/>', get_the_content())[1]));
-                
+                $icon = get_file_icon(get_the_title());
+
                 echo
                 '<div class="notifications__item" style="--data-notification: '.$x.';">
                     <figure>
-                        <span class="material-symbols-outlined">account_circle</span>
+                        <span></span>
+                        <span></span>
                     </figure>
-                    <article data-user="'.(!empty(wp_get_current_user()->user_firstname) ? wp_get_current_user()->user_firstname : wp_get_current_user()->display_name).'"><a href="'. get_home_url(). '/hotels/' . $hotel . '/#' . $section .'" title="'.get_the_title().'">'.get_the_title().'</a></article>
+                    <article>
+                        <span class="notifications__author">'.get_the_author().'</span>
+                        <a href="'. get_home_url(). '/hotels/' . $hotel . '/#' . $section .'" title="'.get_the_title().'" class="notifications__file">'.$icon.get_the_title().'</a>
+                        <time datetime="'.get_the_date('Y | m | d - H:i').'" class="notifications__time">'.get_the_date('Y | m | d - H:i').'</time>
+                    </article>
                 </div>';
             }
 

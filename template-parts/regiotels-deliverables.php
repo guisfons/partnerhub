@@ -1,15 +1,9 @@
-<?php
-if(!is_single()) {
-    $post_id = 1166;
-} else {
-    $post_id = get_the_ID();
-}
-?>
+<?php $post_id = get_the_ID(); ?>
 <section data-content="revenue-distribution" class="content">
 	<h2>Revenue & Distribution</h2>
     <div class="card revenue-distribution">
         <?php
-        $section_title = 'Revenue & Distribution'; $repeater_title = 'Revenue & Distribution'; $field_name = 'revenue_document'; $subfield_name = 'file';
+        $section_title = 'Monthly Dashboard Report'; $repeater_title = 'Monthly Dashboard Report'; $field_name = 'monthly_reports_documents'; $subfield_name = 'file';
         echo show_tables($post_id, $section_title, $repeater_title, $field_name, $subfield_name, '');
         ?>
     </div>

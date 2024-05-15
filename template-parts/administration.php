@@ -48,49 +48,21 @@
     <?php endif; ?>
     <h2>Hotel Dashboard</h2>
 
-    <div class="card card--noresize">
+    <div class="card card--medium">
         <div class="card__header">
-            <h3>Room Pricing Per Day</h3>
+            <h3>Monthly Rooms Sold</h3>
         </div>
         <div class="card__body">
-            <?php
-            global $wpdb;
-            $results = $wpdb->get_results('SELECT partner_room_price, date FROM room_pricing_'.get_field('hotel_code').'');
-            
-            $data = [];
-            foreach ($results as $row) {
-                $data[] = array(
-                    'label' => $row->date,
-                    'value' => $row->partner_room_price
-                );
-            }
-            $data_json = json_encode($data);
-            echo '<script>let pricingPerDay = '.$data_json.';</script>';
-            ?>
-            <canvas id="pricingPerDayChart" width="400" height="400"></canvas>
+            <canvas id="monthlyRoomSoldChart" width="400" height="400"></canvas>
         </div>
     </div>
 
-    <div class="card card--noresize">
+    <div class="card card--medium">
         <div class="card__header">
-            <h3>Room Availability Per Day</h3>
+            <h3>Pie Chart (% Room Sold)</h3>
         </div>
         <div class="card__body">
-            <?php
-            global $wpdb;
-            $results = $wpdb->get_results('SELECT rooms_left, date FROM occupancy_rate_'.get_field('hotel_code').'');
-            
-            $data = [];
-            foreach ($results as $row) {
-                $data[] = array(
-                    'label' => $row->date,
-                    'value' => $row->rooms_left
-                );
-            }
-            $data_json = json_encode($data);
-            echo '<script>let availabilityPerDay = '.$data_json.';</script>';
-            ?>
-            <canvas id="availabilityPerDayChart" width="400" height="400"></canvas>
+            <canvas id="roomSoldChart" width="400" height="400"></canvas>
         </div>
     </div>
 </section>

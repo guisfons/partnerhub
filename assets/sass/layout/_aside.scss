@@ -92,6 +92,10 @@
         gap: 1.8rem;
         max-width: 26.2rem;
         overflow-y: auto;
+
+        & > .aside__item:first-of-type {
+            background-color: $darkblue;
+        }
     }
 
     &__menu {
@@ -180,7 +184,8 @@
         
                     font-size: 1.8rem;
                     font-weight: 700;
-        
+                    text-transform: uppercase;
+
                     figure {
                         max-width: 5rem;
                     }

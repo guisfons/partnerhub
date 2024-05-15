@@ -36,14 +36,14 @@
             gap: 1rem;
             width: 50%;
 
-            font-size: 2.2rem;
+            font-size: 1.6rem;
             font-weight: 500;
             color: $dark_slate_gray;
 
             &:empty { display: none; }
 
             figure {
-                width: 4rem;
+                width: 3rem;
 
                 img {
                     width: 100%;
@@ -105,25 +105,9 @@
         }
 
         &-upload {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 1.2rem 1.5rem;
-            border: none;
-            border-radius: 1rem;
+            @include btn;
             background-color: $cyan;
-
-            font-size: 2rem;
-            font-weight: 600;
-            color: $white !important;
-            white-space: nowrap;
-
-            position: relative;
             margin-left: auto;
-
-            width: fit-content;
-            cursor: pointer;
         }
 
         &-colour {
@@ -138,6 +122,7 @@
         justify-content: flex-end;
 
         &-addrow {
+            @include btn;
             background-color: $mustard !important;
         }
     }

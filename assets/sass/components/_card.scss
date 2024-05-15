@@ -76,6 +76,11 @@
         }
     }
 
+    &--medium {
+        max-width: calc(50rem - 3rem);
+        width: 100%;
+    }
+
     &--noresize {
         .card__header h3::after { display: none; }
     }

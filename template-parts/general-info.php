@@ -1,10 +1,4 @@
-<?php
-if(!is_single()) {
-    $post_id = 1166;
-} else {
-    $post_id = get_the_ID();
-}
-?>
+<?php $post_id = get_the_ID(); ?>
 <section data-content="contract" class="content">
     <h2>General Info</h2>
     <div class="card contract">

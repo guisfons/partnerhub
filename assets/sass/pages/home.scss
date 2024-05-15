@@ -179,7 +179,7 @@
         flex-direction: column;
 
         padding: 5rem 2rem 2rem;
-        background-color: #d3d5dd;
+        background-color: $gainsboro;
         border-radius: 1rem;
 
         gap: 5rem;
@@ -197,58 +197,82 @@
         align-items: flex-start;
         gap: 1rem;
 
-        figure {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 1rem;
-
+        & > figure {
+            width: 5.4rem;
+            min-width: 5.4rem;
+            height: 5.4rem;
+            min-height: 5.4rem;
+            background-color: #fff;
+            border-radius: 50%;
+            overflow: hidden;
             position: relative;
 
             span {
-                font-size: 4rem;
-            }
+                &:first-of-type {
+                    position: absolute;
+                    top: 0.4rem;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 2rem;
+                    height: 2rem;
+                    background-color: red;
+                    border-radius: 50%;
+                }
 
-            img {
-                width: 5rem;
-                height: 5rem;
-                border-radius: 50%;
-                overflow: hidden;
-                object-fit: cover;
+                &:last-of-type {
+                    position: absolute;
+                    top: 3rem;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 4.5rem;
+                    height: 4.5rem;
+                    background-color: red;
+                    border-radius: 50%;
+                }
             }
         }
 
         article {
-            background-color: $gainsboro;
-            padding: 1rem;
-            border-radius: 1rem;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            width: 100%;
 
-            font-size: 1.2rem;
-
-            &::before {
-                content: attr(data-user);
-                font-size: 1.1rem;
-
-                position: absolute;
-                left: 0;
-                top: -2rem;
-            }
-
-            &::after {
-                content: '';
-
-                background-color: $gainsboro;
-                clip-path: polygon(100% 0, 45% 0, 100% 100%);
-                
-                width: 1rem;
-                height: 1.5rem;
-
-                position: absolute;
-                left: -1rem;
-                bottom: 1rem;
+            a {
+                background-color: $white;
+                padding: .7rem .9rem;
+                font-size: 1.2rem;
+                border-radius: .5rem;
             }
         }
+    }
+
+    &__author {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: $dark_slate_gray;
+    }
+
+    &__file {
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: $dark_slate_gray;
+
+        display: flex;
+        align-items: center;
+        gap: .3rem;
+
+        figure {
+            max-width: 1.6rem;
+            width: 100%;
+            height: 2rem;
+        }
+    }
+
+    &__time {
+        text-align: right;
+        font-size: 1rem;
+        font-weight: 500;
+        color: $dark_slate_gray;
     }
 }

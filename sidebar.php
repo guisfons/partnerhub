@@ -3,8 +3,13 @@
 	<button class="aside__button"><span class="material-symbols-outlined"></span></button>
 	<figure class="aside__logo"><img src="<?= get_template_directory_uri(); ?>/assets/img/logo.webp" alt="Logo">PartnerHub</figure>
 	<div class="aside__container">
-		<?php if (is_singular('hotels') || current_user_can('contributor')) { ?>
-			<button class="aside__item"><a href="<?php echo get_home_url(); ?>"><?= (!current_user_can('contributor') ? 'PartnerHub' : ''); ?> Home</a></button>
+		<?php
+		if (is_singular('hotels') || current_user_can('contributor')) {
+			if(!current_user_can('contributor')) {
+				echo '<button class="aside__item"><a href="'.get_home_url().'" title="Home">PartnerHub Home</a></button>';
+			} else {
+				echo '<button data-menu="home" class="aside__item">Home</button>';
+			} ?>
 			<button data-menu="administration" class="aside__item">Hotel Dashboard</button>
 			<div class="aside__menu">
 				<button class="aside__item">General Info <span></span></button>
@@ -35,14 +40,14 @@
 				</div>
 			</div>
 			<?php if (in_array('administrator', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('contributor', (array) $user->roles) || in_array('revenuemanager', (array) $user->roles)) : ?>
-			<div class="aside__menu">
+			<!-- <div class="aside__menu">
 				<button class="aside__item">Revenue Automation <span></span></button>
 				<div class="aside__item-submenu" style="display: none;">
-					<a href="/dashboard" title="Dashboard"><h4>Dashboard</h4></a>
+					<span data-menu="pricing-sheet"><h4>Pricing Sheet</h4></span>
 					<span data-menu="room-pricing"><h4>Room Pricing</h4></span>
 					<span data-menu="occupancy-rate"><h4>Occupancy Rate</h4></span>
 				</div>
-			</div>
+			</div> -->
 			<?php
 			endif;
 			} else {
@@ -61,14 +66,21 @@
 					echo '<div class="aside__menu"><button class="aside__item">Hotels Listing<span></span></button><nav class="aside__nav" style="display: none;">';
 
 					$hotels_by_country = array();
-
+					
 					while ($query->have_posts()) : $query->the_post();
+
+						$hotel_code = get_field('hotel_code');
+						
 						$user_ids = get_field('user');
 
 						if (in_array('administrator', (array) $user->roles) || in_array('headofoperations', (array) $user->roles) || is_array($user_ids) && in_array(get_current_user_id(), $user_ids)) {
 							$country = get_field('country');
 
-							$hotels_by_country[$country][] = '<a href="' . get_the_permalink() . '" title="' . get_the_title() . '"><figure>' . (!empty(get_field('corporate_identity_logos')[0]['url']) ? '<img src="' . get_field('corporate_identity_logos')[0]['url'] . '" alt="' . get_the_title() . '">' : '<span class="material-symbols-outlined">room_service</span>') . '</figure>' . get_the_title() . '</a>';
+							$hotels_by_country[$country][] = 
+							'<a href="' . get_the_permalink() . '" title="' . get_the_title() . '">
+								<figure><span class="material-symbols-outlined">room_service</span></figure>'
+								. get_field('hotel_code') .
+							'</a>';
 						}
 					endwhile;
 

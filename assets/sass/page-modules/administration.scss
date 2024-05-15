@@ -72,4 +72,13 @@
             }
         }
     }
+    
+    &.content {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+
+        h2 {
+            width: 100%;
+        }
+    }
 }

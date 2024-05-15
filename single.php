@@ -26,6 +26,11 @@ if(is_user_logged_in()) {
                 get_template_part('template-parts/regiotels-deliverables');
 
                 get_template_part('template-parts/pricing-sheet');
+                get_template_part('template-parts/revenue-automation');
+                
+                echo '<section data-content="home" class="content">';
+                get_template_part('template-parts/home');
+                echo '</section>';
             } else {
                 echo '<style>.header > span {display: none;}</style><h2 class="wrapper error" style="margin-top: 5vh;">You have no permission to see this page.</h2>';
             }
