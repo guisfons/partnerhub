@@ -9,6 +9,7 @@
     <!-- Include Chart.js and the datalabels plugin -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script>
         let xValues = [];
@@ -3823,176 +3824,87 @@
         // WEBSITE TRAFFIC PER CHANNEL - WEBSITE SECTION
 
         (function() {
-        // Data for the pie chart
-        var channelLabels = ['Direct', 'Organic Search', 'Referral', 'Organic Social', 'Other'];
-        var dataUsers = [2201, 1614, 1333, 612, 207];
+            // Data for the pie chart
+            var channelLabels = ['Direct', 'Organic Search', 'Referral', 'Organic Social', 'Other'];
+            var dataUsers = [2201, 1614, 1333, 612, 207];
 
-        if ($('#trafficPieChart').length > 0) {
-            var ctxTrafficPieChart = document.querySelector('#trafficPieChart').getContext('2d');
-        }
-
-        // Filter out 0% values and corresponding labels
-        const filteredLabels = [];
-        const filteredData = [];
-        for (let i = 0; i < dataUsers.length; i++) {
-            if (dataUsers[i] > 0) {
-                filteredLabels.push(channelLabels[i]);
-                filteredData.push(dataUsers[i]);
+            if ($('#trafficPieChart').length > 0) {
+                var ctxTrafficPieChart = document.querySelector('#trafficPieChart').getContext('2d');
             }
-        }
 
-        // Define background colors for the pie chart
-        const backgroundColors = [
-            '#25475C', '#2E7C8A', '#5EC4C8', '#92D1D4', '#BFCDD0'
-        ].slice(0, filteredData.length);
-
-        // Create the dataset object
-        const datasets = [{
-            label: 'Users',
-            data: filteredData,
-            backgroundColor: backgroundColors,
-            borderWidth: 0 // Remove borders
-        }];
-
-        // Chart configuration
-        let data = {
-            type: 'pie', // Ensure the chart type is 'pie' for a full pie chart
-            data: {
-                labels: filteredLabels,
-                datasets: datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        top: 40,
-                        bottom: 40,
-                        left: 60,
-                        right: 50 // Add padding to the bottom for the legend
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false // Hide the external legend
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw; // Show the label and users on the tooltip
-                            }
-                        }
-                    },
-                    datalabels: {
-                        formatter: function (value, context) {
-                            const total = context.chart.data.datasets[0].data.reduce((sum, val) => sum + val, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return context.chart.data.labels[context.dataIndex] + '\n' + percentage + '%'; // Add a line break between label and percentage
-                        },
-                        color: '#000',
-                        align: 'end',
-                        anchor: 'end',
-                        offset: 5,
-                        font: {
-                            weight: 'bold',
-                            size: 12
-                        }
-                    }
+            // Filter out 0% values and corresponding labels
+            const filteredLabels = [];
+            const filteredData = [];
+            for (let i = 0; i < dataUsers.length; i++) {
+                if (dataUsers[i] > 0) {
+                    filteredLabels.push(channelLabels[i]);
+                    filteredData.push(dataUsers[i]);
                 }
-            },
-            plugins: [ChartDataLabels] // Enable the datalabels plugin
-        };
+            }
 
-        var trafficPieChart = new Chart(ctxTrafficPieChart, data);
-    })();
+            // Define background colors for the pie chart
+            const backgroundColors = [
+                '#25475C', '#2E7C8A', '#5EC4C8', '#92D1D4', '#BFCDD0'
+            ].slice(0, filteredData.length);
 
-    // IBE Sales Graph
+            // Create the dataset object
+            const datasets = [{
+                label: 'Users',
+                data: filteredData,
+                backgroundColor: backgroundColors,
+                borderWidth: 0 // Remove borders
+            }];
 
-    (function() {
-            var ctxQuarterlyIbeChart = document.querySelector('#quarterlyIbeChart').getContext('2d');
-
-            var xValues = ['Rooms Sold (IBE)', 'Revenue (IBE)', 'Total Website Traffic'];
-            var yValuesQ1_2024 = [99, 14128, 5805];
-            var yValuesQ1_2023 = [160, 20417, 5284];
-
-            // Function to dynamically calculate min and max values
-            const getDynamicMinMax = (values) => {
-                const min = Math.min(...values);
-                const max = Math.max(...values);
-                const dynamicMinValue = Math.floor(min * 0.95);
-                const adjustedMax = Math.ceil(max * 1.05);
-                return { dynamicMinValue, adjustedMax };
-            };
-
-            // Calculate dynamic min and max values for both datasets
-            const { dynamicMinValue: minRoomsSold, adjustedMax: maxRoomsSold } = getDynamicMinMax([yValuesQ1_2024[0], yValuesQ1_2023[0]]);
-            const { dynamicMinValue: minRevenue, adjustedMax: maxRevenue } = getDynamicMinMax([yValuesQ1_2024[1], yValuesQ1_2023[1]]);
-            const { dynamicMinValue: minTraffic, adjustedMax: maxTraffic } = getDynamicMinMax([yValuesQ1_2024[2], yValuesQ1_2023[2]]);
-
+            // Chart configuration
             let data = {
-                labels: xValues,
-                datasets: [
-                    {
-                        label: 'Q1 2024',
-                        data: yValuesQ1_2024,
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
+                type: 'pie', // Ensure the chart type is 'pie' for a full pie chart
+                data: {
+                    labels: filteredLabels,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 40,
+                            bottom: 40,
+                            left: 60,
+                            right: 50 // Add padding to the bottom for the legend
+                        }
                     },
-                    {
-                        label: 'Q1 2023',
-                        data: yValuesQ1_2023,
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                    }
-                ]
-            };
-
-            let options = {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        suggestedMin: Math.min(minRoomsSold, minRevenue, minTraffic),
-                        suggestedMax: Math.max(maxRoomsSold, maxRevenue, maxTraffic),
-                        ticks: {
-                            callback: function(value, index, values) {
-                                if (value >= 1000) {
-                                    return '€' + (value / 1000).toLocaleString() + 'k';
+                    plugins: {
+                        legend: {
+                            display: false // Hide the external legend
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw; // Show the label and users on the tooltip
                                 }
-                                return value.toLocaleString();
                             }
                         },
-                        title: {
-                            display: true,
-                            text: 'Values'
+                        datalabels: {
+                            formatter: function (value, context) {
+                                const total = context.chart.data.datasets[0].data.reduce((sum, val) => sum + val, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return context.chart.data.labels[context.dataIndex] + '\n' + percentage + '%'; // Add a line break between label and percentage
+                            },
+                            color: '#000',
+                            align: 'end',
+                            anchor: 'end',
+                            offset: 5,
+                            font: {
+                                weight: 'bold',
+                                size: 12
+                            }
                         }
                     }
                 },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                let value = context.raw;
-                                if (context.label.includes('Revenue')) {
-                                    return `${label}: €${value.toLocaleString()}`;
-                                } else {
-                                    return `${label}: ${value.toLocaleString()}`;
-                                }
-                            }
-                        }
-                    }
-                }
+                plugins: [ChartDataLabels] // Enable the datalabels plugin
             };
 
-            new Chart(ctxQuarterlyIbeChart, {
-                type: 'bar',
-                data: data,
-                options: options
-            });
+            var trafficPieChart = new Chart(ctxTrafficPieChart, data);
         })();
 
         (function() {
@@ -4005,8 +3917,8 @@
             const getDynamicMinMax = (values) => {
                 const min = Math.min(...values);
                 const max = Math.max(...values);
-                const dynamicMinValue = Math.floor(min * 0.95);
-                const adjustedMax = Math.ceil(max * 1.05);
+                const dynamicMinValue = Math.floor(min * 0.4);
+                const adjustedMax = Math.ceil(max * 1.15);
                 return { dynamicMinValue, adjustedMax };
             };
 
@@ -4018,16 +3930,12 @@
                     {
                         label: 'Q1 2024',
                         data: yValuesQ1_2024,
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
+                        backgroundColor: '#25475C',
                     },
                     {
                         label: 'Q1 2023',
                         data: yValuesQ1_2023,
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
+                        backgroundColor: '#5EC4C8',
                     }
                 ]
             };
@@ -4071,18 +3979,19 @@
             });
         })();
 
-        (function() {
-            var ctxRevenueTrafficChart = document.querySelector('#revenueTrafficChart').getContext('2d');
 
-            var xValues = ['Revenue (IBE)', 'Total Website Traffic'];
-            var yValuesQ1_2024 = [14128, 5805];
-            var yValuesQ1_2023 = [20417, 5284];
+        (function() {
+            var ctxRevenueChart = document.querySelector('#revenueChart').getContext('2d');
+
+            var xValues = ['Revenue (IBE)'];
+            var yValuesQ1_2024 = [14128];
+            var yValuesQ1_2023 = [20417];
 
             const getDynamicMinMax = (values) => {
                 const min = Math.min(...values);
                 const max = Math.max(...values);
-                const dynamicMinValue = Math.floor(min * 0.95);
-                const adjustedMax = Math.ceil(max * 1.05);
+                const dynamicMinValue = Math.floor(min * 0.4); // Adjusted dynamic min value
+                const adjustedMax = Math.ceil(max * 1.15); // Adjusted dynamic max value
                 return { dynamicMinValue, adjustedMax };
             };
 
@@ -4094,16 +4003,12 @@
                     {
                         label: 'Q1 2024',
                         data: yValuesQ1_2024,
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1,
+                        backgroundColor: '#25475C',
                     },
                     {
                         label: 'Q1 2023',
                         data: yValuesQ1_2023,
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
+                        backgroundColor: '#5EC4C8',
                     }
                 ]
             };
@@ -4118,16 +4023,12 @@
                         max: adjustedMax,
                         ticks: {
                             callback: function(value) {
-                                if (xValues.includes('Revenue (IBE)')) {
-                                    return '€' + value.toLocaleString();
-                                } else {
-                                    return value.toLocaleString();
-                                }
+                                return '€' + value.toLocaleString();
                             }
                         },
                         title: {
                             display: true,
-                            text: 'Values'
+                            text: 'Revenue'
                         }
                     }
                 },
@@ -4137,22 +4038,243 @@
                             label: function(context) {
                                 let label = context.dataset.label || '';
                                 let value = context.raw;
-                                if (context.label === 'Revenue (IBE)') {
-                                    return `${label}: €${value.toLocaleString()}`;
-                                } else {
-                                    return `${label}: ${value.toLocaleString()}`;
-                                }
+                                return `${label}: €${value.toLocaleString()}`;
                             }
                         }
                     }
                 }
             };
 
-            new Chart(ctxRevenueTrafficChart, {
+            new Chart(ctxRevenueChart, {
                 type: 'bar',
                 data: data,
                 options: options
             });
+        })();
+
+        // Map Loader - 1
+
+        (function() {
+            <?php if(get_field('hotel_code') == 'LUTAN') { ?>
+                var mapData = [
+                    ['Country', 'Website Visitors'],
+                    ['Luxembourg', 1544],
+                    ['Belgium', 1895],
+                    ['Netherlands', 611],
+                    ['Germany', 377],
+                    ['France', 1184],
+                    ['United Kingdom', 377]
+                ];
+                var tableData = [
+                    ['Luxembourg', 1544],
+                    ['Belgium', 1895],
+                    ['Netherlands', 611],
+                    ['Germany', 377],
+                    ['France', 1184],
+                    ['United Kingdom', 377]
+                ];
+                var region = '155'; // Europe
+            <?php } else { ?>
+                var mapData = [];
+                var tableData = [];
+                var region = 'world';
+            <?php } ?>
+
+            google.charts.load('current', {
+                'packages': ['geochart', 'table']
+            });
+            google.charts.setOnLoadCallback(function() {
+                drawRegionsMap();
+                drawTable();
+            });
+
+            function drawRegionsMap() {
+                if (mapData.length > 0) {
+                    var data = google.visualization.arrayToDataTable(mapData);
+
+                    var options = {
+                        region: region,
+                        colorAxis: { colors: ['#a2d2df', '#5EC4C8', '#15435F'] },
+                        backgroundColor: 'white',
+                        datalessRegionColor: '#f2f2f2',
+                        defaultColor: '#f5f5f5'
+                    };
+
+                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+                    chart.draw(data, options);
+                } else {
+                    document.getElementById('regions_div').innerHTML = '<p>No data available for the selected hotel code.</p>';
+                }
+            }
+
+            function drawTable() {
+                if (tableData.length > 0) {
+                    // Sort the table data by website visitors in descending order
+                    tableData.sort((a, b) => b[1] - a[1]);
+
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Country');
+                    data.addColumn('number', 'Website Visitors');
+                    data.addRows(tableData);
+
+                    var table = new google.visualization.Table(document.getElementById('table_div'));
+
+                    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+                } else {
+                    document.getElementById('table_div').innerHTML = '<p>No data available for the selected hotel code.</p>';
+                }
+            }
+        })();
+        
+        // Map loader 2
+
+        (function() {
+            <?php if(get_field('hotel_code') == 'LUTAN') { ?>
+                var mapData = [
+                    ['Country', 'Website Visitors'],
+                    ['Luxembourg', 2202],
+                    ['Belgium', 2612],
+                    ['Netherlands', 694],
+                    ['Germany', 523],
+                    ['France', 423],
+                    ['United Kingdom', 135]
+                ];
+                var tableData = [
+                    ['Luxembourg', 2202],
+                    ['Belgium', 2612],
+                    ['Netherlands', 694],
+                    ['Germany', 523],
+                    ['France', 423],
+                    ['United Kingdom', 135]
+                ];
+                var region = '155'; // Europe
+            <?php } else { ?>
+                var mapData = [];
+                var tableData = [];
+                var region = 'world';
+            <?php } ?>
+
+            google.charts.load('current', {
+                'packages': ['geochart', 'table']
+            });
+            google.charts.setOnLoadCallback(function() {
+                drawRegionsMap();
+                drawTable();
+            });
+
+            function drawRegionsMap() {
+                if (mapData.length > 0) {
+                    var data = google.visualization.arrayToDataTable(mapData);
+
+                    var options = {
+                        region: region,
+                        colorAxis: { colors: ['#a2d2df', '#5EC4C8', '#15435F'] },
+                        backgroundColor: 'white',
+                        datalessRegionColor: '#f2f2f2',
+                        defaultColor: '#f5f5f5'
+                    };
+
+                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div2'));
+
+                    chart.draw(data, options);
+                } else {
+                    document.getElementById('regions_div2').innerHTML = '<p>No data available for the selected hotel code.</p>';
+                }
+            }
+
+            function drawTable() {
+                if (tableData.length > 0) {
+                    // Sort the table data by website visitors in descending order
+                    tableData.sort((a, b) => b[1] - a[1]);
+
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Country');
+                    data.addColumn('number', 'Website Visitors');
+                    data.addRows(tableData);
+
+                    var table = new google.visualization.Table(document.getElementById('table_div2'));
+
+                    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+                } else {
+                    document.getElementById('table_div2').innerHTML = '<p>No data available for the selected hotel code.</p>';
+                }
+            }
+        })();
+
+        // Map loader 3
+
+        (function() {
+            <?php if(get_field('hotel_code') == 'LUTAN') { ?>
+                var mapData = [
+                    ['Country', 'Website Visitors'],
+                    ['Luxembourg', 2525],
+                    ['Belgium', 2560],
+                    ['Netherlands', 1759],
+                    ['Germany', 541],
+                    ['France', 2365],
+                    ['United Kingdom', 183]
+                ];
+                var tableData = [
+                    ['Luxembourg', 1544],
+                    ['Belgium', 1895],
+                    ['Netherlands', 611],
+                    ['Germany', 377],
+                    ['France', 1184],
+                    ['United Kingdom', 377]
+                ];
+                var region = '155'; // Europe
+            <?php } else { ?>
+                var mapData = [];
+                var tableData = [];
+                var region = 'world';
+            <?php } ?>
+
+            google.charts.load('current', {
+                'packages': ['geochart', 'table']
+            });
+            google.charts.setOnLoadCallback(function() {
+                drawRegionsMap();
+                drawTable();
+            });
+
+            function drawRegionsMap() {
+                if (mapData.length > 0) {
+                    var data = google.visualization.arrayToDataTable(mapData);
+
+                    var options = {
+                        region: region,
+                        colorAxis: { colors: ['#a2d2df', '#5EC4C8', '#15435F'] },
+                        backgroundColor: 'white',
+                        datalessRegionColor: '#f2f2f2',
+                        defaultColor: '#f5f5f5'
+                    };
+
+                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div3'));
+
+                    chart.draw(data, options);
+                } else {
+                    document.getElementById('regions_div3').innerHTML = '<p>No data available for the selected hotel code.</p>';
+                }
+            }
+
+            function drawTable() {
+                if (tableData.length > 0) {
+                    // Sort the table data by website visitors in descending order
+                    tableData.sort((a, b) => b[1] - a[1]);
+
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Country');
+                    data.addColumn('number', 'Website Visitors');
+                    data.addRows(tableData);
+
+                    var table = new google.visualization.Table(document.getElementById('table_div3'));
+
+                    table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+                } else {
+                    document.getElementById('table_div3').innerHTML = '<p>No data available for the selected hotel code.</p>';
+                }
+            }
         })();
 
 

@@ -449,16 +449,7 @@
             <h4>Revenue and Traffic - Q1 Comparison</h4>
         </div>
         <div class="card__body">
-            <canvas id="revenueTrafficChart" width="400" height="400"></canvas>
-        </div>
-    </div>
-
-    <div class="card card--large">
-        <div class="card__header">
-            <h4>Quarterly IBE Sales</h4>
-        </div>
-        <div class="card__body">
-            <canvas id="quarterlyIbeChart" width="600" height="400"></canvas>
+            <canvas id="revenueChart" width="400" height="400"></canvas>
         </div>
     </div>
 
@@ -507,6 +498,38 @@
 
 <section data-content="geo-traffic" class="content content--row"> 
     <h2>Geographic Traffic</h2>
+
+    <div class="card card--geostats">
+        <div class="card__header">
+            <h4>Geographic Traffic - Q1 2024</h4>
+        </div>
+        <div class="card__body">
+            <div id="regions_div"></div>
+            <div id="table_div"></div>
+        </div>
+    </div>
+
+    <div class="card card--geostats">
+        <div class="card__header">
+            <h4>Geographic Traffic - Q1 2023</h4>
+        </div>
+            <div class="card__body">
+            <div id="regions_div2"></div>
+            <div id="table_div2"></div>
+        </div>
+    </div>
+
+    <div class="card card--geostats">
+        <div class="card__header">
+            <h4>Geographic Traffic - Q4 2023</h4>
+        </div>
+            <div class="card__body">
+            <div id="regions_div3"></div>
+            <div id="table_div3"></div>
+        </div>
+    </div>
+
+
 </section>
 
 <!--
