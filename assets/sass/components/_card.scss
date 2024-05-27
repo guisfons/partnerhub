@@ -7,6 +7,7 @@
 
     font-size: 1.5rem;
     height: fit-content;
+    min-height: 40rem;
     border-radius: 1rem;
 
     overflow: hidden;
@@ -82,12 +83,37 @@
         width: 100%;
     }
 
-    &--noresize {
-        .card__header h3::after { display: none; }
+    &--ibestats {
+        min-height: initial;
+
+        canvas {
+            height: 20rem !important;
+        }
+    }
+
+    &--webtraffic {
+        &perdays {
+            max-width: 60%;
+        }
+
+        &channelpie {
+            max-width: 35%; 
+        }
+    }
+
+    &--geostats {
+        width: 45%;
+        height: 53rem;
+    }
+
+    &--trafficcomparison {
+        min-height: initial;
+        height: 33rem;
+        max-height: 50rem;
     }
 
     &--statistics {
-        max-width: 60rem;
+        max-width: 55rem;
         width: 100%;
 
         .card__body {
@@ -166,6 +192,10 @@
                 }
             }
         }
+    }
+
+    &--noresize {
+        .card__header h3::after { display: none; }
     }
 
     &.administration__contact {
