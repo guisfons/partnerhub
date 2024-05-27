@@ -42,6 +42,11 @@
     max-width: 1060px;
     width: 90%;
 
+    &[data-content=home] {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
     &--active {
         opacity: 1;
         visibility: visible;
@@ -54,6 +59,15 @@
         transform: none;
 
         margin: 5rem auto !important;
+    }
+
+    &--row {
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        h2 {
+            width: 100%;
+        }
     }
 
     h2 {
@@ -111,7 +125,7 @@
     border: none;
     border-radius: 1rem;
 
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: $white !important;
     white-space: nowrap;

@@ -1,0 +1,93 @@
+/* General styles for the main element */
+main {
+    background-image: url('../img/backtest.png');
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+}
+
+main::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.3), rgba(192, 192, 192, 0.3));
+    backdrop-filter: blur(5.5px);
+}
+
+main > * {
+    z-index: 1;
+    position: relative;
+}
+
+/* General card styles */
+.card--medium {
+    width: 115%;
+    height: 40rem;
+}
+
+/* General canvas styles */
+canvas {
+    height: 30rem !important;
+    width: 100% !important;
+    padding: 1.2rem 1.7rem;
+    border-radius: 1.2rem;
+    overflow: hidden;
+}
+
+.card--ibestats {
+    width: 100%; 
+    height: 26rem !important;
+    max-height: 30rem;
+    background-color: #f8f8f8; 
+    border: 1px solid #ddd; 
+}
+
+.card--trafficcomparison {
+    width: 100%; 
+    height: 33rem !important;
+    max-height: 50rem;
+    background-color: #f8f8f8; 
+    border: 1px solid #ddd; 
+}
+
+.card--ibestats canvas {
+    height: 20rem !important;
+}
+
+.card--large {
+    width: 100%; 
+    height: 40rem; 
+    background-color: #f8f8f8; 
+    border: 1px solid #ddd; 
+}
+
+.card--webtrafficperdays {
+    max-width: 60%; 
+    width: 60%; 
+    height: 40rem; 
+    background-color: #f8f8f8; 
+    border: 1px solid #ddd;
+    margin-right: -5px;
+}
+
+.card--webtrafficchannelpie {
+    max-width: 35%; 
+    width: 35%; 
+    height: 40rem; 
+    background-color: #f8f8f8; 
+    border: 1px solid #ddd; 
+    margin-left: 1px;
+}
+
+.content {
+    max-width: 1000px;
+}
+
+.card--statistics {
+    max-width: 55rem;
+}

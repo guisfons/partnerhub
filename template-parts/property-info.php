@@ -1,10 +1,4 @@
-<?php
-if(!is_single()) {
-    $post_id = 1166;
-} else {
-    $post_id = get_the_ID();
-}
-?>
+<?php $post_id = get_the_ID(); ?>
 <section data-content="onboarding" class="content">
     <h2>Property Info</h2>
 
@@ -85,9 +79,9 @@ if(!is_single()) {
         ?>
     </div>
 
-    <div class="card">
+    <div class="card card--noresize">
+        <div class="card__header"><h3>Logos</h3></div>
         <div class="gallery">
-            <h4>Logos</h4>
             <?php
             $images = get_field('corporate_identity_logos');
             $field_key = acf_get_field('corporate_identity_logos')['key'];

@@ -92,6 +92,10 @@
         gap: 1.8rem;
         max-width: 26.2rem;
         overflow-y: auto;
+
+        & > .aside__item:first-of-type {
+            background-color: $darkblue;
+        }
     }
 
     &__menu {
@@ -173,14 +177,17 @@
             }
 
             &__body {
+                gap: 1rem;
+
                 a {
                     display: flex;
                     align-items: center;
                     gap: 1rem;
         
-                    font-size: 1.8rem;
-                    font-weight: 700;
-        
+                    font-size: 1.6rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+
                     figure {
                         max-width: 5rem;
                     }
@@ -268,11 +275,62 @@
             gap: 1rem;
 
             & > span, & > a {
-                padding: 1.5rem 3.5rem;
+                padding: 1.5rem 3rem;
                 cursor: pointer;
 
-                &:not(:last-child) {
+                display: flex;
+                align-items: center;
+
+                figure {
+                    width: 3rem;
+                    height: 3rem;
+                    background-color: $cyan;
+                    border-radius: 50%;
+                    transition: .3s ease-in-out;
+                }
+
+                &:hover figure {
+                    background-color: $mustard;
+                }
+
+                &:not(:last-of-type) {
                     border-bottom: .1rem solid $slate_gray;
+                }
+            }
+
+            span {
+                gap: 1rem;
+
+                span {
+                    background-color: $cyan;
+                    font-size: 1.5rem;
+                    color: $white;
+
+                    width: 2rem;
+                    min-width: 2rem;
+                    max-width: 2rem;
+                    height: 2rem;
+                    min-height: 2rem;
+                    max-height: 2rem;
+                    border-radius: 50%;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: .3s ease-in-out;
+                }
+            }
+
+            &-sub {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.5rem 3.5rem;
+                border-bottom: .1rem solid $slate_gray;
+
+                span {
+                    display: flex;
+                    cursor: pointer;
                 }
             }
         }
