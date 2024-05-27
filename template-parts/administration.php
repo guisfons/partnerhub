@@ -50,7 +50,7 @@
 
     <div class="card card--medium">
         <div class="card__header">
-            <h3>Monthly Rooms Sold</h3>
+            <h4>Monthly Rooms Sold - April</h4>
         </div>
         <div class="card__body">
             <canvas id="monthlyRoomSoldChart" width="400" height="400"></canvas>
@@ -59,10 +59,56 @@
 
     <div class="card card--medium">
         <div class="card__header">
-            <h3>Pie Chart (% Room Sold)</h3>
+            <h4>Monthly Occupancy Rate - April</h4>
         </div>
         <div class="card__body">
-            <canvas id="roomSoldChart" width="400" height="400"></canvas>
+            <canvas id="monthlyOccupancyChart" width="400" height="400"></canvas>
         </div>
     </div>
+
+    <div class="card card--medium">
+        <div class="card__header">
+            <h4>LOS (Online Sales) - April</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="monthlyLosChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <div class="card card--medium">
+        <div class="card__header">
+            <h4>ADR - April</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="monthlyAdrChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <div class="card card--medium">
+        <div class="card__header">
+            <h4>RevPAR - April</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="monthlyRevPar" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <div class="card card--medium">
+        <div class="card__header">
+            <h4>Room REV - April</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="monthlyRoomRev" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <div class="card card--medium">
+        <div class="card__header">
+            <h4>Monthly Rooms Sold per Channel</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="monthlyRoomChannel" width="400" height="400"></canvas>
+        </div>
+    </div>
+
 </section>

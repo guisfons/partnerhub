@@ -37,7 +37,7 @@ if(is_user_logged_in()) {
 			get_template_part('template-parts/front-page/latest-updates');
         } else { ?>
 
-		<!-- <div class="card administration__contact">
+		<div class="card administration__contact">
 			<div class="card__header">
 				<h3>RegiÔtels Team Contact Details</h3>
 			</div>
@@ -80,8 +80,8 @@ if(is_user_logged_in()) {
 				endif;
 				?>
 			</div>
-		</div> -->
-
+		</div>
+		
 		<?php }
 
 		if(in_array('contributor', (array)$user->roles)) {

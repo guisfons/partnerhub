@@ -21,4 +21,6 @@
         </figure>
         <?= $user->user_login; ?>
     </a>
+
+    <a href="<?php echo wp_logout_url(get_home_url()); ?>"><figure class="header-user__logout"><span class="material-symbols-outlined">logout</span></figure> LOGOUT</a>
 </section>

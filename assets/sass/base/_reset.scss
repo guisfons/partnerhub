@@ -71,19 +71,15 @@ h3 {
     max-width: 1280px;
 }
 
-body:not([data-role="administrator"]):not([data-role="editor"]):not([data-role="headofoperations"]) {
-    .table__foot-addrow, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .upload-file, form:has(.upload-file) {
+body:not([data-role="administrator"]):not([data-role="editor"]):not([data-role="headofoperations"]):not([data-role="revenuemanager"]) {
+    .table__foot-addrow, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .upload-file, form:has(.upload-file), .table__row-controls-view, .table__row-controls-delete {
         display: none !important;
         opacity: 0;
         visibility: hidden;
     }
-
-    form h4:contain('Add backup') {
-        display: none;
-    }
 }
 
-body:not([data-role=revenuemanager]) [data-menu="pricing-sheet"] {
+body:not([data-role="administrator"]):not([data-role="editor"]):not([data-role="headofoperations"]):not([data-role=revenuemanager]) [data-menu="pricing-sheet"] {
     display: none;
 }
 

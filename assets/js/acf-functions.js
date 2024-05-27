@@ -148,8 +148,6 @@ function addRow(el) {
                     addBtn.closest('.card__body').find('.table--new .table__body').prepend(tableRowNew)
                     addBtn.closest('.table').find('.table__body').prepend(oldNew)
                 }
-
-                linkUpdate()
             }
         },
         error: function(error) {
@@ -311,8 +309,6 @@ function uploadFile(el) {
                 } else {
                     form.replaceWith(updatedHtml)
                 }
-
-                linkUpdate()
             },
             error: function(error) {
                 alert('Error uploading file.')
@@ -457,7 +453,7 @@ function galllery(el) {
                                 '+value.split('/').pop()+'\
                                 <figure style="display: none;"><img style="display: none;" lazy="load" src="'+value+'" alt="'+value.split('/').pop()+'"></figure>\
                             </span>\
-                            <div class="table__row-controls"><a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a></div>\
+                            <div class="table__row-controls"><a href="'+getServiceUrl(value)+'" title="'+value.split('/').pop()+'" target="_blank">View</a></div>\
                         </div>')
                     })
                 }

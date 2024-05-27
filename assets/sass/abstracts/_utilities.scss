@@ -61,6 +61,15 @@
         margin: 5rem auto !important;
     }
 
+    &--row {
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        h2 {
+            width: 100%;
+        }
+    }
+
     h2 {
         font-size: 3.5rem;
         text-transform: uppercase;

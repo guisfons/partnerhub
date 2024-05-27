@@ -100,7 +100,7 @@
 
     &-user {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         flex-wrap: wrap;
         gap: 1rem 2rem;
         width: 100%;
@@ -112,6 +112,11 @@
             
             span {
                 font-size: 2.5rem;
+
+                &:first-of-type {
+                    font-size: 2.2rem;
+                    color: $cyan;
+                }
             }
 
             h1 {
@@ -165,6 +170,22 @@
                 object-fit: contain;
                 width: 5.7rem;
                 height: 5.7rem;
+            }
+        }
+
+        &__logout {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 6rem;
+            height: 6rem;
+            cursor: pointer;
+            background-color: $white;
+            border-radius: 50%;
+
+            span {
+                font-size: 4rem;
+                position: initial !important;
             }
         }
     }

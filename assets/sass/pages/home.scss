@@ -165,7 +165,7 @@
             transition: .3s ease-in-out;
 
             &:nth-of-type(2) {
-                background-color: #efa937;
+                background-color: $mustard;
             }
 
             &:nth-of-type(3) {
@@ -202,7 +202,7 @@
             min-width: 5.4rem;
             height: 5.4rem;
             min-height: 5.4rem;
-            background-color: #fff;
+            background-color: $white;
             border-radius: 50%;
             overflow: hidden;
             position: relative;
@@ -215,7 +215,6 @@
                     transform: translateX(-50%);
                     width: 2rem;
                     height: 2rem;
-                    background-color: red;
                     border-radius: 50%;
                 }
 
@@ -226,10 +225,21 @@
                     transform: translateX(-50%);
                     width: 4.5rem;
                     height: 4.5rem;
-                    background-color: red;
                     border-radius: 50%;
                 }
             }
+        }
+
+        &:nth-of-type(3n+1) figure span {
+            background-color: $mustard;
+        }
+
+        &:nth-of-type(3n+2) figure span {
+            background-color: #6e23e5;
+        }
+
+        &:nth-of-type(3n+3) figure span {
+            background-color: $cyan;
         }
 
         article {
@@ -262,6 +272,13 @@
         align-items: center;
         gap: .3rem;
 
+        background-color: #fff;
+        padding: .7rem .9rem;
+        font-size: 1.2rem;
+        border-radius: .5rem;
+        
+        cursor: pointer;
+
         figure {
             max-width: 1.6rem;
             width: 100%;
@@ -275,4 +292,8 @@
         font-weight: 500;
         color: $dark_slate_gray;
     }
+}
+
+[data-content=home] .card--statistics, [data-content=home] .card.notifications {
+    max-height: 52rem;
 }

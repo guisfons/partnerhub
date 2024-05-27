@@ -12,7 +12,6 @@ $(document).ready(function() {
     searchPosts()
     api()
     slide()
-    // chart()
 
     dragNDrop()
     // feed('https://www.regiotels.com/feed/')
@@ -74,8 +73,8 @@ function aside() {
     })
 
     $('.notifications__file').on('click', function() {
-        sectionId = $(this).data('href')
-        let menuItem = $('#'+sectionId).closest('section').data('content')
+        sectionId = window.location.hash
+        let menuItem = $(sectionId).closest('section').data('content')
 
         $('span').removeClass('aside__item--active')
         $('span[data-menu='+menuItem+']').addClass('aside__item--active')
@@ -374,7 +373,6 @@ function searchPosts() {
                 'search': query
             },
             success: function(response) {
-                // Response on functions.php
                 $('.notifications__tasks').html(response);
             }
         })

@@ -16,7 +16,7 @@ if(is_user_logged_in()) {
         while ( have_posts() ) : the_post();
             if(in_array( 'administrator', (array) $user->roles ) || in_array('headofoperations', (array) $user->roles) || in_array(get_current_user_id(), get_field('user'))) {
                 loadModulesCssForTemplate('administration.min.css');
-                get_template_part('template-parts/administration');
+                get_template_part('template-parts/hotel-dashboard');
         
                 loadModulesCssForTemplate('general-property.min.css');
                 get_template_part('template-parts/general-info');

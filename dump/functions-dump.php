@@ -839,8 +839,7 @@ function ajax_search_callback() {
             echo
             '<div class="notifications__item">
                 <figure>
-                    <span></span>
-                    <span></span>
+                    <span class="material-symbols-outlined">account_circle</span>
                 </figure>
                 <article data-user="'.(!empty(wp_get_current_user()->user_firstname) ? wp_get_current_user()->user_firstname : wp_get_current_user()->display_name).'"><a href="'. get_home_url(). '/hotels/' . $hotel . '/#' . $section .'" title="'.get_the_title().'">'.get_the_title().'</a></article>
             </div>';
@@ -862,7 +861,6 @@ function get_file_icon($url) {
                 break;
             case 'xls':
             case 'xlsx':
-            case 'xlsm':
                 $color = '#107c41';
                 break;
             default:
@@ -1188,125 +1186,3 @@ function show_gallery($post_id, $section_title, $field_name) {
     endif;
     echo '</div></div></div>';
 }
-
-// THIS RENDERS THE IBE SALES INSIDE A TABLE
-
-/*
-function render_quarterly_sales_table() {
-    // Define the static data for the table
-    $data = [
-        ['', 'Q1 2024', 'Q1 2023', 'Q1 2024 vs Q1 2023'],
-        ['Chambres vendues (IBE)', '99', '160', '38%'],
-        ['Revenus (IBE)', '€14,128.00', '€20,417.00', '30%'],
-        ['Trafic site internet (total)', '5805', '5284', '9%']
-    ];
-
-    ob_start();
-    ?>
-    <div class="card card--large">
-        <div class="card__header">
-            <h4>Quarterly IBE Sales</h4>
-        </div>
-        <div class="card__body">
-            <table id="quarterlySalesTable" style="width:100%;border-collapse:collapse;">
-                <thead>
-                    <tr style="background-color:#f2f2f2;">
-                        <?php foreach ($data[0] as $header) : ?>
-                            <th style="padding:8px;border:1px solid #ddd;text-align:left;"><?php echo $header; ?></th>
-                        <?php endforeach; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($i = 1; $i < count($data); $i++) : ?>
-                        <tr>
-                            <?php foreach ($data[$i] as $cell) : ?>
-                                <td style="padding:8px;border:1px solid #ddd;"><?php echo $cell; ?></td>
-                            <?php endforeach; ?>
-                        </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <?php
-    return ob_get_clean();
-}
-
-add_shortcode('quarterly_sales', 'render_quarterly_sales_table');
-*/ 
-
-// THIS RENDERS THE IBE SALES INSIDE A CANVAS
-
-/*
-function render_quarterly_sales_canvas() {
-    // Define the static data for the table
-    $data = [
-        ['', 'Q1 2024', 'Q1 2023', 'Q1 2024 vs Q1 2023'],
-        ['Chambres vendues (IBE)', '99', '160', '38%'],
-        ['Revenus (IBE)', '€14,128.00', '€20,417.00', '30%'],
-        ['Trafic site internet (total)', '5805', '5284', '9%']
-    ];
-
-    ob_start();
-    ?>
-    <div class="card card--large">
-        <div class="card__header">
-            <h4>Quarterly IBE Sales</h4>
-        </div>
-        <div class="card__body">
-            <canvas id="quarterlyIbeCanvas" width="600" height="200"></canvas>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const canvas = document.getElementById('quarterlyIbeCanvas');
-            const ctx = canvas.getContext('2d');
-
-            // Define the data for the table
-            const data = <?php echo json_encode($data); ?>;
-
-            const cellWidth = 130;
-            const cellHeight = 40;
-            const startX = 10;
-            const startY = 10;
-            const tableWidth = cellWidth * data[0].length;
-            const tableHeight = cellHeight * data.length;
-
-            ctx.font = '11px Arial'; // Set font style and size
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            // Colors
-            const headerBgColor = '#f2f2f2';
-            const rowBgColor = '#ffffff';
-            const borderColor = '#ddd';
-            const textColor = '#000000';
-
-            // Draw the table grid and content
-            for (let i = 0; i < data.length; i++) {
-                for (let j = 0; j < data[i].length; j++) {
-                    const x = startX + j * cellWidth;
-                    const y = startY + i * cellHeight;
-
-                    // Set background color
-                    ctx.fillStyle = i === 0 ? headerBgColor : rowBgColor;
-                    ctx.fillRect(x, y, cellWidth, cellHeight);
-
-                    // Set text color
-                    ctx.fillStyle = textColor;
-                    ctx.fillText(data[i][j], x + cellWidth / 2, y + cellHeight / 2);
-
-                    // Draw cell border
-                    ctx.strokeStyle = borderColor;
-                    ctx.strokeRect(x, y, cellWidth, cellHeight);
-                }
-            }
-        });
-    </script>
-    <?php
-    return ob_get_clean();
-}
-
-add_shortcode('quarterly_sales_canvas', 'render_quarterly_sales_canvas');
-*/ 
