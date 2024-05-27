@@ -1,13 +1,19 @@
 $( document ).ready(function() {
-    $('body').on('click', '.table__row-controls-delete', function(){ deleteSingleFile($(this)) })
+    $('body').on('click', '.table__row-controls-delete', function(){ 
+        if($(this).closest('.table__row').data('row-index') == undefined) {
+            deleteSingleFile($(this))
+        }
+
+        if($(this).closest('.table__row').data('row-index') !== undefined) {
+            deleteRepeater($(this))
+        }
+    })
 
     $('body').on('click', '.upload-file', function() { uploadFile($(this)) })
 
     $('.table__foot-addrow').on('click', function() { addRow($(this)) })
     
     $('body').on('click', '.table__row-controls-upload', function() { colorFontAdd($(this)) })
-    
-    $('body').on('click', '.table__row-controls-delete', function() { deleteRepeater($(this)) })
 
     $('.gallery-field .upload-gallery').on('click', function() { galllery($(this)) })
 
@@ -88,7 +94,7 @@ function addRow(el) {
                 <span class="table__row-title"></span>\
                 <div class="table__row-form">\
                     <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-file-field-key="'+fileFieldKey+'" class="file-field" enctype="multipart/form-data">\
-                        <input type="file" class="file" accept="application/pdf">\
+                        <input type="file" class="file" accept=".xls, .xlsm, .pdf, .docx">\
                         <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>\
                     </form>\
                 </div>\
@@ -157,84 +163,80 @@ function addRow(el) {
 }
 
 function deleteSingleFile(el) {
-    if(el.closest('.table__row').data('row-index') == undefined) {
-        el = el.closest('.table__row')
-        let postId = el.data('post-id')
-        let fieldKey = el.data('field-key')
+    el = el.closest('.table__row')
+    let postId = el.data('post-id')
+    let fieldKey = el.data('field-key')
 
-        $.ajax({
-            type: 'POST',
-            url: '/wp-admin/admin-ajax.php?action=remove_file_from_field',
-            data: { postId: postId, fieldKey: fieldKey },
-            beforeSend: function () {
-                showLoadingScreen();
-            },
-            complete: function () {
-                setTimeout(function(){
-                    hideLoadingScreen()
-                }, 1000);
-            },
-            success: function(response) {
-                // Handle the success response
-                let updatedHtml =
-                '<div class="table__row">\
-                    <div class="table__row-form">\
-                        <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" class="file-field" enctype="multipart/form-data">\
-                            <input type="file" class="file" accept="application/pdf">\
-                            <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>\
-                        </form>\
-                    </div>\
-                </div>'
-                el.replaceWith(updatedHtml)
-            },
-            error: function(error) {
-                // Handle the error response
-                alert('Error removing file from field.')
-            }
-        })
-    }
+    $.ajax({
+        type: 'POST',
+        url: '/wp-admin/admin-ajax.php?action=remove_file_from_field',
+        data: { postId: postId, fieldKey: fieldKey },
+        beforeSend: function () {
+            showLoadingScreen();
+        },
+        complete: function () {
+            setTimeout(function(){
+                hideLoadingScreen()
+            }, 1000);
+        },
+        success: function(response) {
+            // Handle the success response
+            let updatedHtml =
+            '<div class="table__row">\
+                <div class="table__row-form">\
+                    <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" class="file-field" enctype="multipart/form-data">\
+                        <input type="file" class="file" accept=".xls, .xlsm, .pdf, .docx">\
+                        <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>\
+                    </form>\
+                </div>\
+            </div>'
+            el.replaceWith(updatedHtml)
+        },
+        error: function(error) {
+            // Handle the error response
+            alert('Error removing file from field.')
+        }
+    })
 }
 
 function deleteRepeater(el) {
-    if(el.closest('.table__row').data('row-index') !== undefined) {
-        let rmBtn = el
-        let postId = el.closest('.table__row').data('post-id')
-        let fieldKey = el.closest('.table__row').data('field-key')
-        let rowId = parseInt(el.closest('.table__row').data('row-index'))
-        let fileName = el.closest('.table__row').find('.table__row-title').text()
+    let rmBtn = el
+    let postId = el.closest('.table__row').data('post-id')
+    let fieldKey = el.closest('.table__row').data('field-key')
+    let rowId = parseInt(el.closest('.table__row').data('row-index'))
+    let fileName = el.closest('.table__row').find('.table__row-title').text()
 
-        $.ajax({
-            type: 'POST',
-            url: '/wp-admin/admin-ajax.php?action=delete_repeater_row',
-            data: { postId: postId, fieldKey: fieldKey, rowId: rowId, fileName: fileName },
-            beforeSend: function () {
-                // showLoadingScreen();
-            },
-            complete: function () {
-                // setTimeout(function(){
-                //     hideLoadingScreen()
-                // }, 1000);
-            },
-            success: function(response) {
-                let currentRow = rmBtn.closest('.table__row')
+    $.ajax({
+        type: 'POST',
+        url: '/wp-admin/admin-ajax.php?action=delete_repeater_row',
+        data: { postId: postId, fieldKey: fieldKey, rowId: rowId, fileName: fileName },
+        beforeSend: function () {
+            // showLoadingScreen();
+        },
+        complete: function () {
+            // setTimeout(function(){
+            //     hideLoadingScreen()
+            // }, 1000);
+        },
+        success: function(response) {
+            let currentRow = rmBtn.closest('.table__row')
 
-                if(rmBtn.closest('.table').hasClass('table--new')) {
-                    currentRow.closest('.table--new').remove()
-                } else {
-                    currentRow.remove()
-                }
-
-                let rows = rmBtn.closest('.table__body').find('[data-row-index]')
-
-                rows.each(function(i) {
-                    el.attr('data-row-index', i + 1)
-                })
-            },
-            error: function(error) {
-                console.error('Error deleting row.');
+            if(rmBtn.closest('.table').hasClass('table--new')) {
+                currentRow.closest('.table--new').remove()
+            } else {
+                currentRow.remove()
             }
-        })
-    }
+
+            let rows = rmBtn.closest('.table__body').find('[data-row-index]')
+
+            rows.each(function(i) {
+                el.attr('data-row-index', i + 1)
+            })
+        },
+        error: function(error) {
+            console.error('Error deleting row.');
+        }
+    })
 }
 
 function uploadFile(el) {

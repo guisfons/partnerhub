@@ -7,14 +7,19 @@
 
     font-size: 1.5rem;
     height: fit-content;
-    min-height: 40rem;
+
+    &:has(canvas) {
+        min-height: 40rem;
+    }
+
     border-radius: 1rem;
 
     overflow: hidden;
     
     display: flex;
-    align-self: stretch;
     flex-direction: column;
+    align-self: auto;
+
     gap: 3rem;
 
     transition: .3s ease-in-out;
@@ -93,12 +98,19 @@
     }
 
     &--webtraffic {
+        &perdays, &channelpie {
+            canvas {
+                max-height: initial;
+                height: 33rem !important;
+            }
+        }
+
         &perdays {
-            max-width: 60%;
+            max-width: calc(60% - 2.5rem);
         }
 
         &channelpie {
-            max-width: 35%; 
+            max-width: calc(40% - 2.5rem);
         }
     }
 

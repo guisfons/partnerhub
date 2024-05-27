@@ -906,7 +906,7 @@ function render_empty_file_row($x, $post_id, $field_key, $file_field_key) {
     '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="table__row">
         <div class="table__row-form">
             <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="file-field" enctype="multipart/form-data">
-                <input type="file" class="file" accept="application/pdf">
+                <input type="file" class="file" accept=".xls, .xlsm, .pdf, .docx">
                 <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>
             </form>
         </div>
@@ -1018,7 +1018,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                         <div class="table__row">
                             <div class="table__row-form">
                                 <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" class="file-field" enctype="multipart/form-data">
-                                    <input type="file" class="file" accept="application/pdf">
+                                    <input type="file" class="file" accept=".xls, .xlsm, .pdf, .docx">
                                     <button type="button" class="table__row-upload upload-file">Upload file</button>
                                 </form>
                             </div>
