@@ -1149,8 +1149,8 @@ function show_gallery($post_id, $section_title, $field_name) {
             echo
             '<div class="table__row">
                 <span class="table__row-title">
+                    <figure><img src="' .get_template_directory_uri(). '/assets/img/photo-icon.svg" alt="' . $image_title . '"></figure>
                     ' . $image_filename . '
-                    <figure style="display: none;"><img style="display: none;" lazy="load" src="' . $image_url . '" alt="' . $image_title . '"></figure>
                 </span>
                 <div class="table__row-controls"><a href="' . $image_url . '" title="' . $image_title . '" target="_blank">View</a></div>
             </div>';
@@ -1159,18 +1159,23 @@ function show_gallery($post_id, $section_title, $field_name) {
         '</div><div class="table__foot">
             <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
             <span class="download-images"><span class="material-symbols-outlined">download</span></span>
-            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
-                <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
-                <button type="button" class="upload-gallery">Submit</button>
-            </form>
+            <button class="table__foot-viewgallery">View in gallery</button>
+            <div class="table__foot-modal">
+                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
+                    <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
+                    <button type="button" class="upload-gallery">Submit</button>
+                </form>
+            </div>
         </div>';
     else :
         echo
         '</div><div class="table__foot">
-            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
-                <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
-                <button type="button" class="upload-gallery">Submit</button>
-            </form>
+            <div class="table__foot-modal">
+                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
+                    <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
+                    <button type="button" class="upload-gallery">Submit</button>
+                </form>
+            </div>
         </div>';
     endif;
     echo '</div></div></div>';

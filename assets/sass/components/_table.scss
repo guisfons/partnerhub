@@ -9,9 +9,9 @@
 
     & > *:empty { display: none; }
 
-    &__header {
+    // &__header {
         
-    }
+    // }
 
     &__body {
         display: flex;
@@ -20,7 +20,7 @@
 
         &:not(:empty) {
             background-color: $gainsboro;
-            border-radius: 1.2rem;
+            border-radius: 1.5rem;
             padding: 1.5rem;
         }
     }
@@ -150,21 +150,34 @@
                 background-color: $gainsboro;
     
                 &:first-of-type {
-                    border-radius: 1rem 1rem 0 0;
+                    border-radius: 1.5rem 1.5rem 0 0;
                 }
     
                 &:last-of-type {
-                    border-radius: 0 0 1rem 1rem;
+                    border-radius: 0 0 1.5rem 1.5rem;
                 }
     
                 &-title {
-                    font-size: 1.5rem;
+                    width: 100%;
+                    font-size: 2.2rem;
+                    font-weight: 400;
+
+                    figure {
+                        max-width: 4.5rem;
+                        width: 100%;
+                        height: auto;
+
+                        img {
+                            width: 100%;
+                            height: auto;
+                        }
+                    }
                 }
     
                 &-controls {
                     a {
                         @include btn;
-                        font-size: 1.7rem;
+                        font-size: 1.4rem;
                         background-color: $cyan;
                     }
                 }
@@ -183,6 +196,15 @@
                     &:last-of-type {
                         font-size: 2.5rem;
                     }
+                }
+
+                .download-images {
+                    display: flex;
+                }
+
+                &-viewgallery {
+                    @include btn;
+                    background-color: $green;
                 }
         
                 form {
