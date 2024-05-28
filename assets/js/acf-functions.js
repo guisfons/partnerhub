@@ -166,11 +166,12 @@ function deleteSingleFile(el) {
     el = el.closest('.table__row')
     let postId = el.data('post-id')
     let fieldKey = el.data('field-key')
+    let fileName = el.closest('.table__row').find('.table__row-title').text()
 
     $.ajax({
         type: 'POST',
         url: '/wp-admin/admin-ajax.php?action=remove_file_from_field',
-        data: { postId: postId, fieldKey: fieldKey },
+        data: { postId: postId, fieldKey: fieldKey, fileName: fileName },
         beforeSend: function () {
             showLoadingScreen();
         },
@@ -505,4 +506,8 @@ function removeImages(el) {
             alert(error.responseText);
         }
     });
+}
+
+function removeNotification() {
+    
 }
