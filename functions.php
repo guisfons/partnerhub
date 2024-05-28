@@ -204,7 +204,7 @@ function login_logo() {
 ?>
     <style type="text/css">
         #login h1 a, .login h1 a {
-            background-image: url("<?php echo get_stylesheet_directory_uri(); ?>/assets/img/logo.svg");
+            background-image: url("<?php echo get_stylesheet_directory_uri(); ?>/assets/img/logo.webp");
             width:260px;
             height:55px;
             background-size: contain;
@@ -222,7 +222,7 @@ function login_logo_url() {
 add_filter( 'login_headerurl', 'login_logo_url' );
 
 function login_logo_url_title() {
-    return 'IT Mídia';
+    return 'PartnerHub';
 }
 
 add_filter( 'login_headertext', 'login_logo_url_title' );
@@ -522,11 +522,13 @@ function handle_remove_file_from_field() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $postId = isset($_POST['postId']) ? intval($_POST['postId']) : 0;
         $fieldKey = isset($_POST['fieldKey']) ? sanitize_text_field($_POST['fieldKey']) : '';
+        $filename = isset($_POST['fileName']) ? sanitize_text_field($_POST['fileName']) : '';
 
         // Check if the post ID and field key are valid
         if ($postId > 0 && !empty($fieldKey)) {
             // Update the ACF file field with null or an empty string
             update_field($fieldKey, null, $postId);
+            removeNotification($filename);
 
             // Send a success response
             wp_send_json_success('File removed successfully!');
@@ -620,22 +622,7 @@ function handle_delete_repeater_row() {
 
             // Remove the specified row from the repeater field
             if ($rowId <= count($repeaterFieldValues)) {
-                $query = new WP_Query(array(
-                    'post_type' => 'notifications',
-                    'post_status' => 'publish',
-                    'posts_per_page' => 1,
-                    'title' => $filename
-                ));
-    
-                if ($query->have_posts()) {
-                    $post = $query->posts[0];
-                    $post_id = $post->ID;
-                } else {
-                    $post_id = '';
-                }
-
-                wp_delete_post($post_id, true);
-
+                removeNotification($filename);
                 delete_row($fieldKey, $rowId, $postId);
                 wp_send_json_success('Row removed from repeater field successfully!');
             } else {
@@ -789,7 +776,7 @@ function my_handle_attachment($file_handler,$post_id,$set_thu=false) {
       update_post_meta( $post_id, '_my_file_upload', $attach_id );
     }
     return $attach_id;
-  }
+}
 
 add_action('admin_init', 'restrict_dashboard_access');
 function restrict_dashboard_access() {
@@ -1187,6 +1174,24 @@ function show_gallery($post_id, $section_title, $field_name) {
         </div>';
     endif;
     echo '</div></div></div>';
+}
+
+function removeNotification($filename) {
+    $query = new WP_Query(array(
+        'post_type' => 'notifications',
+        'post_status' => 'publish',
+        'posts_per_page' => 1,
+        'title' => $filename
+    ));
+
+    if ($query->have_posts()) {
+        $post = $query->posts[0];
+        $post_id = $post->ID;
+    } else {
+        $post_id = '';
+    }
+
+    wp_delete_post($post_id, true);
 }
 
 // THIS RENDERS THE IBE SALES INSIDE A TABLE
