@@ -34,9 +34,11 @@
         cursor: pointer;
         box-sizing: content-box;
 
-        background-color: $cyan;
+        background-color: $mustard;
         border-radius: 0 1rem 1rem 0;
         padding: 1rem;
+
+        transition: .3s ease-in-out;
 
         span {
             color: $white;
@@ -81,8 +83,12 @@
             width: 90%;
         }
 
-        .aside__button span::after {
-            content: '\eac3';
+        .aside__button {
+            background-color: $cyan;
+
+            span::after {
+                content: '\eac3';
+            }
         }
     }
 

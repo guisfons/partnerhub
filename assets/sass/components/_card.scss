@@ -1,5 +1,5 @@
 .card {
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     background-color: $white;
 
     padding: 2rem;
@@ -11,8 +11,6 @@
     &:has(canvas) {
         min-height: 40rem;
     }
-
-    border-radius: 1rem;
 
     overflow: hidden;
     
@@ -116,7 +114,7 @@
 
     &--geostats {
         width: 45%;
-        height: 53rem;
+        min-height: 53rem;
     }
 
     &--trafficcomparison {
