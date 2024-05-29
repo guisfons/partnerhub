@@ -99,6 +99,10 @@
     }
 
     &-user {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -138,7 +142,12 @@
             text-align: center;
             color: $dim_gray;
 
+            max-width: 12rem;
+            width: 100%;
+
             &:first-of-type {
+                margin-left: auto;
+
                 span {
                     background-color: $coral;
                     border-radius: 50%;

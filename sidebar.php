@@ -4,6 +4,10 @@
 	<figure class="aside__logo"><img src="<?= get_template_directory_uri(); ?>/assets/img/logo.webp" alt="Logo">PartnerHub</figure>
 	<div class="aside__container">
 		<?php
+		if(is_page('notifications')) {
+			echo '<a href="'.get_home_url().'" title="Home" class="aside__item">Home</a>';
+		}
+
 		if (is_singular('hotels') || current_user_can('contributor')) {
 			if(!current_user_can('contributor')) {
 				echo '<button class="aside__item"><a href="'.get_home_url().'" title="Home">PartnerHub Home</a></button>';

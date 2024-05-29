@@ -66,7 +66,7 @@
         }
     }
 
-    & ~ main {
+    & ~ main, & ~ .header-user {
         margin-left: 0 !important;
         transition: .3s ease-in-out;
         padding: 5rem;
@@ -77,7 +77,7 @@
     &--active {
         transform: translateX(0);
         
-        & ~ main {
+        & ~ main, & ~ .header-user {
             margin-left: 32.5rem !important;
             max-width: calc(100% - 32.5rem);
             width: 90%;

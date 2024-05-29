@@ -26,10 +26,8 @@ if(is_user_logged_in()) {
             }
 		}
 	}
-	
+		
 	if ( in_array( 'administrator', (array) $user->roles ) || in_array('headofoperations', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('contributor', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('revenuemanager', (array) $user->roles) ) {
-		get_template_part('template-parts/front-page/header');
-        
         if(!in_array('contributor', (array) $user->roles)) {
             get_template_part('template-parts/front-page/schedule');
 			get_template_part('template-parts/front-page/tickets');
