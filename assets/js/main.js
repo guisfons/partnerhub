@@ -2,7 +2,7 @@ $(document).ready(function() {
     window.history.replaceState("","",window.location.href)
 
     panelIds()
-    // header()
+    header()
     aside()
     breadcrumb()
     bulletinboard()
@@ -36,35 +36,8 @@ function hideLoadingScreen() {
 }
 
 function header() {
-    if (window.location.hash && $('body').hasClass('single-hotels')) {
-        sectionId = window.location.hash
-        let menuItem = $(sectionId).closest('section').data('content')
-
-        $('span[data-menu='+menuItem+']').addClass('header__item--active')
-        $('.content[data-content='+menuItem+']').addClass('content--active')
-    } else {
-        $('span[data-menu=monthly-dashboard]').addClass('header__item--active')
-        $('.content[data-content=monthly-dashboard]').addClass('content--active')
-    }
-
-    $('.header__item').on('click', function() {
-        $('.header__item').removeClass('header__item--active')
-
-        if($(this).parent().hasClass('header__submenu')) {
-            $('.header__item').removeClass('header__item--active')
-            $('.header__submenu span').removeClass('header__item--active')
-            $(this).closest('.header__item').addClass('header__item--active')
-            $(this).addClass('header__item--active')
-        } else {
-            $(this).addClass('header__item--active')
-        }
+    $('.header-user__notification').on('click', function() {
         
-        $('.content').removeClass('content--active')
-        $('.content[data-content='+$(this).data('menu')+']').addClass('content--active')
-
-        let menu = $(this).data('menu')
-
-        localStorage.setItem('menu', menu)
     })
 }
 

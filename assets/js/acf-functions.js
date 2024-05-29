@@ -37,6 +37,17 @@ function addRow(el) {
     let postId = el.data('post-id')
     let fieldKey = el.data('field-key')
     let rowId, rowIdAdded
+    let file = el.closest('.card__body').find('.table--new form input[type=file]')
+
+    if(file.length !== 0) {
+        if(file[0].files.length === 0) {
+            alert('Please add a file to upload')
+            return false
+        } else {
+            console.log('Deu certo');
+            return false
+        }
+    }
 
     if(el.closest('.card__body').find('.table--new').length == 0) {
         if(el.closest('.table').find('.table__row').length > 0) {

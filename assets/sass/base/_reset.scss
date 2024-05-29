@@ -26,15 +26,6 @@ body {
     background-color: $grey;
     overflow-x: hidden;
     min-height: 100vh;
-}
-
-main {
-    position: relative;
-    
-    margin: 0 auto;
-    width: 90%;
-    max-width: 1280px;
-    min-height: 100vh;
 
     background-image: url('../img/backtest.png');
     background-size: cover;
@@ -54,10 +45,23 @@ main {
         backdrop-filter: blur(5.5px);
     }
 
-    & > * {
+    main > * {
         z-index: 1;
         position: relative;
     }
+
+    &:has(.header-user) {
+        padding-top: 13.8rem;
+    }
+}
+
+main {
+    position: relative;
+    
+    margin: 0 auto;
+    width: 90%;
+    max-width: 1280px;
+    min-height: 100vh;
 }
 
 img {

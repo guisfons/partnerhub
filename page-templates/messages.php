@@ -1,14 +1,15 @@
 <?php
-    /**
-     * Template Name: Messages Page
-     * Template Post Type: page
-     *
-     * @package UAU
-     * @since 1.0.0
-     */
 
-    get_header();
+/**
+ * Template Name: Messages Page
+ * Template Post Type: page
+ *
+ * @package UAU
+ * @since 1.0.0
+ */
 
-	the_content();
+get_header();
 
-    get_footer();
+the_content();
+
+get_footer();
