@@ -651,16 +651,9 @@ function handle_add_images_to_gallery() {
         $post_name = $post->post_name;
 
         $upload_dir = wp_upload_dir();
-
         $post_folder_path = $upload_dir['basedir'] . '/' . $post_name;
-        // $post_folder_path .= '/' . $current_year . '/' . $current_month;
-
-        if (!file_exists($post_folder_path)) {
-            mkdir($post_folder_path, 0755, true);
-        }
-
         $year_month_folder_path = $post_folder_path . '/' . $current_year . '/' . $current_month;
-        // Check if the folder exists, create it if not
+
         if (!file_exists($year_month_folder_path)) {
             mkdir($year_month_folder_path, 0755, true);
         }
@@ -669,15 +662,16 @@ function handle_add_images_to_gallery() {
 
         if ($postId > 0) {
             if (!empty($files['name'][0])) {
-                $attach_ids = array();  // Array to store attachment IDs
+                $attach_ids = array();
 
-                // Get the current gallery images
                 $current_gallery = get_field($galleryFieldKey, $postId);
-
-                // If there are existing images, add them to the $attach_ids array
                 if ($current_gallery && is_array($current_gallery)) {
                     $attach_ids = $current_gallery;
                 }
+
+                require_once(ABSPATH . 'wp-admin/includes/file.php');
+                require_once(ABSPATH . 'wp-admin/includes/media.php');
+                require_once(ABSPATH . 'wp-admin/includes/image.php');
 
                 foreach ($files['name'] as $key => $value) {
                     if ($files['name'][$key]) {
@@ -689,45 +683,79 @@ function handle_add_images_to_gallery() {
                             'size'     => $files['size'][$key]
                         );
 
-                        // Set the file array in $_FILES
                         $_FILES = array($_POST['nameField'] => $file);
 
-                        // Upload each file using media_handle_upload and get the attachment ID
+                        // Use media_handle_upload to upload the file and get the attachment ID
                         $attach_id = media_handle_upload($_POST['nameField'], $postId);
 
-                        $file_url = wp_get_attachment_url($attach_id);
-                        $file_path = get_attached_file($attach_id);
+                        if (is_wp_error($attach_id)) {
+                            wp_send_json_error('Upload failed: ' . $attach_id->get_error_message());
+                            continue;
+                        }
 
-                        // Move the file to the post folder
+                        $file_path = get_attached_file($attach_id);
                         $destination = $year_month_folder_path . '/' . basename($file_path);
 
-                        rename($file_path, $destination);
+                        // Move the file to the correct directory
+                        if (rename($file_path, $destination)) {
+                            update_attached_file($attach_id, $destination);
 
-                        // Store the attachment ID in the array
-                        if (is_numeric($attach_id)) {
+                            // Generate new metadata for the relocated file
+                            $metadata = wp_generate_attachment_metadata($attach_id, $destination);
+                            wp_update_attachment_metadata($attach_id, $metadata);
+
                             $attach_ids[] = $attach_id;
+                        } else {
+                            wp_send_json_error('Failed to move file.');
                         }
                     }
                 }
 
-                // Update the ACF gallery field with the combined array
+                // Update the ACF gallery field with the new attachment IDs
                 update_field($galleryFieldKey, $attach_ids, $postId);
-
                 $imageUrls = array_map('wp_get_attachment_url', $attach_ids);
 
-                // Send a success response
-                wp_send_json_success(array('imageUrls' => $imageUrls), 'Images added to the gallery successfully!');
+                wp_send_json_success(array('imageUrls' => $imageUrls, 'attach_ids' => $attach_ids), 'Images added to the gallery successfully!');
             } else {
-                // No files uploaded
                 wp_send_json_error('No images uploaded.');
             }
         } else {
-            // Invalid post ID
             wp_send_json_error('Invalid post ID.');
         }
     } else {
-        // Invalid request method
         wp_send_json_error('Invalid request method.');
+    }
+}
+
+add_action('wp_ajax_delete_gallery_image', 'handle_delete_gallery_image');
+add_action('wp_ajax_nopriv_delete_gallery_image', 'handle_delete_gallery_image');
+
+function handle_delete_gallery_image() {
+    if (isset($_POST['image_id']) && isset($_POST['post_id']) && isset($_POST['field_key'])) {
+        $image_id = intval($_POST['image_id']);
+        $post_id = intval($_POST['post_id']);
+        $field_key = sanitize_text_field($_POST['field_key']);
+
+        $images = get_field($field_key, $post_id);
+
+        if ($images) {
+            foreach ($images as $key => $image) {
+                if ($image['ID'] == $image_id) {
+                    unset($images[$key]);
+                    break;
+                }
+            }
+
+            $images = array_values($images);
+
+            update_field($field_key, $images, $post_id);
+
+            wp_send_json_success('Image deleted successfully!');
+        } else {
+            wp_send_json_error('No images found.');
+        }
+    } else {
+        wp_send_json_error('Invalid request.');
     }
 }
 
@@ -855,7 +883,14 @@ function get_file_icon($url) {
             default:
                 $color = '#434343';
         }
-        $icon = '<figure><svg id="eB0JEjPqx6d1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 39 49" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"><path d="M4.615079,2.653579L27.5022,2.570655l8.872906,10.531393v32.920968h-31.760027v-43.369437Z" fill="none" stroke="#434343" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M26.38157,2.570652v10.531393h9.993536L27.5022,2.570652h-1.12063Z" transform="translate(0 0.000003)" fill="#434343" stroke="#434343" stroke-width="0.5" stroke-linejoin="round"/><path d="M2.031101,24.296836L31.958601,24.5v14.422172h-29.9275v-14.625336Z" fill="'.$color.'" stroke="'.$color.'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></figure>';
+        $icon =
+            '<figure>
+                <svg id="eB0JEjPqx6d1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 39 49" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                    <path d="M4.615079,2.653579L27.5022,2.570655l8.872906,10.531393v32.920968h-31.760027v-43.369437Z" fill="none" stroke="#434343" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M26.38157,2.570652v10.531393h9.993536L27.5022,2.570652h-1.12063Z" transform="translate(0 0.000003)" fill="#434343" stroke="#434343" stroke-width="0.5" stroke-linejoin="round"/>
+                    <path d="M2.031101,24.296836L31.958601,24.5v14.422172h-29.9275v-14.625336Z" fill="'.$color.'" stroke="'.$color.'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </figure>';
     }
     return $icon;
 }
@@ -893,8 +928,8 @@ function render_empty_file_row($x, $post_id, $field_key, $file_field_key) {
     '<div data-row-index="'.$x.'" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="table__row">
         <div class="table__row-form">
             <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" data-file-field-key="'.$file_field_key.'" class="file-field" enctype="multipart/form-data">
-                <input type="file" class="file" accept=".xls, .xlsm, .pdf, .docx">
-                <button type="button" class="table__row-upload upload-file upload-repeater-file">Upload file</button>
+                <input type="file" class="file" id="file" accept=".xls, .xlsm, .pdf, .docx">
+                <button type="button" class="table__row-upload acho que --repeater">Upload file</button>
             </form>
         </div>
         <div class="table__row-controls">
@@ -1005,11 +1040,14 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                         <div class="table__row">
                             <div class="table__row-form">
                                 <form method="post" data-post-id="'.$post_id.'" data-field-key="'.$field_key.'" class="file-field" enctype="multipart/form-data">
-                                    <input type="file" class="file" accept=".xls, .xlsm, .pdf, .docx">
-                                    <button type="button" class="table__row-upload upload-file">Upload file</button>
+                                    <input type="file" class="file" id="file" accept=".xls, .xlsm, .pdf, .docx">
+                                    <button type="button" class="table__row-upload">Upload file</button>
                                 </form>
                             </div>
                         </div>
+                    </div>
+                    <div class="table__foot">
+                        <span class="table__foot-submit">Submit File</span>
                     </div>
                 </div>';
             }
@@ -1135,47 +1173,59 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
 }
 
 function show_gallery($post_id, $section_title, $field_name) {
-    echo '<div class="card__header"><h3>'.$section_title.'</h3></div><div class="card__body"><div class="table table--gallery"><div class="table__header"></div><div class="table__body">';
     $images = get_field($field_name);
     $field_key = acf_get_field($field_name)['key'];
     $file_array = preg_replace("/[^a-zA-Z]+/", "", $section_title);
 
+    echo '<div class="card__header"><h3>'.$section_title.'</h3></div><div class="card__body"><div class="table table--gallery" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '"><div class="table__header"></div><div class="table__body">';
+
     if ($images) :
         foreach ($images as $image) :
             $image_title = $image['alt'];
-            $image_url = get_service_url($image['url'], $post_id);
+            $image_url = $image['url'];
             $image_filename = $image['filename'];
+            $image_id = $image['ID'];
 
             echo
             '<div class="table__row">
                 <span class="table__row-title">
-                    <figure><img src="' .get_template_directory_uri(). '/assets/img/photo-icon.svg" alt="' . $image_title . '"></figure>
+                    <figure data-image-id="' . $image_id . '"><img src="' .get_template_directory_uri(). '/assets/img/photo-icon.svg" alt="' . $image_title . '"></figure>
                     ' . $image_filename . '
                 </span>
-                <div class="table__row-controls"><a href="' . $image_url . '" title="' . $image_title . '" target="_blank">View</a></div>
+                <div class="table__row-controls">
+                    <a href="' . $image_url . '" title="' . $image_title . '" target="_blank">View</a>
+                    <span class="table__row-controls-delete" data-image-id="' . $image_id . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '">Remove</span>
+                </div>
             </div>';
         endforeach;
         echo
-        '</div><div class="table__foot">
-            <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
-            <span class="download-images"><span class="material-symbols-outlined">download</span></span>
-            <button class="table__foot-viewgallery">View in gallery</button>
-            <div class="table__foot-modal">
-                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
-                    <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
-                    <button type="button" class="upload-gallery">Submit</button>
-                </form>
-            </div>
+        '</div>
+        <div class="table__modal">
+            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
+                <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
+                <button type="button" class="upload-gallery">Submit</button>
+            </form>
+        </div>
+        <div class="table__foot">
+            <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>';
+            // <span class="download-images"><span class="material-symbols-outlined">download</span></span>
+            echo '<span class="table__foot-viewgallery">View in gallery</span>
+            <span class="table__foot-addgallery">Upload new picture</span>
         </div>';
     else :
         echo
-        '</div><div class="table__foot">
-            <div class="table__foot-modal">
-                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
-                    <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
-                    <button type="button" class="upload-gallery">Submit</button>
-                </form>
-            </div>
+        '</div>
+        <div class="table__modal">
+            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="gallery-field" enctype="multipart/form-data">
+                <input type="file" accept="image/*" name="'.$file_array.'[]" multiple required>
+                <button type="button" class="upload-gallery">Submit</button>
+            </form>
+        </div>
+        <div class="table__foot">
+            <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>';
+            // <span class="download-images"><span class="material-symbols-outlined">download</span></span>
+            echo '<span class="table__foot-viewgallery">View in gallery</span>
+            <span class="table__foot-addgallery">Upload new picture</span>
         </div>';
     endif;
     echo '</div></div></div>';

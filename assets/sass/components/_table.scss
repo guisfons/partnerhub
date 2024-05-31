@@ -13,6 +13,12 @@
         
     // }
 
+    &:not(.table--gallery) {
+        .table__body:not(:has(form)) ~ .table__foot {
+            display: none;
+        }
+    }
+
     &__body {
         display: flex;
         flex-direction: column;
@@ -99,6 +105,8 @@
                 align-items: center;
                 gap: 1rem;
                 width: 100%;
+
+                .table__row-upload { display: none; }
             }
 
             & ~ .table__row-controls { width: fit-content; }
@@ -117,11 +125,35 @@
         }
     }
 
+    &__modal {
+        opacity: 0;
+        visibility: hidden;
+        width: 0px;
+        height: 0px;
+        overflow: hidden;
+        transition: .3s ease-in-out;
+
+        background-color: $gainsboro;
+        border-radius: 1.5rem;
+
+        &--active {
+            opacity: 1;
+            visibility: visible;
+            width: 100%;
+            height: fit-content;
+            padding: 1.8rem 2.9rem;
+
+            & ~ .table__foot span:not(.table__foot-addgallery) {
+                display: none;
+            }
+        }
+    }
+
     &__foot {
         display: flex;
         justify-content: flex-end;
 
-        &-addrow {
+        &-addrow, &-submit, &-addgallery {
             @include btn;
             background-color: $mustard !important;
         }
@@ -180,6 +212,16 @@
                         font-size: 1.4rem;
                         background-color: $cyan;
                     }
+
+                    span {
+                        font-size: 1.4rem;
+                    }
+                }
+            }
+
+            &__body {
+                &:empty ~ .table__foot span:not(.table__foot-addgallery) {
+                    display: none;
                 }
             }
 
@@ -192,14 +234,14 @@
                     font-weight: 700;
                     color: $darkblue;
                     cursor: pointer;
-        
-                    &:last-of-type {
-                        font-size: 2.5rem;
-                    }
                 }
 
                 .download-images {
                     display: flex;
+                    
+                    span {
+                        font-size: 2.5rem;
+                    }
                 }
 
                 &-viewgallery {
@@ -215,4 +257,101 @@
             }
         }
     }
+
+    &__gallery {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .6rem;
+
+        background-color: $white;
+        border-radius: 1.5rem;
+        padding: 4.5rem 2.5rem 2.5rem;
+
+        figure {
+            position: relative;
+            z-index: 1;
+
+            max-width: calc(33.33% - .4rem);
+            width: 100%;
+            height: auto;
+            aspect-ratio: 362/229;
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 2.8rem;
+
+            padding-bottom: 2.7rem;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                background-color: rgba($color: $black, $alpha: .0);
+                transition: .3s ease-in-out;
+            }
+
+            &:hover {
+                &::after {
+                    background-color: rgba($color: $black, $alpha: .5);
+                }
+
+
+                a, & > span {
+                    opacity: 1;
+                    visibility: visible;
+                }
+
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+
+                position: absolute;
+                top: 0;
+                z-index: -1;
+            }
+
+            a, & > span {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                width: 6.5rem;
+                height: 4.1rem;
+
+                opacity: 0;
+                visibility: hidden;
+                transition: .3s ease-in-out;
+                z-index: 1;
+                
+                font-size: 3rem;
+                color: $white;
+                border-radius: .5rem;
+                cursor: pointer;
+            }
+
+            a {
+                background-color: $cyan;
+            }
+
+            & > span {
+                background-color: $red;
+            }
+        }
+
+        &-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+        }
+    }    
 }

@@ -109,27 +109,6 @@
         gap: 1rem 2rem;
         width: 100%;
 
-        .title {
-            margin-right: auto;
-            font-weight: 700;
-            color: $dark_slate_gray;
-            
-            span {
-                font-size: 2.5rem;
-
-                &:first-of-type {
-                    font-size: 2.2rem;
-                    color: $cyan;
-                }
-            }
-
-            h1 {
-                font-size: 3.4rem;
-                text-transform: uppercase;
-                color: $dark_slate_gray;
-            }
-        }
-
         a {
             display: flex;
             flex-direction: column;

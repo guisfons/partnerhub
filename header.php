@@ -46,12 +46,6 @@ $user = wp_get_current_user();
 		get_sidebar('sidebar');
 	?>
 		<header class="header-user">
-			<?php if(is_front_page()): ?>
-			<span class="title"><span>Hello, <?php echo $user->user_firstname; ?></span><br /><br />
-				<h1><?= (!current_user_can('contributor') ? 'ADMINISTRATIVE PARTNERHUB HOME' : 'Hotel Administrative Panel'); ?></h1>
-			</span>
-			<?php endif; ?>
-
 			<a href="/notifications" class="header-user__notification">
 				<figure>
 					<img src="<?= get_template_directory_uri(); ?>/assets/img/bell.webp" alt="Messages">
