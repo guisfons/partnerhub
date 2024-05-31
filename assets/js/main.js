@@ -212,6 +212,14 @@ function actions() {
     $('body').on('click', '.table__row-controls-share', function() {
         copyToClipboard($(this).parent().find('.table__row-controls-view').data('url'))
     })
+
+    $('body').on('change', '.table__row-form form', function() {
+        $(this).closest('.card__body').find('.table__foot-addrow').text('Upload file')
+    })
+
+    $('.table:not(.table--new) .table__foot-submit').on('click', function() {
+        $(this).closest('.table').find('.table__row-upload').click()
+    })
 }
 
 function downloadImages() {
@@ -289,6 +297,73 @@ function gallery() {
 
     $('body').on('click', '.gallery__popup-close', function() {
         $(this).parent().remove()
+    })
+
+    $('.table__foot-addgallery').on('click', function() {
+        $(this).closest('.table').find('.table__body').hide()
+        $(this).closest('.table').find('.table__modal').addClass('table__modal--active')
+
+        if($(this).text() == 'Submit picture') {
+            $(this).closest('.table').find('.table__modal .upload-gallery').click()
+
+            return false
+        }
+
+        if($(this).text() == 'Upload new picture') {
+            $(this).text('Submit picture')
+        }
+    })
+
+    $('.table__foot-viewgallery').on('click', function() {
+        let table = $(this).closest('.table')
+        let imgData = []
+        let fieldKey = $(this).closest('.table').data('field-key')
+        let postId = $(this).closest('.table').data('post-id')
+
+        console.log(fieldKey);
+
+        table.find('.table__row').each(function() {
+            let imgId = $(this).find('.table__row-title figure').data('image-id')
+            let imgUrl = $(this).find('.table__row-controls a').attr('href')
+
+            if (imgId !== undefined && imgUrl !== undefined) {
+                let img = {
+                    id: imgId,
+                    url: imgUrl
+                }
+                imgData.push(img)
+            }
+        })
+
+        let oldTitle = $(this).closest('.content').find('h2').text()
+        let title = $(this).closest('.card').find('.card__header h3').text()
+
+        $(this).closest('.content').find('.card').hide()
+        $(this).closest('.content').find('h2').text('GALLERY - ' + title)
+
+        $(this).closest('.content').append('<div class="table__gallery"></div>')
+
+        $.each(imgData, function(i, value) {
+            let id = value.id
+            let url = value.url
+            let filename = url.substring(url.lastIndexOf('/') + 1)
+            let title = filename.substring(0, filename.lastIndexOf('.'))
+
+            table.closest('.content').find('.table__gallery').append('\
+                <figure>\
+                    <img src="'+url+'" alt="'+title+'" />\
+                    <a href="'+url+'" target="_blank" title="'+title+'"><span class="material-symbols-outlined">preview</span></a>\
+                    <span class="material-symbols-outlined table__gallery-delete" data-image-id="'+id+'" data-field-key="'+fieldKey+'" data-post-id="'+postId+'">delete</span>\
+                </figure>')
+        })
+
+        table.closest('.content').find('.table__gallery').append('<span class="material-symbols-outlined table__gallery-close">close</span>')
+    })
+
+    $('body').on('click', '.table__gallery-close', function() {
+        $(this).closest('.content').find('h2').text('Property Info')
+        $(this).closest('.content').find('.card').attr('style', '')
+        $(this).closest('.table__gallery').remove()
     })
 }
 

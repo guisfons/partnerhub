@@ -83,6 +83,28 @@
     width: fit-content !important;
 }
 
+.title {
+    margin-right: auto;
+    font-weight: 700;
+    color: $dark_slate_gray;
+    width: 100%;
+    
+    span {
+        font-size: 2.5rem;
+
+        &:first-of-type {
+            font-size: 2.2rem;
+            color: $cyan;
+        }
+    }
+
+    h1 {
+        font-size: 3.4rem;
+        text-transform: uppercase;
+        color: $dark_slate_gray;
+    }
+}
+
 .breadcrumb {
     display: flex;
     gap: 1rem;
@@ -92,7 +114,7 @@
     color: $dark_dim_grey;
     text-transform: uppercase;
 
-    max-width: 1060px;
+    max-width: 1000px;
     width: 90%;
     margin: 0 auto;
 
@@ -134,4 +156,17 @@
 
     width: fit-content;
     cursor: pointer;
+}
+
+input[type="file"] {
+    width: 100%;
+
+    &::file-selector-button {
+        @include btn;
+
+        display: initial;
+
+        font-size: 1.4rem;
+        background-color: $dim_gray;
+    }
 }

@@ -4,6 +4,13 @@ loadModulesCssForTemplate('home.min.css');
 if(is_user_logged_in()) {
 	$user = wp_get_current_user();
 
+	if(is_front_page() || is_singular('hotels')): ?>
+		<span class="title"><span>Hello, <?php echo $user->user_firstname; ?></span><br /><br />
+			<h1><?= (!current_user_can('contributor') ? 'ADMINISTRATIVE PARTNERHUB HOME' : 'Hotel Administrative Panel'); ?></h1>
+		</span>
+	<?php
+	endif;
+
     if(in_array('contributor', (array)$user->roles)) {
 		$posts = get_posts(array(
 			'posts_per_page' => -1,
@@ -29,8 +36,8 @@ if(is_user_logged_in()) {
 		
 	if ( in_array( 'administrator', (array) $user->roles ) || in_array('headofoperations', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('contributor', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('revenuemanager', (array) $user->roles) ) {
         if(!in_array('contributor', (array) $user->roles)) {
-            get_template_part('template-parts/front-page/schedule');
-			get_template_part('template-parts/front-page/tickets');
+            // get_template_part('template-parts/front-page/schedule');
+			// get_template_part('template-parts/front-page/tickets');
 			get_template_part('template-parts/front-page/notifications');
 			get_template_part('template-parts/front-page/latest-updates');
         } else { ?>

@@ -22,7 +22,7 @@
             <a href="<?= $latest_blog_post['url']; ?>" target="_blank" title="Latest Blog Post"><img src="<?= $latest_blog_post['image']; ?>" alt="Latest Blog Post"></a>
         </figure>
     </div>
-    <div class="card">
+    <!-- <div class="card">
         <h4>Upcoming Events</h4>
-    </div>
+    </div> -->
 </section>

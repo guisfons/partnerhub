@@ -204,6 +204,7 @@
         .upload-gallery {
             @include btn;
             background-color: $mustard;
+            display: none;
         }
     }
 
