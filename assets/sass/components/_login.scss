@@ -3,6 +3,7 @@
     height: 100vh;
     margin: 0 0 !important;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 
@@ -104,5 +105,21 @@
                 }
             }
         }
+    }
+
+    &__error {
+        z-index: 1;
+        max-width: 47.5rem;
+        width: 90%;
+
+        background-color: rgba($color: $white, $alpha: .8);
+        padding: 2.45rem;
+        margin-bottom: 2rem;
+
+        font-size: 1.6rem;
+        
+        border-radius: .5rem;
+        border: .1rem solid #FD604C;
+        border-width: 0 0 0 0.6rem;
     }
 }

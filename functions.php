@@ -305,6 +305,11 @@ function fix_svg() {
 }
 add_action( 'admin_head', 'fix_svg' );
 
+add_action('wp_login_failed', 'redirect_login_failed');
+function redirect_login_failed() {
+    wp_redirect(get_home_url().'?failed=true');
+}
+
 add_action('wp_ajax_upload_and_update_field', 'handle_file_upload_and_update_field');
 add_action('wp_ajax_nopriv_upload_and_update_field', 'handle_file_upload_and_update_field');
 

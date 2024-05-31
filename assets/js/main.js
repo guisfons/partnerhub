@@ -1,6 +1,11 @@
 $(document).ready(function() {
     window.history.replaceState("","",window.location.href)
 
+    let searchParams = new URLSearchParams(window.location.search)
+    if(searchParams.has('failed')) {
+        $('<div class="login__error"><strong>Error: </strong>The username or password provided is incorrect.</div>').insertBefore('.login__form')
+    }
+
     panelIds()
     header()
     aside()
