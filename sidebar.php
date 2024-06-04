@@ -11,7 +11,7 @@
 		if (is_singular('hotels') || current_user_can('contributor')) {
 			if(!current_user_can('contributor')) {
 				echo '<button class="aside__item"><a href="'.get_home_url().'" title="Home">PartnerHub Home</a></button>';
-			} else {
+			} else if(!is_page('notifications')) {
 				echo '<button data-menu="home" class="aside__item">Home</button>';
 			}
 

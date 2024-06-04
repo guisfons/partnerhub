@@ -9,11 +9,11 @@
 
     & > *:empty { display: none; }
 
-    &:not(.table--gallery), &:not(:has(.table--new)) ~ .table {
-        .table__body:not(:has(.table__row-form)) ~ .table__foot {
-            display: none;
-        }
-    }
+    // &:not(.table--gallery), &:not(:has(.table--new)) ~ .table {
+    //     .table__body:not(:has(.table__row-form)) ~ .table__foot {
+    //         display: none;
+    //     }
+    // }
 
     &__body {
         display: flex;

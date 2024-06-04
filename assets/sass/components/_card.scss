@@ -85,6 +85,10 @@
     &--medium {
         max-width: calc(50% - 2.5rem);
         width: 100%;
+
+        &:not(:has(.card__body)) {
+            margin-right: 50%;
+        }
     }
 
     &--ibestats {
