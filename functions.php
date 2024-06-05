@@ -14,6 +14,7 @@
  * @since 1.0.0
  */
 
+
 if (in_array(session_status(), [PHP_SESSION_NONE, 1])) {
 	session_start();
 }

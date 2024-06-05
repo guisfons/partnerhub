@@ -80,41 +80,11 @@
     </div>
 
     <div class="card card--noresize">
-        <div class="card__header"><h3>Logos</h3></div>
-        <div class="gallery">
-            <?php
-            $images = get_field('corporate_identity_logos');
-            $field_key = acf_get_field('corporate_identity_logos')['key'];
-
-            if ($images) :
-                echo '<div class="gallery__images gallery__images--noslider">';
-                foreach ($images as $image) :
-                    $image_title = $image['alt'];
-                    $image_url = $image['url'];
-                    $image_filename = $image['filename'];
-                    echo '<figure><img src="' . $image_url . '" alt="' . $image_title . '"></figure>';
-                endforeach;
-                echo
-                '</div>
-                    <div class="gallery__control">
-                        <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
-                        <span class="download-images"><span class="material-symbols-outlined">download</span></span>
-                        <form method="post" data-post-id="' . $post_id . '" enctype="multipart/form-data" data-field-key="' . $field_key . '" class="gallery-field">
-                            <input type="file" accept="image/*" name="logos[]" multiple required>
-                            <button type="button" class="upload-gallery">Submit</button>
-                        </form>
-                    </div>';
-            else :
-                echo
-                '<div class="gallery__control">
-                        <form method="post" data-post-id="' . $post_id . '" enctype="multipart/form-data" data-field-key="' . $field_key . '" class="gallery-field">
-                            <input type="file" accept="image/*" name="logos[]" multiple required>
-                            <button type="button" class="upload-gallery">Add Logos</button>
-                        </form>
-                    </div>';
-            endif;
-            ?>
-        </div>
+        <?php
+        $section_title = 'Logos';
+        $field_name = 'corporate_identity_logos';
+        show_gallery($post_id, $section_title, $field_name);
+        ?>
     </div>
 </section>
 

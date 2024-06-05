@@ -102,6 +102,12 @@
         & > .aside__item:first-of-type {
             background-color: $darkblue;
         }
+
+        .simplebar-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
     }
 
     &__menu {

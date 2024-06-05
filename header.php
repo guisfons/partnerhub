@@ -17,7 +17,6 @@
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 
 	<!-- Assets -->
-	<link rel="stylesheet" href="<?php echo esc_url(get_stylesheet_directory_uri()); ?>/assets/lib/slick.css">
 
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">

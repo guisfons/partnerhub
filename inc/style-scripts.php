@@ -9,19 +9,23 @@ function themeFiles() {
     wp_deregister_script('jquery');
     wp_dequeue_style('wp-block-library');
     
+    wp_register_style('simplebar-css', 'https://cdn.jsdelivr.net/npm/simplebar/dist/simplebar.css', array(), ASSETS_VERSION, 'screen');
+    wp_enqueue_style('simplebar-css');
+    wp_register_style('slick-css', get_stylesheet_directory_uri() . '/assets/lib/slick.css', array(), ASSETS_VERSION, 'screen');
+    wp_enqueue_style('slick-css');
     wp_register_style('style', get_stylesheet_directory_uri() . '/assets/css/main.min.css', array(), ASSETS_VERSION, 'screen');
     wp_enqueue_style('style');
-  
   	wp_register_style('custom-style', get_stylesheet_directory_uri() . '/assets/css/custom.css', array(), ASSETS_VERSION, 'screen');
     wp_enqueue_style('custom-style');
 
     wp_enqueue_script( 'jquery', get_stylesheet_directory_uri() . '/assets/lib/jquery-3.7.1.min.js', array(), '3.7.1', true );
     wp_enqueue_script( 'jszip', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js', array(), '3.1.5', true );
-    wp_enqueue_script( 'slick', get_stylesheet_directory_uri() . '/assets/lib/slick.min.js', array('jquery'), '1.8.1', true );
+    wp_enqueue_script( 'slick-js', get_stylesheet_directory_uri() . '/assets/lib/slick.min.js', array('jquery'), '1.8.1', true );
     wp_enqueue_script( 'api', get_template_directory_uri() . '/assets/js/api.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array('main-js'), '1.0', true);
     // wp_enqueue_script( 'chart-datalabel-js', 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0', array('chart-js'), '1.0', true);
-    wp_enqueue_script( 'main-js', get_stylesheet_directory_uri() . '/assets/js/main.js', array('jquery', 'slick'), '1.0', true );
+    wp_enqueue_script( 'main-js', get_stylesheet_directory_uri() . '/assets/js/main.js', array('jquery', 'slick-js'), '1.0', true );
+    wp_enqueue_script( 'simplebar-js', 'https://cdn.jsdelivr.net/npm/simplebar/dist/simplebar.min.js', array('jquery', 'main-js'), '1.0', true );
     wp_enqueue_script( 'acf-functions', get_stylesheet_directory_uri() . '/assets/js/acf-functions.js', array('jquery'), '1.0', true );
 }
 add_action('wp_enqueue_scripts', 'themeFiles');

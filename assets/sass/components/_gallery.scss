@@ -143,6 +143,14 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 2rem;
+
+        .gallery-field {
+            input[type=file] {
+                width: 50%;
+            }
+
+            .upload-gallery { display: flex; }
+        }
     }
 
     &__popup {

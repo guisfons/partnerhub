@@ -2,7 +2,7 @@
 <aside class="aside aside--active">
 	<button class="aside__button"><span class="material-symbols-outlined"></span></button>
 	<figure class="aside__logo"><img src="<?= get_template_directory_uri(); ?>/assets/img/logo.webp" alt="Logo">PartnerHub</figure>
-	<div class="aside__container">
+	<div class="aside__container" data-simplebar>
 		<?php
 		if(is_page('notifications')) {
 			echo '<a href="'.get_home_url().'" title="Home" class="aside__item">Home</a>';

@@ -112,4 +112,8 @@ body:not([data-role="administrator"]):not([data-role="editor"]):not([data-role="
 
 .single-hotels aside ~ main {
     padding-top: 0;
+
+    &:has(.breadcrumb) {
+        padding-top: 5rem;
+    }
 }

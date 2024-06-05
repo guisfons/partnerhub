@@ -494,32 +494,28 @@ function galllery(el) {
                     return url !== false;
                 });
 
-                if(type == 'logos[]') {
-                    btn.closest('.gallery').find('h4').after('<div class="gallery__images gallery__images--noslider"></div>')
-                    $.each(filteredImageUrls, function(i, value) {
-                        btn.closest('.gallery').find('.gallery__images').append('<figure><img src="'+value+'" alt="'+value.split('/').pop()+'"></figure>')
-                    })
-                } else {
-                    btn.closest('.table').find('.table__modal').removeClass('table__modal--active')
-                    btn.closest('.table').find('.table__body').css('display', 'flex')
+                btn.closest('.table').find('.table__modal').removeClass('table__modal--active')
+                btn.closest('.table').find('.table__body').css('display', 'flex')
 
-                    $.each(filteredImageUrls, function(i, value) {
-                        btn.closest('.table--gallery').find('.table__body').append(
-                        '<div class="table__row">\
-                            <span class="table__row-title">\
-                                <figure data-image-id="'+attatchIds[i]+'"><img src="'+window.location.origin+'/wp-content/themes/partnerhub/assets/img/photo-icon.svg" alt="'+value.split('/').pop()+'"></figure>\
-                                '+value.split('/').pop()+'\
-                            </span>\
-                            <div class="table__row-controls">\
-                                <a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a>\
-                                <span class="table__row-controls-delete" data-image-id="'+attatchIds[i]+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span>\
-                            </div>\
-                        </div>')
-                    })
-                }
+                $.each(filteredImageUrls, function(i, value) {
+                    btn.closest('.table--gallery').find('.table__body').append(
+                    '<div class="table__row">\
+                        <span class="table__row-title">\
+                            <figure data-image-id="'+attatchIds[i]+'"><img src="'+window.location.origin+'/wp-content/themes/partnerhub/assets/img/photo-icon.svg" alt="'+value.split('/').pop()+'"></figure>\
+                            '+value.split('/').pop()+'\
+                        </span>\
+                        <div class="table__row-controls">\
+                            <a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a>\
+                            <span class="table__row-controls-delete" data-image-id="'+attatchIds[i]+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span>\
+                        </div>\
+                    </div>')
+                })
+
+                btn.parent().find('input[type=file]').val('')
             },
             error: function(xhr, status, error) {
                 alert('Error uploading file.');
+                console.log(error);
             }
         })
     } else {
