@@ -39,19 +39,42 @@ $user = wp_get_current_user();
 ?>
 
 <body <?php body_class($post->post_name ?? ''); ?> data-role="<?php echo $user_role; ?>">
-
 	<?php
 	if (is_user_logged_in() && is_front_page() || is_page('messages') || is_singular('hotels') || is_page('notifications')) {
 		get_sidebar('sidebar');
 	?>
 		<header class="header-user">
-			<a href="/notifications" class="header-user__notification">
+			<?php
+			$posts = get_posts(array(
+				'posts_per_page' => -1,
+				'post_type' => 'hotels',
+				'meta_query' => array(
+					array(
+						'key' => 'user',
+						'value' => '"' . get_current_user_id() . '"',
+						'compare' => 'LIKE',
+					),
+				),
+			));
+	
+			if(in_array('contributor', (array)$user_role) && !empty($posts) && count($posts) > 1) {
+			?>
+			<a href="<?= get_home_url(); ?>/hotel-select/" class="header-user__profile">
+				<figure>
+					<img src="<?= get_template_directory_uri(); ?>/assets/img/switch.webp" alt="Switch hotel account">
+				</figure>
+				Switch
+			</a>
+			<?php } ?>
+
+			<a href="<?= get_home_url(); ?>/notifications" class="header-user__notification">
 				<figure>
 					<img src="<?= get_template_directory_uri(); ?>/assets/img/bell.webp" alt="Messages">
 					<span></span>
 				</figure>
 				Notifications
 			</a>
+
 			<!-- <a href="<?= do_shortcode('[better_messages_my_messages_url]'); ?>">
 				<figure>
 					<img src="<?= get_template_directory_uri(); ?>/assets/img/messages.webp" alt="Messages">
@@ -59,6 +82,7 @@ $user = wp_get_current_user();
 				</figure>
 				Messages
 			</a> -->
+			
 			<a href="/" class="header-user__profile">
 				<figure>
 					<img src="<?= get_template_directory_uri(); ?>/assets/img/user.webp" alt="<?= $user->user_login; ?>">

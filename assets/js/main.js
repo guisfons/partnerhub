@@ -20,6 +20,7 @@ $(document).ready(function() {
     // chart()
 
     dragNDrop()
+    hotelSelect()
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -508,5 +509,34 @@ function dragNDrop() {
 function slide() {
     $('.card--statistics .card__body').slick({
         dots: true
+    })
+}
+
+function hotelSelect() {
+    $('.hotel-select__selection > span').on('click', function() {
+        $('.hotel-select__select').slideDown({
+            start: function () {
+                $(this).css({
+                    display: "flex"
+                })
+            }
+        })
+    })
+
+    $('.hotel-select__select span').on('click', function() {
+        let text = $(this).data('title')
+        $(this).parent().slideUp()
+        $('.hotel-select__select span').attr('data-selected', '')
+        $(this).attr('data-selected', 'selected')
+        $(this).closest('.hotel-select__selection').find('span').first().text(text)
+    })
+
+    $('.hotel-select__btn').on('click', function() {
+        let value = $(this).closest('.hotel-select__container').find('.hotel-select__selection [data-selected="selected"]').val()
+        let url = $(this).closest('.hotel-select__container').find('.hotel-select__selection [data-selected="selected"]').data('url')
+        
+        if($(this).closest('.hotel-select__select').find('select').val() != '') {
+            window.location.replace(url)
+        }
     })
 }
