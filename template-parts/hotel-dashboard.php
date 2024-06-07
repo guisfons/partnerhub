@@ -391,7 +391,7 @@
                     <th style="padding:8px;border:1px solid #ddd;text-align:left;background-color:#25475C;color:#fff;">Traffic Channel</th>
                     <th style="padding:8px;border:1px solid #ddd;text-align:left;background-color:#2E7C8A;color:#fff;">Visitors</th>
                     <th style="padding:8px;border:1px solid #ddd;text-align:left;background-color:#5EC4C8;color:#fff;">Q1 24 vs Q1 23</th>
-                    <th style="padding:8px;border:1px solid #ddd;text-align:left;background-color:#5EC4C8;color:#fff;">Q1 24 vs Q1 23</th>
+                    <th style="padding:8px;border:1px solid #ddd;text-align:left;background-color:#5EC4C8;color:#fff;">Q1 24 vs Q4 23</th>
                 </tr>
             </thead>
             <tbody>
@@ -494,6 +494,24 @@
 
 <section data-content="page-traffic" class="content content--row"> 
     <h2>Page Traffic</h2>
+
+    <div class="card card--large">
+        <div class="card__header">
+            <h4>Page Traffic per Page - Q1 2024</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="pageTrafficChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+    <div class="card card--large">
+        <div class="card__header">
+            <h4>Page Traffic per Room - Q1 2024</h4>
+        </div>
+        <div class="card__body">
+            <canvas id="pageTrafficRoom" width="400" height="400"></canvas>
+        </div>
+    </div>
 </section>
 
 <section data-content="geo-traffic" class="content content--row"> 

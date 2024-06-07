@@ -3979,6 +3979,7 @@
             });
         })();
 
+        // Revenue Chart
 
         (function() {
             var ctxRevenueChart = document.querySelector('#revenueChart').getContext('2d');
@@ -4277,6 +4278,147 @@
             }
         })();
 
+        (function() {
+            var ctxPageTrafficChart = document.querySelector('#pageTrafficChart').getContext('2d');
+
+            var xValues = ['/', '/aux-anciennes-tanneries-wiltz/Rooms/Select', '/restaurant/', '/aux-anciennes-tanneries-wiltz', '/rooms/'];
+            var yValues = [1930, 1912, 1255, 1179, 631];
+            var barColors = ['#25475C', '#5EC4C8', '#2E7C8A', '#92D1D4', '#BFCDD0'];
+
+            const getDynamicMinMax = (values) => {
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                const dynamicMinValue = Math.floor(min * 0.4); // Adjusted dynamic min value
+                const adjustedMax = Math.ceil(max * 1.15); // Adjusted dynamic max value
+                return { dynamicMinValue, adjustedMax };
+            };
+
+            const { dynamicMinValue, adjustedMax } = getDynamicMinMax(yValues);
+
+            let data = {
+                labels: xValues,
+                datasets: [{
+                    label: 'Total users',
+                    data: yValues,
+                    backgroundColor: barColors,
+                }]
+            };
+
+            let options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: dynamicMinValue,
+                        max: adjustedMax,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Users'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                let value = context.raw;
+                                return `${label}: ${value.toLocaleString()}`;
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctxPageTrafficChart, {
+                type: 'bar',
+                data: data,
+                options: options
+            });
+        })();
+
+        (function() {
+            var ctxPageTrafficRoom = document.querySelector('#pageTrafficRoom').getContext('2d');
+
+            var xValues = [
+                '/suite/chambre-confort/',
+                '/suite/chambre-confort-cote-riviere/',
+                '/nl/suite/chambre-confort/',
+                '/suite/chambre-familiale-vue-riviere/',
+                '/suite/chambre-simple/'
+            ];
+            var yValues = [127, 60, 43, 35, 29];
+            var barColors = ['#25475C', '#5EC4C8', '#2E7C8A', '#92D1D4', '#BFCDD0'];
+
+            const getDynamicMinMax = (values) => {
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                const dynamicMinValue = Math.floor(min * 0.4); // Adjusted dynamic min value
+                const adjustedMax = Math.ceil(max * 1.15); // Adjusted dynamic max value
+                return { dynamicMinValue, adjustedMax };
+            };
+
+            const { dynamicMinValue, adjustedMax } = getDynamicMinMax(yValues);
+
+            let data = {
+                labels: xValues,
+                datasets: [{
+                    label: 'Total users',
+                    data: yValues,
+                    backgroundColor: barColors,
+                }]
+            };
+
+            let options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        min: dynamicMinValue,
+                        max: adjustedMax,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Users'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hide the legend
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                let value = context.raw;
+                                return `${label}: ${value.toLocaleString()}`;
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctxPageTrafficRoom, {
+                type: 'bar',
+                data: data,
+                options: options
+            });
+        })();
 
     /*
         //Website Traffic Page (1 Month)
