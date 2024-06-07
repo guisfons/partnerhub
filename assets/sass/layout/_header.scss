@@ -105,6 +105,7 @@
 
         display: flex;
         align-items: center;
+        justify-content: flex-end;
         flex-wrap: wrap;
         gap: 1rem 2rem;
         width: 100%;
@@ -124,9 +125,7 @@
             max-width: 12rem;
             width: 100%;
 
-            &:first-of-type {
-                margin-left: auto;
-
+            &.header-user__notification {
                 span {
                     background-color: $coral;
                     border-radius: 50%;

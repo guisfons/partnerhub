@@ -17,7 +17,7 @@ if(is_user_logged_in()) {
 			'post_type' => 'hotels',
 			'meta_query' => array(
 				array(
-					'key' => 'user', // Assuming 'user' is the meta key
+					'key' => 'user',
 					'value' => '"' . get_current_user_id() . '"',
 					'compare' => 'LIKE',
 				),
@@ -28,9 +28,9 @@ if(is_user_logged_in()) {
 			$url = get_permalink($posts[0]->ID);
             $full_current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-            if($full_current_url !== $url) {
-                echo '<script>window.location.replace("'.$url.'")</script>';
-            }
+			if($full_current_url !== $url && count($posts) == 1) {
+				echo '<script>window.location.replace("'.$url.'")</script>';
+			}
 		}
 	}
 		
