@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Template Name: Images Page
+ * Template Name: Hotel Select Page
  * Template Post Type: page
  *
  * @package UAU
@@ -10,9 +10,9 @@
 
 get_header();
 ?>
-<main class="images">
+<aside class="hotel-select__sidebar">
 
-</main>
+</aside>
 <?php
 
 get_footer();

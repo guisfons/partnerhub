@@ -236,6 +236,47 @@ add_filter( 'login_headertext', 'login_logo_url_title' );
 
 REQUIRE_ONCE('inc/style-scripts.php');
 
+function my_custom_hotels_columns($columns) {
+    // Unset the existing columns you want to reorder
+    unset($columns['title']);
+    unset($columns['date']);
+
+    // Define the new order of columns
+    return array_merge(array(
+        'cb' => $columns['cb'],
+        'title' => __('Title', 'your-text-domain'),
+        'hotel_code' => __('Hotel Code', 'your-text-domain'),
+        'date' => __('Date', 'your-text-domain'),
+    ), $columns);
+}
+add_filter('manage_hotels_posts_columns', 'my_custom_hotels_columns');
+
+function my_custom_hotels_column_content($column_name, $post_id) {
+    if ($column_name == 'hotel_code') {
+        // Use the ACF field name 'hotel_code'
+        $hotel_code_value = get_field('hotel_code', $post_id);
+        echo esc_html($hotel_code_value);
+    }
+}
+add_action('manage_hotels_posts_custom_column', 'my_custom_hotels_column_content', 10, 2);
+
+function my_custom_hotels_column_sortable($columns) {
+    $columns['hotel_code'] = 'hotel_code';
+    return $columns;
+}
+add_filter('manage_edit-hotels_sortable_columns', 'my_custom_hotels_column_sortable');
+
+function my_custom_hotels_orderby($query) {
+    if(!is_admin()) return;
+
+    $orderby = $query->get('orderby');
+
+    if($orderby == 'hotel_code') {
+        $query->set('meta_key', 'hotel_code');
+        $query->set('orderby', 'meta_value');
+    }
+}
+add_action('pre_get_posts', 'my_custom_hotels_orderby');
 
 /**
  * Pagination of posts in pages
