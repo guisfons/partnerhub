@@ -10,29 +10,6 @@ if(is_user_logged_in()) {
 		</span>
 	<?php
 	endif;
-
-    // if(in_array('contributor', (array)$user->roles)) {
-	// 	$posts = get_posts(array(
-	// 		'posts_per_page' => -1,
-	// 		'post_type' => 'hotels',
-	// 		'meta_query' => array(
-	// 			array(
-	// 				'key' => 'user',
-	// 				'value' => '"' . get_current_user_id() . '"',
-	// 				'compare' => 'LIKE',
-	// 			),
-	// 		),
-	// 	));
-
-	// 	if(!empty($posts)) {
-	// 		$url = get_permalink($posts[0]->ID);
-    //         $full_current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-	// 		if($full_current_url !== $url && count($posts) == 1) {
-	// 			echo '<script>window.location.replace("'.$url.'")</script>';
-	// 		}
-	// 	}
-	// }
 		
 	if ( in_array( 'administrator', (array) $user->roles ) || in_array('headofoperations', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('contributor', (array) $user->roles) || in_array('editor', (array) $user->roles) || in_array('revenuemanager', (array) $user->roles) ) {
         if(!in_array('contributor', (array) $user->roles)) {
@@ -98,7 +75,11 @@ if(is_user_logged_in()) {
 		echo '<h2>You have no permission to see this page</h2>';
 	}
 } else {
-	echo '<section class="login"><div class="login__form"><figure><img src="'.get_template_directory_uri().'/assets/img/regiotels-partnerhub.webp" alt="Regiotels Logo"></figure>';
+	echo '<section class="login">';
+	if(isset($_GET['failed'])) {
+		echo '<div class="login__error"><strong>Error: </strong>The username or password provided is incorrect.</div>';
+	}
+	echo '<div class="login__form"><figure><img src="'.get_template_directory_uri().'/assets/img/regiotels-partnerhub.webp" alt="Regiotels Logo"></figure>';
 	$args = array(
 		'echo' => false,
 	);

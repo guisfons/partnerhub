@@ -36,11 +36,20 @@ if (!empty($user->roles) && is_array($user->roles)) {
 }
 
 $user = wp_get_current_user();
+
 ?>
 
 <body <?php body_class($post->post_name ?? ''); ?> data-role="<?php echo $user_role; ?>">
 	<?php
-	if (is_user_logged_in() && is_front_page() || is_page('messages') || is_singular('hotels') || is_page('notifications')) {
+	if (
+		is_user_logged_in() && is_front_page() || 
+		in_array(true, [
+			is_page('messages'),
+			is_singular('hotels'),
+			is_page('notifications'),
+			is_page('profile')
+		])
+	) {
 		get_sidebar('sidebar');
 	?>
 		<header class="header-user">
@@ -83,14 +92,14 @@ $user = wp_get_current_user();
 				Messages
 			</a> -->
 			
-			<a href="/" class="header-user__profile">
+			<a href="/profile" class="header-user__profile">
 				<figure>
 					<img src="<?= get_template_directory_uri(); ?>/assets/img/user.webp" alt="<?= $user->user_login; ?>">
 				</figure>
 				<?= $user->user_login; ?>
 			</a>
 
-			<a href="<?php echo wp_logout_url(get_home_url()); ?>">
+			<a href="<?php echo wp_logout_url( home_url() ); ?>">
 				<figure class="header-user__logout"><span class="material-symbols-outlined">logout</span></figure> LOGOUT
 			</a>
 		</header>

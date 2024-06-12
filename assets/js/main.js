@@ -1,10 +1,10 @@
 $(document).ready(function() {
     window.history.replaceState("","",window.location.href)
 
-    let searchParams = new URLSearchParams(window.location.search)
-    if(searchParams.has('failed')) {
-        $('<div class="login__error"><strong>Error: </strong>The username or password provided is incorrect.</div>').insertBefore('.login__form')
-    }
+    // let searchParams = new URLSearchParams(window.location.search)
+    // if(searchParams.has('failed')) {
+    //     $('<div class="login__error"><strong>Error: </strong>The username or password provided is incorrect.</div>').insertBefore('.login__form')
+    // }
 
     panelIds()
     header()
@@ -226,6 +226,76 @@ function actions() {
     $('.table:not(.table--new) .table__foot-submit').on('click', function() {
         $(this).closest('.table').find('.table__row-upload').click()
     })
+
+    $('.card--profile__edit').on('click', function() {
+        let btn = $(this)
+        let userId = btn.closest('.card--profile__body').find('input[name=userId]').val()
+
+        if(btn.text() == 'Edit') {
+            btn.siblings('input').prop('disabled', false)
+            btn.siblings('input').focus().select()
+            btn.text('Submit')
+
+            if($(this).siblings('input').attr('type') == 'password') {
+                btn.siblings('input').val('').attr('placeholder', 'Password').attr('value', '')
+                btn.siblings('input').attr('type', 'text')
+            }
+        } else {
+            if($(this).siblings('input').attr('type') == 'email') {
+                let email = btn.siblings('input').val()
+
+                if(isValidEmail(email)) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/wp-admin/admin-ajax.php?action=edit_user_email',
+                        data: {
+                            user_id: userId,
+                            new_email: email
+                        },
+                        success: function(response) {
+                            btn.siblings('input').prop('disabled', true)
+                            btn.text('Edit')
+                            alert('Email updated successfully!')
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error updating email:', error)
+                        }
+                    })
+                } else {
+                    alert('Type a valid email.')
+                    btn.siblings('input').focus().css('border', '1px solid #fd604c')
+                }
+            } else {
+                let password = btn.siblings('input').val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/wp-admin/admin-ajax.php?action=edit_user_password',
+                    data: {
+                        user_id: userId,
+                        new_password: password
+                    },
+                    success: function(response) {
+                        btn.siblings('input').prop('disabled', true)
+                        btn.text('Edit')
+                        alert('Password updated successfully!')
+
+                        console.log(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error updating password:', error)
+                        btn.siblings('input').focus().css('border', '1px solid #fd604c')
+                    }
+                });
+            }
+        }
+
+    })
+}
+
+function isValidEmail(email) {
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
 }
 
 function downloadImages() {

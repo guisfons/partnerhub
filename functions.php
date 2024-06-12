@@ -228,6 +228,87 @@ function login_logo_url_title() {
 
 add_filter( 'login_headertext', 'login_logo_url_title' );
 
+add_action('template_redirect', 'redirects');
+function redirects() {
+    $user = wp_get_current_user();
+
+    if (!is_user_logged_in() && !isset($_GET['logged'])) {
+        $redirect_url = add_query_arg('logged', 'false', get_home_url());
+        wp_redirect($redirect_url);
+        exit;
+    } else {
+        if (in_array('contributor', (array)$user->roles) && (is_front_page() || is_home() || is_singular('hotels'))) {
+            after_login_page('', $user);
+        }
+    }
+}
+
+add_action('wp_login_failed', 'redirect_login_failed');
+function redirect_login_failed() {
+    wp_redirect(get_home_url().'?failed=true');
+    exit;
+}
+
+add_action('admin_init', 'restrict_dashboard_access');
+function restrict_dashboard_access() {
+    if (defined('DOING_AJAX') && DOING_AJAX) {
+        return;
+    }
+
+    $user = wp_get_current_user();
+    $allowed_roles = ['administrator', 'editor', 'headofoperations', 'revenuemanager'];
+    
+    if (!array_intersect($allowed_roles, (array) $user->roles)) {
+        after_login_page('', $user);
+    }
+}
+
+add_action('wp_logout', 'remove_query_after_logout', 10, 2);
+function remove_query_after_logout() {
+    $redirect_url = remove_query_arg('logged', get_home_url(''));
+    wp_redirect($redirect_url);
+    exit;
+}
+
+add_action('wp_login', 'after_login_page', 10, 2);
+function after_login_page($user_login, $user) {
+    if (in_array('contributor', (array)$user->roles)) {
+        $posts = get_posts(array(
+            'posts_per_page' => -1,
+            'post_type' => 'hotels',
+            'meta_query' => array(
+                array(
+                    'key' => 'user',
+                    'value' => '"' . get_current_user_id() . '"',
+                    'compare' => 'LIKE',
+                ),
+            ),
+        ));
+
+        if(!empty($posts)) {
+            $full_current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            $post_urls = array();
+
+            foreach ($posts as $post) {
+                $post_urls[] = get_permalink($post->ID);
+            }
+
+            if (!in_array($full_current_url, $post_urls)) {
+                if (count($posts) == 1) {
+                    $url = get_permalink($posts[0]->ID);
+                    echo wp_redirect($url);
+                    exit;
+                } else {
+                    wp_redirect('/hotel-select/');
+                    exit;
+                }
+            }
+        }
+    } else {
+        wp_redirect(home_url(''));
+        exit;
+    }
+}
 
 /**
  * Declaring the JS files for the site
@@ -346,11 +427,6 @@ function fix_svg() {
         </style>';
 }
 add_action( 'admin_head', 'fix_svg' );
-
-add_action('wp_login_failed', 'redirect_login_failed');
-function redirect_login_failed() {
-    wp_redirect(get_home_url().'?failed=true');
-}
 
 add_action('wp_ajax_upload_and_update_field', 'handle_file_upload_and_update_field');
 add_action('wp_ajax_nopriv_upload_and_update_field', 'handle_file_upload_and_update_field');
@@ -853,87 +929,6 @@ function my_handle_attachment($file_handler,$post_id,$set_thu=false) {
     return $attach_id;
 }
 
-add_action('admin_init', 'restrict_dashboard_access');
-function restrict_dashboard_access() {
-    $user = wp_get_current_user();
-
-    if (!in_array('administrator', (array) $user->roles) || !in_array('editor', (array) $user->roles) || !in_array('headofoperations', (array) $user->roles) || !in_array('revenuemanager', (array) $user->roles)) {
-        $user = wp_get_current_user();
-        
-        if(in_array('contributor', (array)$user->roles)) {
-            $posts = get_posts(array(
-                'posts_per_page' => -1,
-                'post_type' => 'hotels',
-                'meta_query' => array(
-                    array(
-                        'key' => 'user',
-                        'value' => get_current_user_id(),
-                        'compare' => 'LIKE',
-                    ),
-                ),
-            ));
-
-            if(!empty($posts)) {
-                if(count($posts) == 1) {
-                    $url = get_permalink($posts[0]->ID);
-                    $full_current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    
-                    if($full_current_url !== $url) {
-                        wp_redirect($url);
-                        exit;
-                    }
-                } else {
-                    wp_redirect('/hotel-select/');
-                    exit;
-                }
-            } else {
-                wp_redirect(home_url());
-                exit;
-            }
-        }
-    } else {
-        wp_redirect(home_url());
-        exit;
-    }
-}
-
-add_action('wp_login', 'after_login_page', 10, 2);
-function after_login_page($user_login, $user) {
-    $user = wp_get_current_user();
-
-    if(in_array('contributor', (array)$user->roles)) {
-        $posts = get_posts(array(
-            'posts_per_page' => -1,
-            'post_type' => 'hotels',
-            'meta_query' => array(
-                array(
-                    'key' => 'user',
-                    'value' => get_current_user_id(),
-                    'compare' => 'LIKE',
-                ),
-            ),
-        ));
-
-        if(!empty($posts)) {
-            wp_redirect('/hotel-select/');
-            exit;
-
-            if(count($posts) == 1) {
-                $url = get_permalink($posts[0]->ID);
-                $full_current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-                if($full_current_url !== $url) {
-                    wp_redirect($url);
-                    exit;
-                }
-            } else {
-                wp_redirect('/hotel-select/');
-                exit;
-            }
-        }
-    }
-}
-
 add_action('wp_ajax_ajax_search', 'ajax_search_callback');
 add_action('wp_ajax_nopriv_ajax_search', 'ajax_search_callback');
 function ajax_search_callback() {
@@ -1346,6 +1341,48 @@ function removeNotification($filename) {
     }
 
     wp_delete_post($post_id, true);
+}
+
+add_action( 'wp_ajax_edit_user_email', 'handle_edit_user_email' );
+function handle_edit_user_email() {
+    if ( isset( $_POST['user_id'] ) && isset( $_POST['new_email'] ) ) {
+        $user_id = intval( $_POST['user_id'] );
+        $new_email = sanitize_email( $_POST['new_email'] );
+
+        if ( email_exists( $new_email ) ) {
+            wp_send_json_error( 'Email already exists.' );
+        }
+
+        $user_data = array(
+            'ID' => $user_id,
+            'user_email' => $new_email
+        );
+
+        if ( wp_update_user( $user_data ) ) {
+            wp_send_json_success( 'Email updated successfully!' );
+        } else {
+            wp_send_json_error( 'Failed to update email.' );
+        }
+    } else {
+        wp_send_json_error( 'Invalid request.' );
+    }
+}
+
+add_action( 'wp_ajax_edit_user_password', 'handle_edit_user_password' );
+function handle_edit_user_password() {
+    if ( isset( $_POST['user_id'] ) && isset( $_POST['new_password'] ) ) {
+        $user_id = intval( $_POST['user_id'] );
+        $new_password = $_POST['new_password'];
+
+        wp_update_user(array(
+            'ID' => $user_id,
+            'user_pass' => $new_password
+        ));
+
+        wp_send_json_success('Password changed successfully!');
+    } else {
+        wp_send_json_error('Invalid request.');
+    }
 }
 
 // THIS RENDERS THE IBE SALES INSIDE A TABLE
