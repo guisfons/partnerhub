@@ -99,10 +99,6 @@
         max-width: 26.2rem;
         overflow-y: auto;
 
-        & > .aside__item:first-of-type {
-            background-color: $darkblue;
-        }
-
         .simplebar-content {
             display: flex;
             flex-direction: column;
@@ -242,6 +238,10 @@
 
         &:hover {
             background-color: $mustard !important;
+        }
+
+        &--home {
+            background-color: $darkblue;
         }
 
         span {
