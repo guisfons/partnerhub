@@ -39,7 +39,7 @@ $user = wp_get_current_user();
 
 ?>
 
-<body <?php body_class($post->post_name ?? ''); ?> data-role="<?php echo $user_role; ?>">
+<body <?php body_class($post->post_name ?? ''); ?> data-role="<?php echo $user_role; ?>" <?php if (is_singular('hotels')) { echo 'data-hotel-code="' . get_field('hotel_code') . '"'; } ?>>
 	<?php
 	if (
 		is_user_logged_in() && is_front_page() || 

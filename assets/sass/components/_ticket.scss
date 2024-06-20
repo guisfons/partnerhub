@@ -1,0 +1,228 @@
+body:has(.content--ticket.content--active) {
+    background-image: url('../img/ticket-bg.webp');
+}
+
+.content--ticket {
+    &[data-content="track-open-tickets"], &[data-content="closed-tickets"] {
+        .card--ticket {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+            background-color: rgba($color: $white, $alpha: .92);
+            cursor: pointer;
+
+            figure {
+                max-width: 10.6rem;
+                width: 100%;
+                height: 10.6rem;
+                aspect-ratio: 1/1;
+                border-radius: 50%;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: $cultured;
+
+                svg {
+                    max-width: 5.8rem;
+                    object-fit: contain;
+                }
+
+                span {
+                    font-size: 4.8rem;
+                    font-weight: 500;
+                    line-height: 1;
+                    color: $slate_gray;
+                }
+            }
+
+            &-open {
+                figure {
+                    background-color: #E4FBFC;
+
+                    svg {
+                        fill: $cyan !important;
+                    }
+                }
+            }
+
+            &-closed {
+                figure {
+                    background-color: #FFF3DF;
+
+                    svg {
+                        fill: #EFA937;
+                    }
+                }
+            }
+        }
+    }
+    
+    .card {
+        overflow: initial;
+
+        &--sm {
+            max-width: 29.3rem;
+        }
+
+        &--ticket {
+            transition: .3s ease-in-out;
+
+            select {
+                display: none;
+            }
+
+            input, textarea {
+                background-color: $gainsboro;
+                border-radius: 1.5rem;
+                font-size: 2.2rem;
+
+
+                width: 100%;
+                max-width: 100%;
+
+                padding: 2.5rem;
+                margin: 0;
+            }
+
+            textarea {
+                resize: none;
+                min-height: 14.6rem;
+            }
+
+            button {
+                @include btn;
+                background-color: $mustard;
+                align-self: flex-end;
+            }
+
+            &__text {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                font-size: 1.6rem;
+                font-weight: 500;
+                color: $dark_slate_gray;
+
+                span:last-of-type:not(:first-of-type) {
+                    font-size: 3.6rem;
+                    font-weight: 700;
+                    width: 100%;
+                }
+            }
+        }
+
+        &__header {
+            .nice-select {
+                padding: 1.3rem 2rem;
+                margin-left: auto;
+
+                font-size: 1.8rem;
+                line-height: 1;
+                width: 100%;
+                max-width: 25.1rem;
+
+                border-radius: 1rem;
+
+                &::before {
+                    right: 2.3rem;
+                }
+
+                &::after {
+                    width: 2.8rem;
+                    height: 2.8rem;
+                    right: 1rem;
+                }
+
+                &.open::before {
+                    right: 1.4rem;
+                    top: 40%;
+                }
+
+                .option {
+                    text-transform: capitalize;
+                }
+            }
+
+            input[type=search] {
+                font-size: 1.8rem;
+                font-weight: 400;
+                color: $dark_slate_gray;
+
+                width: 100%;
+                max-width: 25.1rem;
+                padding: 1.3rem 2rem;
+
+                background-color: $gainsboro;
+                border-radius: 1rem;
+
+                border: none;
+                outline: none;
+            }
+        }
+
+        &__body {
+            &-header {
+                display: flex;
+                justify-content: space-between;
+                gap: 3rem;
+
+                span {
+                    flex: 1;
+                    text-align: center;
+                    background-color: $grey;
+                    font-size: 1.8rem;
+                    font-weight: 700;
+                    color: #4A4848;
+                    padding: 1.3rem;
+                    border-radius: 1rem;
+                }
+            }
+
+            &-content {
+                display: flex;
+                flex-direction: column;
+                gap: 1.6rem;
+            }
+
+            &-task {
+                display: flex;
+                align-items: center;
+                gap: 3rem;
+
+                padding: 2rem;
+                background-color: $grey;
+                border-radius: 1rem;
+
+                font-size: 1.9rem;
+
+                & > * {
+                    flex: 1;
+                }
+
+                span {
+                    &:not(:first-of-type) {
+                        text-align: center
+                    }
+
+                    &:nth-of-type(2) {
+                        text-transform: capitalize;
+                    }
+
+                    &:last-of-type {
+                        font-weight: 700;
+                        text-transform: capitalize;
+                    }
+                }
+
+                button {
+                    @include btn;
+                    height: 4.7rem;
+                    background-color: $cyan;
+                    border-radius: 1rem;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}

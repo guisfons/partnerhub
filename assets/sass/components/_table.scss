@@ -139,8 +139,10 @@
             height: fit-content;
             padding: 1.8rem 2.9rem;
 
-            & ~ .table__foot span:not(.table__foot-addgallery) {
-                display: none;
+            & ~ .table__foot {
+                span:not(.table__foot-addgallery) {
+                    display: none;
+                }
             }
         }
     }
@@ -221,6 +223,14 @@
                 }
             }
 
+            &__modal {
+                &--active {
+                    & ~ .table__foot {
+                        .table__foot-back { display: flex !important; }
+                    }
+                }
+            }
+
             &__foot {
                 gap: 1rem;
                 align-items: center;
@@ -230,6 +240,10 @@
                     font-weight: 700;
                     color: $darkblue;
                     cursor: pointer;
+                }
+
+                &-back {
+                    display: none !important;
                 }
 
                 .download-images {

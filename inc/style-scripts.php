@@ -13,8 +13,8 @@ function themeFiles() {
     wp_enqueue_style('simplebar-css');
     wp_register_style('slick-css', get_stylesheet_directory_uri() . '/assets/lib/slick.css', array(), ASSETS_VERSION, 'screen');
     wp_enqueue_style('slick-css');
-    wp_register_style('select-css', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css', array(), ASSETS_VERSION, 'screen');
-    wp_enqueue_style('select-css');
+    wp_register_style('niceselect-css', get_stylesheet_directory_uri() . '/assets/lib/nice-select2.css', array(), ASSETS_VERSION, 'screen');
+    wp_enqueue_style('niceselect-css');
     wp_register_style('style', get_stylesheet_directory_uri() . '/assets/css/main.min.css', array(), ASSETS_VERSION, 'screen');
     wp_enqueue_style('style');
   	wp_register_style('custom-style', get_stylesheet_directory_uri() . '/assets/css/custom.css', array(), ASSETS_VERSION, 'screen');
@@ -25,7 +25,7 @@ function themeFiles() {
     wp_enqueue_script( 'slick-js', get_stylesheet_directory_uri() . '/assets/lib/slick.min.js', array('jquery'), '1.8.1', true );
     wp_enqueue_script( 'api', get_template_directory_uri() . '/assets/js/api.js', array('jquery'), '1.0', true);
     wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array('main-js'), '1.0', true);
-    wp_enqueue_script( 'select-js', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('main-js'), '1.0', true);
+    wp_enqueue_script( 'niceselect-js', get_stylesheet_directory_uri() . '/assets/lib/nice-select2.js', array('main-js'), '1.0', true);
     // wp_enqueue_script( 'chart-datalabel-js', 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0', array('chart-js'), '1.0', true);
     wp_enqueue_script( 'main-js', get_stylesheet_directory_uri() . '/assets/js/main.js', array('jquery', 'slick-js'), '1.0', true );
     wp_enqueue_script( 'simplebar-js', 'https://cdn.jsdelivr.net/npm/simplebar/dist/simplebar.min.js', array('jquery', 'main-js'), '1.0', true );

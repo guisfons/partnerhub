@@ -65,34 +65,61 @@ function ks_register_post_types(){
             'show_in_rest' => false,  // @info inherited from old version
         ),
 
-        'tickets' => array(
+        // 'tickets' => array(
 
-            'labels' => array(
-                'name'               => __('Tickets'),
-                'singular_name'      => __('Ticket'),
-                'menu_name'          => __('Tickets'),
-                'name_admin_bar'     => __('Tickets'),
-                'add_new'            => __('New Ticket'),
-                'add_new_item'       => __('New Ticket'),
-                'new_item'           => __('New Ticket'),
-                'edit_item'          => __('Edit Ticket'),
-                'view_item'          => __('See Ticket'),
-                'all_items'          => __('Tickets'),
-                'search_items'       => __('Search for Tickets'),
-                'parent_item_colon'  => __('Tickets parent:'),
-                'not_found'          => __('No Ticket found.'),
-                'not_found_in_trash' => __('No Ticket found in bin.')
-            ),
-            'menu_icon' => 'dashicons-tickets',
-            'description' => __('Tickets'),
-            'rest_base' =>'custom/tickets',
-            'has_archive' => 'biblioteca/tickets',
-            'rewrite'     => [
-                'slug' => 'tickets',
-            ],
-            'supports'    => array('title', 'editor', 'thumbnail', 'excerpt', 'author'),
-            'show_in_rest' => false,  // @info inherited from old version
-        ),
+        //     'labels' => array(
+        //         'name'               => __('Tickets'),
+        //         'singular_name'      => __('Ticket'),
+        //         'menu_name'          => __('Tickets'),
+        //         'name_admin_bar'     => __('Tickets'),
+        //         'add_new'            => __('New Ticket'),
+        //         'add_new_item'       => __('New Ticket'),
+        //         'new_item'           => __('New Ticket'),
+        //         'edit_item'          => __('Edit Ticket'),
+        //         'view_item'          => __('See Ticket'),
+        //         'all_items'          => __('Tickets'),
+        //         'search_items'       => __('Search for Tickets'),
+        //         'parent_item_colon'  => __('Tickets parent:'),
+        //         'not_found'          => __('No Ticket found.'),
+        //         'not_found_in_trash' => __('No Ticket found in bin.')
+        //     ),
+        //     'menu_icon' => 'dashicons-tickets',
+        //     'description' => __('Tickets'),
+        //     'rest_base' =>'custom/tickets',
+        //     'has_archive' => 'biblioteca/tickets',
+        //     'rewrite'     => [
+        //         'slug' => 'tickets',
+        //     ],
+        //     'supports'    => array('title', 'editor', 'thumbnail', 'excerpt', 'author'),
+        //     'taxonomy'    => array(
+
+        //         'tickets_categories' => array(
+
+        //             'hierarchical'      => true,
+        //             'labels'            => array(
+        //                 'name'              => __('Categorias'),
+        //                 'singular_name'     => __('Categoria'),
+        //                 'search_items'      => __('Procurar por categoria' ),
+        //                 'all_items'         => __('Categorias' ),
+        //                 'parent_item'       => __('Categoria Pai' ),
+        //                 'parent_item_colon' => __('Categorias Pai:' ),
+        //                 'edit_item'         => __('Editar Categoria' ),
+        //                 'update_item'       => __('Atualizar Categoria' ),
+        //                 'add_new_item'      => __('Nova Categoria' ),
+        //                 'new_item_name'     => __('Nova Categoria' ),
+        //                 'menu_name'         => __('Categorias' ),
+        //             ),
+
+        //             'show_ui'           => true,
+        //             'show_admin_column' => true,
+        //             'query_var'         => true,
+		// 			'rewrite'           => array('slug' => 'tickets/categorias'),
+		// 			'show_in_rest'      => true,
+        //             'rest_base'         => 'tickets'
+        //         ),
+        //     ),
+        //     'show_in_rest' => false,  // @info inherited from old version
+        // ),
 
         'notifications' => array(
 

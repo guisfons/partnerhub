@@ -1,4 +1,4 @@
-<?php $post_id = get_the_ID(); ?>
+<?php $post_id = get_queried_object_id(); ?>
 
 <section data-content="photos" class="content">
     <h2>Property Info</h2>

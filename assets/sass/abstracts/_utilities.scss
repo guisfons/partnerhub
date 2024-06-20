@@ -177,3 +177,64 @@ input[type="file"] {
         background-color: $dim_gray;
     }
 }
+
+select:has(~ .nice-select) {
+    display: none;
+}
+
+.nice-select {
+    background-color: $gainsboro;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    height: auto;
+    font-size: 2.2rem;
+
+    &::before {
+        content: '';
+
+        position: absolute;
+        top: 45%;
+        right: 4.1rem;
+        transform: translateY(-50%);
+
+        border: .2rem solid $white;
+        border-width: 0 .2rem .2rem 0;
+
+        width: 1.2rem;
+        height: 1.2rem;
+        z-index: 1;
+        rotate: 45deg;
+
+        transition: all .2s ease-in-out;
+    }
+
+    &::after {
+        background-color: $cyan;
+        width: 3.8rem;
+        height: 3.8rem;
+        border-radius: 50%;
+        border: none;
+        margin: initial;
+
+        top: 50%;
+        right: 2.5rem;
+        transform: translateY(-50%);
+        rotate: initial;
+    }
+
+    &.open {
+        &::before {
+            rotate: -135deg;
+            right: 3.4rem;
+        }
+
+        &::after {
+            transform: translateY(-50%);
+        }
+    }
+
+    &-dropdown {
+        width: 100%;
+    }
+}
