@@ -21,64 +21,66 @@
 				echo '<button data-menu="home" class="aside__item aside__item--home">Home</button>';
 			}
 
-			// Get the current hotel code
 			$hotel_code = get_field('hotel_code');
 
-		?>
-			<div class="aside__menu">
-				<button class="aside__item">Dashboards<span></span></button>
-				<div class="aside__item-submenu" style="display: none;">
-					<span class="aside__item-head"><span class="material-symbols-outlined">add</span>
-						<h4>Website Dashboards</h4>
-					</span>
-					<div class="aside__item-submenu-sub" style="display: none;">
-						<span data-menu="web-report">
-							<h4>Channel Report</h4>
+			if($hotel_code == 'THANA' || $hotel_code == 'LUTAN') {
+				echo
+				'<div class="aside__menu">
+					<button class="aside__item">Dashboards<span></span></button>
+					<div class="aside__item-submenu" style="display: none;">
+						<span class="aside__item-head"><span class="material-symbols-outlined">add</span>
+							<h4>Website Dashboards</h4>
 						</span>
-						<span data-menu="geo-traffic">
-							<h4>Geographic Report</h4>
-						</span>
-						<span data-menu="page-traffic">
-							<h4>Page Traffic Report</h4>
-						</span>
-						<span data-menu="ibe-sales">
-							<h4>IBE Sales Report</h4>
-						</span>
-					</div>
+						<div class="aside__item-submenu-sub" style="display: none;">
+							<span data-menu="web-report">
+								<h4>Channel Report</h4>
+							</span>
+							<span data-menu="geo-traffic">
+								<h4>Geographic Report</h4>
+							</span>
+							<span data-menu="page-traffic">
+								<h4>Page Traffic Report</h4>
+							</span>
+							<span data-menu="ibe-sales">
+								<h4>IBE Sales Report</h4>
+							</span>
+						</div>
 
-					<span class="aside__item-head"><span class="material-symbols-outlined">add</span>
-						<h4>Revenue Dashboards</h4>
-					</span>
-					<div class="aside__item-submenu-sub" style="display: none;">
-						<span data-menu="monthly-dashboard">
-							<h4>Monthly Dashboard</h4>
+						<span class="aside__item-head"><span class="material-symbols-outlined">add</span>
+							<h4>Revenue Dashboards</h4>
 						</span>
-						<span data-menu="year-to-date-dashboard">
-							<h4>Year to Date Dashboard</h4>
+						<div class="aside__item-submenu-sub" style="display: none;">
+							<span data-menu="monthly-dashboard">
+								<h4>Monthly Dashboard</h4>
+							</span>
+							<span data-menu="year-to-date-dashboard">
+								<h4>Year to Date Dashboard</h4>
+							</span>
+							<span data-menu="monthly-channels-dashboard">
+								<h4>Monthly Channels Dashboard</h4>
+							</span>
+							<span data-menu="year-to-date-channels-dashboard">
+								<h4>Year to Date Channels Dashboard</h4>
+							</span>
+							<span data-menu="full-year">
+								<h4>Full Year</h4>
+							</span>
+						</div>
+						<span class="aside__item-head"><span class="material-symbols-outlined">add</span>
+							<h4>Ad Dashboards</h4>
 						</span>
-						<span data-menu="monthly-channels-dashboard">
-							<h4>Monthly Channels Dashboard</h4>
-						</span>
-						<span data-menu="year-to-date-channels-dashboard">
-							<h4>Year to Date Channels Dashboard</h4>
-						</span>
-						<span data-menu="full-year">
-							<h4>Full Year</h4>
-						</span>
+						<div class="aside__item-submenu-sub" style="display: none;">
+							<span data-menu="meta-ads">
+								<h4>Meta Ads</h4>
+							</span>
+							<span data-menu="google-ads">
+								<h4>Google Ads</h4>
+							</span>
+						</div>
 					</div>
-					<span class="aside__item-head"><span class="material-symbols-outlined">add</span>
-						<h4>Ad Dashboards</h4>
-					</span>
-					<div class="aside__item-submenu-sub" style="display: none;">
-						<span data-menu="meta-ads">
-							<h4>Meta Ads</h4>
-						</span>
-						<span data-menu="google-ads">
-							<h4>Google Ads</h4>
-						</span>
-					</div>
-				</div>
-			</div>
+				</div>';
+			}
+		?>
 			<div class="aside__menu">
 				<button class="aside__item">General Info <span></span></button>
 				<div class="aside__item-submenu" style="display: none;">
@@ -188,22 +190,23 @@
 			// 	</div>
 			// </div>';
 			endif;
-			?>
-			<div class="aside__menu">
-				<button class="aside__item">Support Center <span></span></button>
-				<div class="aside__item-submenu" style="display: none;">
-					<span data-menu="request-new-ticket">
-						<h4>Request New Ticket</h4>
-					</span>
-					<span data-menu="track-open-tickets">
-						<h4>Track Open Tickets</h4>
-					</span>
-					<span data-menu="closed-tickets">
-						<h4>Closed Tickets</h4>
-					</span>
+			// if (in_array('contributor', (array) $user_roles)) { ?>
+				<div class="aside__menu">
+					<button class="aside__item">Support Center <span></span></button>
+					<div class="aside__item-submenu" style="display: none;">
+						<span data-menu="request-new-ticket">
+							<h4>Request New Ticket</h4>
+						</span>
+						<span data-menu="track-open-tickets">
+							<h4>Track Open Tickets</h4>
+						</span>
+						<span data-menu="closed-tickets">
+							<h4>Closed Tickets</h4>
+						</span>
+					</div>
 				</div>
-			</div>
 		<?php
+			// }
 		} else {
 			$allowed_roles = array('administrator', 'editor', 'headofoperations', 'contributor', 'revenuemanager');
 			$user_roles = (array) $user->roles;
@@ -255,8 +258,5 @@
 			}
 		}
 		?>
-		<!-- <a href="/tickets" class="aside__tickets"><?php if (!is_single()) : echo 'Support Center';
-														else : echo 'Support Tickets';
-														endif; ?></a> -->
 	</div>
 </aside>

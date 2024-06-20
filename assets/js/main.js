@@ -21,6 +21,8 @@ $(document).ready(function() {
 
     dragNDrop()
     hotelSelect()
+
+    if($('body').find('[data-content=request-new-ticket], .card__header select').length) { select() }
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -210,6 +212,9 @@ function feed(feedUrl) {
 function actions() {
     downloadImages()
     gallery()
+    profile()
+    ticket()
+    hideMenus()
 
     $('body').on('click', '.table__row-controls-view', function() {
         window.open($(this).data('url'), '_blank').focus();
@@ -225,71 +230,6 @@ function actions() {
 
     $('.table:not(.table--new) .table__foot-submit').on('click', function() {
         $(this).closest('.table').find('.table__row-upload').click()
-    })
-
-    $('.card--profile__edit').on('click', function() {
-        let btn = $(this)
-        let userId = btn.closest('.card--profile__body').find('input[name=userId]').val()
-
-        if(btn.text() == 'Edit') {
-            btn.siblings('input').prop('disabled', false)
-            btn.siblings('input').focus().select()
-            btn.text('Submit')
-
-            if($(this).siblings('input').attr('type') == 'password') {
-                btn.siblings('input').val('').attr('placeholder', 'Password').attr('value', '')
-                btn.siblings('input').attr('type', 'text')
-            }
-        } else {
-            if($(this).siblings('input').attr('type') == 'email') {
-                let email = btn.siblings('input').val()
-
-                if(isValidEmail(email)) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/wp-admin/admin-ajax.php?action=edit_user_email',
-                        data: {
-                            user_id: userId,
-                            new_email: email
-                        },
-                        success: function(response) {
-                            btn.siblings('input').prop('disabled', true)
-                            btn.text('Edit')
-                            alert('Email updated successfully!')
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error updating email:', error)
-                        }
-                    })
-                } else {
-                    alert('Type a valid email.')
-                    btn.siblings('input').focus().css('border', '1px solid #fd604c')
-                }
-            } else {
-                let password = btn.siblings('input').val()
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/wp-admin/admin-ajax.php?action=edit_user_password',
-                    data: {
-                        user_id: userId,
-                        new_password: password
-                    },
-                    success: function(response) {
-                        btn.siblings('input').prop('disabled', true)
-                        btn.text('Edit')
-                        alert('Password updated successfully!')
-
-                        console.log(response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error updating password:', error)
-                        btn.siblings('input').focus().css('border', '1px solid #fd604c')
-                    }
-                });
-            }
-        }
-
     })
 }
 
@@ -381,7 +321,6 @@ function gallery() {
 
         if($(this).text() == 'Submit picture') {
             $(this).closest('.table').find('.table__modal .upload-gallery').click()
-
             return false
         }
 
@@ -395,8 +334,6 @@ function gallery() {
         let imgData = []
         let fieldKey = $(this).closest('.table').data('field-key')
         let postId = $(this).closest('.table').data('post-id')
-
-        console.log(fieldKey);
 
         table.find('.table__row').each(function() {
             let imgId = $(this).find('.table__row-title figure').data('image-id')
@@ -441,12 +378,17 @@ function gallery() {
         $(this).closest('.content').find('.card').attr('style', '')
         $(this).closest('.table__gallery').remove()
     })
+
+    $('.table__foot-back').on('click', function() {
+        $(this).closest('.table').find('.table__modal').removeClass('table__modal--active')
+        $(this).closest('.table').find('.table__body').css('display', 'flex')
+        $(this).siblings('.table__foot-addgallery').text('Upload new picture')
+    })
 }
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
     .then(function() {
-        // console.log('Text copied to clipboard: ' + text);
         alert("Link copied to clipboard: " + text);
     })
     .catch(function(err) {
@@ -586,9 +528,7 @@ function hotelSelect() {
     $('.hotel-select__selection > span').on('click', function() {
         $('.hotel-select__select').slideDown({
             start: function () {
-                $(this).css({
-                    display: "flex"
-                })
+                $(this).css({display: "flex"})
             }
         })
     })
@@ -609,4 +549,401 @@ function hotelSelect() {
             window.location.replace(url)
         }
     })
+}
+
+function profile() {
+    $('.card--profile__edit').on('click', function() {
+        let btn = $(this)
+        let userId = btn.closest('.card--profile__body').find('input[name=userId]').val()
+
+        if(btn.text() == 'Edit') {
+            btn.siblings('input').prop('disabled', false)
+            btn.siblings('input').focus().select()
+            btn.text('Submit')
+
+            if($(this).siblings('input').attr('type') == 'password') {
+                btn.siblings('input').val('').attr('placeholder', 'Password').attr('value', '')
+                btn.siblings('input').attr('type', 'text')
+            }
+        } else {
+            if($(this).siblings('input').attr('type') == 'email') {
+                let email = btn.siblings('input').val()
+
+                if(isValidEmail(email)) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/wp-admin/admin-ajax.php?action=edit_user_email',
+                        data: {
+                            user_id: userId,
+                            new_email: email
+                        },
+                        beforeSend: function () {
+                            showLoadingScreen();
+                        },
+                        complete: function () {
+                            setTimeout(function(){
+                                hideLoadingScreen()
+                            }, 1000);
+                        },
+                        success: function(response) {
+                            btn.siblings('input').prop('disabled', true)
+                            btn.text('Edit')
+                            alert('Email updated successfully!')
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error updating email:', error)
+                        }
+                    })
+                } else {
+                    alert('Type a valid email.')
+                    btn.siblings('input').focus().css('border', '1px solid #fd604c')
+                }
+            } else {
+                let password = btn.siblings('input').val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/wp-admin/admin-ajax.php?action=edit_user_password',
+                    data: {
+                        user_id: userId,
+                        new_password: password
+                    },
+                    beforeSend: function () {
+                        showLoadingScreen();
+                    },
+                    complete: function () {
+                        setTimeout(function(){
+                            hideLoadingScreen()
+                        }, 1000);
+                    },
+                    success: function(response) {
+                        btn.siblings('input').prop('disabled', true)
+                        btn.text('Edit')
+                        alert('Password updated successfully!')
+                    },
+                    error: function(xhr, status, error) {
+                        btn.siblings('input').focus().css('border', '1px solid #fd604c')
+                    }
+                });
+            }
+        }
+
+    })
+}
+
+function ticket() {
+    createTicket()
+    $('[data-menu="track-open-tickets"], [data-menu="closed-tickets"]').on('click', function() {
+        loadTickets($(this).data('menu'))
+    })
+
+    $('body').on('click', '.card--ticket-open', function() {
+        $('.content').removeClass('content--active')
+        $('.content[data-content=track-open-tickets]').addClass('content--active')
+        $('.aside__item-submenu span.aside__item--active').removeClass('aside__item--active')
+        $('.aside__item-submenu span[data-menu=track-open-tickets]').addClass('aside__item--active')
+    })
+
+    $('body').on('click', '.card--ticket-closed', function() {
+        $('.content').removeClass('content--active')
+        $('.content[data-content=closed-tickets]').addClass('content--active')
+        $('.aside__item-submenu span.aside__item--active').removeClass('aside__item--active')
+        $('.aside__item-submenu span[data-menu=closed-tickets]').addClass('aside__item--active')
+    })
+    
+    $('body').on('click', '.card--ticket-request', function() {
+        $('.content').removeClass('content--active')
+        $('.content[data-content=request-new-ticket]').addClass('content--active')
+        $('.aside__item-submenu span.aside__item--active').removeClass('aside__item--active')
+        $('.aside__item-submenu span[data-menu=request-new-ticket]').addClass('aside__item--active')
+    })
+}
+
+function createTicket() {
+    $('.card--ticket__categories').on('change', function() {
+        $('.card--ticket__categories').css('border', 'none')
+    })
+
+    $('.card--ticket__content, .card--ticket__title').on('keypress', function() {
+        if($(this).val() !== '') {
+            $(this).css('border', 'none')
+        }
+    })
+
+    $('.card--ticket__send').on('click', function() {
+        let categorie = $('select.card--ticket__categories')
+        let title = $('.card--ticket__title')
+        let content = $('.card--ticket__content')
+        let postId = null
+        var bodyClasses = $('body').attr('class').split(' ')
+
+        $.each(bodyClasses, function(index, className) {
+            if (className.startsWith('postid-')) {
+                postId = className.replace('postid-', '')
+                return false 
+            }
+        })
+
+        if(categorie.val() === '') {
+            categorie.focus().css('border', '1px solid #fd604c')
+            alert('Select a category.')
+            return;
+        }
+
+        if(title.val() == '') {
+            title.focus().css('border', '1px solid #fd604c')
+            alert('Title field empty.')
+            return;
+        }
+
+        if(content.val() == '') {
+            content.focus().css('border', '1px solid #fd604c')
+            alert('Message field empty.')
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/wp-admin/admin-ajax.php?action=create_new_ticket',
+            data: {
+                ticket_title: title.val(),
+                ticket_content: content.val(),
+                ticket_category: categorie.val(),
+                post_id: postId
+            },
+            beforeSend: function () {
+                showLoadingScreen();
+            },
+            complete: function () {
+                setTimeout(function(){
+                    hideLoadingScreen()
+                }, 1000);
+            },
+            success: function(response) {
+                title.val('')
+                content.val('')
+
+                alert('Ticket created!');
+            },
+            error: function(error) {
+                alert('An error occurred. Please try again.');
+
+            }
+        })
+    })
+}
+
+function loadTickets(type) {
+    const API_TOKEN = 'pk_48787545_XGXTPIF1JZI88F2O3CDUZDMIQ1FGS5GO'
+    const LIST_ID = '901304034991'
+    const tagsToFilter = [$('body').data('hotel-code').toLowerCase()]
+
+    const url = `https://api.clickup.com/api/v2/list/${LIST_ID}/task`
+
+    const headers = {
+        'Authorization': API_TOKEN,
+        'Content-Type': 'application/json'
+    }
+
+    const params = $.param({
+        'tags[]': tagsToFilter,
+        'include_closed': 'true'
+    })
+
+    $.ajax({
+        url: url+'?'+params,
+        method: 'GET',
+        headers: headers,
+        beforeSend: function () {
+            showLoadingScreen();
+            $('[data-content="track-open-tickets"]').removeClass('content--active')
+            $('[data-content="closed-tickets"]').removeClass('content--active')
+        },
+        complete: function () {
+            setTimeout(function(){
+                hideLoadingScreen()
+            }, 1000)
+        },
+        success: function(response) {
+            const tasks = response.tasks
+
+            if (tasks && tasks.length > 0) {
+                let openTasks = 0, doneTasks = 0
+                let openTasksHtml = '', closedTasksHtml = ''
+                let openTasksCategories = [], closedTasksCategories = []
+
+                tasks.forEach(task => {
+                    let date = unixConversion(task.date_created);
+
+                    if(task.status.type != 'closed') {
+                        openTasks++
+                        openTasksHtml +=
+                        `<div class="card__body-task">
+                            <span>${task.name}</span>
+                            <span>${task.tags[1].name}</span>
+                            <span>${date}</span>
+                            <span style="color: ${task.status.color}">${task.status.status}</span>
+                            <button>Open Ticket</button>
+                        </div>`
+
+                        if(!openTasksCategories.includes(task.tags[1].name)) {
+                            openTasksCategories.push(task.tags[1].name)
+                        }
+                    }
+
+                    if(task.status.type == 'closed') {
+                        doneTasks++
+                        closedTasksHtml +=
+                        `<div class="card__body-task">
+                            <span>${task.name}</span>
+                            <span>${task.tags[1].name}</span>
+                            <span>${date}</span>
+                            <span style="color: ${task.status.color}">${task.status.status}</span>
+                            <button>Open Ticket</button>
+                        </div>`
+
+                        if(!closedTasksCategories.includes(task.tags[1].name)) {
+                            closedTasksCategories.push(task.tags[1].name)
+                        }
+                    }
+                })
+
+                $('.card__body-content').empty()
+
+                $('.card--tickets__open .card__header h4').text('Open Tickets (' + openTasks + ')')
+                $('.card--tickets__closed .card__header h4').text('Closed Tickets (' + doneTasks + ')')
+
+                $('.card--ticket-open span').last().text(openTasks)
+                $('.card--ticket-closed span').last().text(doneTasks)
+
+                $('.card--tickets__open .card__body .card__body-content').append(openTasksHtml)
+                $('.card--tickets__closed .card__body .card__body-content').append(closedTasksHtml)
+
+                if($('.card--tickets__open .card__header .nice-select').length == 0) {
+                    $.each(openTasksCategories, function(i, categ){
+                        $('.card--tickets__open .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
+                    })
+    
+                    NiceSelect.bind(document.querySelector('.card--tickets__open .card__header select')).update()
+                }
+
+                if($('.card--tickets__closed .card__header .nice-select').length == 0) {
+                    $.each(closedTasksCategories, function(i, categ){
+                        $('.card--tickets__closed .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
+                    })
+    
+                    NiceSelect.bind(document.querySelector('.card--tickets__closed .card__header select')).update()
+                }
+
+
+            } else {
+                $('[data-content="track-open-tickets"] h2').text($('[data-content="track-open-tickets"] h2').text() + ' - No tasks found')
+                $('[data-content="closed-tickets"] h2').text($('[data-content="closed-tickets"] h2').text() + ' - No tasks found')
+            }
+
+            if(type == 'track-open-tickets') {
+                $('[data-content="track-open-tickets"]').addClass('content--active')
+            } else {
+                $('[data-content="closed-tickets"]').addClass('content--active')
+            }
+
+            ticketFilter()
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to retrieve tasks:', status, error)
+            $('#tasks').html('<p>Failed to retrieve tasks. Check the console for details.</p>')
+        }
+    })
+}
+
+function ticketFilter() {
+    $('.card--tickets .card__header select').on('change', function() {
+        let taskCategorie = $(this).val()
+        let tasksContainer = $(this).closest('.card').find('.card__body-content .card__body-task')
+
+        tasksContainer.each(function(){
+            if(taskCategorie == '' || $(this).text().includes(taskCategorie)) {
+                $(this).show()
+            } else {
+                $(this).hide()
+            }
+        })
+    })
+
+    $('.card--tickets .card__header input[type=search]').on('input', function() {
+        let taskValue = $(this).val()
+        let tasksContainer = $(this).closest('.card').find('.card__body-content .card__body-task')
+
+        tasksContainer.each(function(){
+            if(taskValue == '' || $(this).find('span:first-of-type').text().includes(taskValue)) {
+                $(this).show()
+            } else {
+                $(this).hide()
+            }
+        })
+    })
+}
+
+function unixConversion(unix) {
+    let date = new Date(0)
+    date = new Date(new Number(unix))
+    let year = date.getFullYear()
+    let month = ('0' + (date.getMonth() + 1)).slice(-2)
+    let day = ('0' + date.getDate()).slice(-2)
+    let hours = ('0' + date.getHours()).slice(-2)
+    let minutes = ('0' + date.getMinutes()).slice(-2)
+    let seconds = ('0' + date.getSeconds()).slice(-2)
+
+    date = year + ' | ' + month + ' | ' + day + ' - ' + hours + ':' + minutes + ':' + seconds
+
+    return date
+}
+
+function hideMenus() {
+    if($('body').data('role') == 'contributor') {
+        $('.table__foot-addrow, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .upload-file, form:has(.upload-file), .table__row-controls-delete, .table__body:has(.table__row .table__row-form)').remove()
+
+        $('.table__body').each(function() {
+            if($.trim($(this).html()) === '') {
+                $(this).closest('.card').remove()
+            }
+        })
+
+        $('.table__foot-submit').each(function() {
+            if($(this).text() == 'Submit File') {
+                $(this).remove()
+            }
+        })
+
+        $('.table').each(function() {
+            if($(this).find('.table__body').length == 0) {
+                $(this).closest('.card').remove()
+            }
+        })
+
+        $('.content').each(function() {
+            if($(this).find('h2').siblings().length == 0) {
+                let content = $(this).data('content')
+
+                $('[data-content="'+content+'"]:not([data-content="home"]), [data-menu="'+content+'"]:not([data-menu="home"])').remove()
+            }
+        })
+
+        $('.aside__menu .aside__item-submenu').each(function() {
+            if($(this).children().length == 0) {
+                $(this).closest('.aside__menu').remove()
+            }
+        })
+
+        $('.aside__item-submenu-sub').each(function() {
+            if($(this).children().length == 0) {
+                $(this).prev('.aside__item-head').remove()
+                $(this).remove()
+            }
+        })
+    }
+}
+
+function select() {
+    NiceSelect.bind(document.getElementById('ticket-categories'))
 }
