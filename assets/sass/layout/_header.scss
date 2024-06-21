@@ -21,7 +21,7 @@
         transition: .3s ease-in-out;
         position: relative;
 
-        color: #333;
+        color: $almostblack;
 
         &--active, &:hover {
             color: $darkblue !important;
@@ -62,7 +62,7 @@
         }
 
         span {
-            color: #333;
+            color: $almostblack;
             transition: .3s ease-in-out;
 
             &:hover {

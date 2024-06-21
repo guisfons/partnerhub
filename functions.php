@@ -1684,11 +1684,9 @@ function show_gallery($post_id, $section_title, $field_name)
             <span class="remove-images" data-field-key="' .
             $field_key .
             '">Remove images</span>';
-        // <span class="download-images"><span class="material-symbols-outlined">download</span></span>
         echo '<span class="table__foot-viewgallery">View in gallery</span>
             <span class="table__foot-addgallery">Upload new picture</span>
         </div>';
-        // <span class="download-images"><span class="material-symbols-outlined">download</span></span>
     else:
         echo '</div>
         <div class="table__modal">
@@ -1709,6 +1707,7 @@ function show_gallery($post_id, $section_title, $field_name)
             $field_key .
             '">Remove images</span>';
         echo '<span class="table__foot-viewgallery">View in gallery</span>
+            <span class="table__foot-back">Go back</span>
             <span class="table__foot-addgallery">Upload new picture</span>
         </div>';
     endif;

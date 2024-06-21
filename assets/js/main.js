@@ -239,37 +239,39 @@ function isValidEmail(email) {
 }
 
 function downloadImages() {
-    $('body').on('click', '.download-images', function() {
+    $('body').on('click', '.table__gallery-download', function() {
         let btn = $(this)
         let files = []
+        let promises = []
 
-        btn.closest('.gallery').find('tbody').find('tr img').each(function() {
-            files.push({name: $(this)[0].src.split('/').pop(), content: $(this)[0].src})
+        btn.closest('.table__gallery').find('figure').each(function() {
+            let img = $(this).find('img')[0]
+            let src = img.src
+            let name = src.split('/').pop()
+            promises.push(
+                fetch(src)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        files.push({ name: name, content: blob })
+                    })
+            )
         })
+
+        Promise.all(promises).then(function() {
+            var zip = new JSZip()
+            files.forEach(function(file) {
+                zip.file(file.name, file.content)
+            })
+
+            zip.generateAsync({ type: "blob" }).then(function(blob) {
+                var link = document.createElement("a")
+                link.href = URL.createObjectURL(blob)
+                link.download = $(document).attr('title').split('— ').pop() + ' - ' + btn.closest('.content').find('h2').text() + ".zip"
                 
-        // Create a new JSZip instance
-        var zip = new JSZip();
-        
-        // Add files to the zip from the array
-        files.forEach(function(file) {
-            zip.file(file.name, file.content);
-        });
-        
-        // Generate the zip file content
-        zip.generateAsync({ type: "blob" }).then(function (blob) {
-            // Create a download link
-            var link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = $(document).attr('title').split('— ').pop() + ' - ' + btn.closest('.gallery').find('h4').text() + ".zip";
-            
-            // Append the link to the document
-            document.body.appendChild(link);
-            
-            // Trigger a click on the link to start the download
-            link.click();
-            
-            // Remove the link from the document
-            document.body.removeChild(link);
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            });
         });
     })
 }
@@ -370,7 +372,7 @@ function gallery() {
                 </figure>')
         })
 
-        table.closest('.content').find('.table__gallery').append('<span class="material-symbols-outlined table__gallery-close">close</span>')
+        table.closest('.content').find('.table__gallery').append('<span class="material-symbols-outlined table__gallery-close">close</span><button class="table__gallery-download">Download images<span class="material-symbols-outlined">download</span></button>')
     })
 
     $('body').on('click', '.table__gallery-close', function() {
@@ -632,9 +634,17 @@ function profile() {
 }
 
 function ticket() {
+    const apiToken = 'pk_48787545_XGXTPIF1JZI88F2O3CDUZDMIQ1FGS5GO'
+    const listId = '901304034991'
+
     createTicket()
+    
+    // $('body').on('click', '.card__body-task', function() {
+    //     openTicket($(this), apiToken)
+    // })
+
     $('[data-menu="track-open-tickets"], [data-menu="closed-tickets"]').on('click', function() {
-        loadTickets($(this).data('menu'))
+        loadTickets($(this).data('menu'), apiToken, listId)
     })
 
     $('body').on('click', '.card--ticket-open', function() {
@@ -733,12 +743,12 @@ function createTicket() {
     })
 }
 
-function loadTickets(type) {
+function loadTickets(type, apiToken, listId) {
     const API_TOKEN = 'pk_48787545_XGXTPIF1JZI88F2O3CDUZDMIQ1FGS5GO'
     const LIST_ID = '901304034991'
-    const tagsToFilter = [$('body').data('hotel-code').toLowerCase()]
+    const tagsToFilter = $('body').data('hotel-code').toLowerCase()
 
-    const url = `https://api.clickup.com/api/v2/list/${LIST_ID}/task`
+    const listUrl = `https://api.clickup.com/api/v2/list/${LIST_ID}/task`
 
     const headers = {
         'Authorization': API_TOKEN,
@@ -746,12 +756,12 @@ function loadTickets(type) {
     }
 
     const params = $.param({
-        'tags[]': tagsToFilter,
+        'tags[]': [tagsToFilter],
         'include_closed': 'true'
     })
 
     $.ajax({
-        url: url+'?'+params,
+        url: listUrl+'?'+params,
         method: 'GET',
         headers: headers,
         beforeSend: function () {
@@ -774,36 +784,44 @@ function loadTickets(type) {
 
                 tasks.forEach(task => {
                     let date = unixConversion(task.date_created);
+                    let categorie = ''
+
+                    $.each(task.tags, function(i, value) {
+                        if(value.name != tagsToFilter) {
+                            categorie = value.name
+                        }
+                    })
 
                     if(task.status.type != 'closed') {
+
                         openTasks++
                         openTasksHtml +=
-                        `<div class="card__body-task">
+                        `<div class="card__body-task" data-ticket-id="${task.id}">
                             <span>${task.name}</span>
-                            <span>${task.tags[1].name}</span>
+                            <span>${categorie}</span>
                             <span>${date}</span>
                             <span style="color: ${task.status.color}">${task.status.status}</span>
                             <button>Open Ticket</button>
                         </div>`
 
-                        if(!openTasksCategories.includes(task.tags[1].name)) {
-                            openTasksCategories.push(task.tags[1].name)
+                        if(!openTasksCategories.includes(categorie)) {
+                            openTasksCategories.push(categorie)
                         }
                     }
 
                     if(task.status.type == 'closed') {
                         doneTasks++
                         closedTasksHtml +=
-                        `<div class="card__body-task">
+                        `<div class="card__body-task" data-ticket-id="${task.id}">
                             <span>${task.name}</span>
-                            <span>${task.tags[1].name}</span>
+                            <span>${categorie}</span>
                             <span>${date}</span>
                             <span style="color: ${task.status.color}">${task.status.status}</span>
                             <button>Open Ticket</button>
                         </div>`
 
-                        if(!closedTasksCategories.includes(task.tags[1].name)) {
-                            closedTasksCategories.push(task.tags[1].name)
+                        if(!closedTasksCategories.includes(categorie)) {
+                            closedTasksCategories.push(categorie)
                         }
                     }
                 })
@@ -813,8 +831,13 @@ function loadTickets(type) {
                 $('.card--tickets__open .card__header h4').text('Open Tickets (' + openTasks + ')')
                 $('.card--tickets__closed .card__header h4').text('Closed Tickets (' + doneTasks + ')')
 
-                $('.card--ticket-open span').last().text(openTasks)
-                $('.card--ticket-closed span').last().text(doneTasks)
+                $('.card--ticket-open').each(function() {
+                    $(this).find('.card--ticket__text span').last().text(openTasks)
+                })
+
+                $('.card--ticket-closed').each(function() {
+                    $(this).find('.card--ticket__text span').last().text(doneTasks)
+                })
 
                 $('.card--tickets__open .card__body .card__body-content').append(openTasksHtml)
                 $('.card--tickets__closed .card__body .card__body-content').append(closedTasksHtml)
@@ -824,7 +847,7 @@ function loadTickets(type) {
                         $('.card--tickets__open .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
                     })
     
-                    NiceSelect.bind(document.querySelector('.card--tickets__open .card__header select')).update()
+                    NiceSelect.bind(document.querySelector('.card--tickets__open .card__header select'))
                 }
 
                 if($('.card--tickets__closed .card__header .nice-select').length == 0) {
@@ -832,13 +855,14 @@ function loadTickets(type) {
                         $('.card--tickets__closed .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
                     })
     
-                    NiceSelect.bind(document.querySelector('.card--tickets__closed .card__header select')).update()
+                    NiceSelect.bind(document.querySelector('.card--tickets__closed .card__header select'))
                 }
 
 
             } else {
-                $('[data-content="track-open-tickets"] h2').text($('[data-content="track-open-tickets"] h2').text() + ' - No tasks found')
-                $('[data-content="closed-tickets"] h2').text($('[data-content="closed-tickets"] h2').text() + ' - No tasks found')
+                $('[data-content="track-open-tickets"] h2, [data-content="closed-tickets"] h2').text('SUPPORT CENTER - No tasks found')
+
+                $('[data-content="track-open-tickets"], [data-content="closed-tickets"]').find('.card').remove()
             }
 
             if(type == 'track-open-tickets') {
@@ -881,6 +905,45 @@ function ticketFilter() {
                 $(this).hide()
             }
         })
+    })
+}
+
+function openTicket(btn, apiToken) {
+    let taskId = btn.closest('.card__body-task').data('ticket-id')
+
+    const listUrl = `https://api.clickup.com/api/v2/list/${LIST_ID}/task`
+
+    const headers = {
+        'Authorization': API_TOKEN,
+        'Content-Type': 'application/json'
+    }
+
+    const params = $.param({
+        'tags[]': tagsToFilter,
+        'include_closed': 'true'
+    })
+
+    $.ajax({
+        url: listUrl+'?'+params,
+        method: 'GET',
+        headers: headers,
+        beforeSend: function () {
+            showLoadingScreen();
+            $('[data-content="track-open-tickets"]').removeClass('content--active')
+            $('[data-content="closed-tickets"]').removeClass('content--active')
+        },
+        complete: function () {
+            setTimeout(function(){
+                hideLoadingScreen()
+            }, 1000)
+        },
+        success: function(response) {
+            const task = response.tasks
+
+        },
+        error: function(xhr, status, error) {
+            alert('Task not found')
+        }
     })
 }
 

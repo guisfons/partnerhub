@@ -1,5 +1,5 @@
 body:has(.content--ticket.content--active) {
-    background-image: url('../img/ticket-bg.webp');
+    // background-image: url('../img/ticket-bg.webp');
 }
 
 .content--ticket {
@@ -51,7 +51,7 @@ body:has(.content--ticket.content--active) {
                     background-color: #FFF3DF;
 
                     svg {
-                        fill: #EFA937;
+                        fill: $mustard;
                     }
                 }
             }
@@ -173,7 +173,7 @@ body:has(.content--ticket.content--active) {
                     background-color: $grey;
                     font-size: 1.8rem;
                     font-weight: 700;
-                    color: #4A4848;
+                    color: $dark_slate_gray;
                     padding: 1.3rem;
                     border-radius: 1rem;
                 }
