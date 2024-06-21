@@ -169,3 +169,12 @@
         </div>
     </div>
 </section>
+
+<section data-content="ticket" class="content content--ticket">
+    <h2>Support Center</h2>
+
+    <div class="card">
+        <h3></h3>
+        <article></article>
+    </div>
+</section>

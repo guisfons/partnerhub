@@ -84,11 +84,9 @@
 			<div class="aside__menu">
 				<button class="aside__item">General Info <span></span></button>
 				<div class="aside__item-submenu" style="display: none;">
-					<?php if ($hotel_code != 'THANA') : ?>
-						<span data-menu="a-la-carte-services">
-							<h4>A La Carte Services</h4>
-						</span>
-					<?php endif; ?>
+					<span data-menu="a-la-carte-services">
+						<h4>A La Carte Services</h4>
+					</span>
 					<span data-menu="contract">
 						<h4>Contract</h4>
 					</span>
@@ -112,17 +110,15 @@
 					<span data-menu="photos">
 						<h4>Photos</h4>
 					</span>
-					<?php if ($hotel_code != 'THANA') : ?>
-						<span data-menu="menus">
-							<h4>Menus</h4>
-						</span>
-						<span data-menu="texts">
-							<h4>Texts</h4>
-						</span>
-						<span data-menu="facilities-services">
-							<h4>Facilities & Services</h4>
-						</span>
-					<?php endif; ?>
+					<span data-menu="menus">
+						<h4>Menus</h4>
+					</span>
+					<span data-menu="texts">
+						<h4>Texts</h4>
+					</span>
+					<span data-menu="facilities-services">
+						<h4>Facilities & Services</h4>
+					</span>
 				</div>
 			</div>
 			<div class="aside__menu">
@@ -132,11 +128,9 @@
 						<h4>Revenue & Distribution</h4>
 					</span>
 					<div class="aside__item-submenu-sub" style="display: none;">
-						<?php if ($hotel_code != 'THANA') : ?>
-							<span data-menu="pickup-report">
-								<h4>Pickup Report</h4>
-							</span>
-						<?php endif; ?>
+						<span data-menu="pickup-report">
+							<h4>Pickup Report</h4>
+						</span>
 						<span data-menu="monthly-dashboard-report">
 							<h4>Monthly Dashboard Report</h4>
 						</span>
@@ -151,11 +145,9 @@
 						<h4>Digital Marketing</h4>
 					</span>
 					<div class="aside__item-submenu-sub" style="display: none;">
-						<?php if ($hotel_code != 'THANA') : ?>
-							<span data-menu="seo-review">
-								<h4>SEO Review</h4>
-							</span>
-						<?php endif; ?>
+						<span data-menu="seo-review">
+							<h4>SEO Review</h4>
+						</span>
 						<span data-menu="marketing-suggestions">
 							<h4>Marketing Suggestions</h4>
 						</span>
@@ -169,11 +161,9 @@
 							<h4>Webaudit Report</h4>
 						</span>
 					</div>
-					<?php if ($hotel_code != 'THANA') : ?>
-						<span data-menu="online-sales">
-							<h4>Online Sales</h4>
-						</span>
-					<?php endif; ?>
+					<span data-menu="online-sales">
+						<h4>Online Sales</h4>
+					</span>
 				</div>
 			</div>
 			<?php
