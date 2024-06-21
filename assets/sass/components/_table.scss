@@ -276,7 +276,7 @@
 
         background-color: $white;
         border-radius: 1.5rem;
-        padding: 4.5rem 2.5rem 2.5rem;
+        padding: 4.5rem 2.5rem;
 
         figure {
             position: relative;
@@ -363,33 +363,48 @@
             right: 1rem;
             cursor: pointer;
         }
+
+        &-download {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: $darkblue;
+            cursor: pointer;
+
+            position: absolute;
+            right: 2rem;
+            bottom: .8rem;
+        }
     }    
 }
 
 th.google-visualization-table-th.gradient {
     padding: 8px !important;
-    border: 1px solid #ddd !important;
+    border: 1px solid $light_slate_gray !important;
     text-align: left !important;
-    background-color: #25475c !important;
-    color: #fff !important;
+    background-color: $darkblue !important;
+    color: $white !important;
     background-image: none !important;
 }
 
 th.google-visualization-table-th.gradient:nth-of-type(2) {
-    background-color: #2E7C8A !important;
+    background-color: $darkblue !important;
 }
 
 th.google-visualization-table-th.gradient:last-of-type {
-    background-color: #5EC4C8 !important;
+    background-color: $cyan !important;
 }
 
 .google-visualization-table-table td {
-    background-color: #f2f2f2 !important;
+    background-color: $white !important;
     padding: 8px !important;
-    border: 1px solid #ddd !important;
+    border: 1px solid $light_slate_gray !important;
 }
 
 th.google-visualization-table-th.gradient.google-visualization-table-type-number.sort-descending, th.google-visualization-table-th.gradient.google-visualization-table-type-number.sort-ascending {
-    background-color: #5EC4C8 !important;
+    background-color: $cyan !important;
     background-image: none !important;
 }

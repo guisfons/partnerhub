@@ -239,30 +239,39 @@ function isValidEmail(email) {
 }
 
 function downloadImages() {
-    $('body').on('click', '.table__foot-downloadimages', function() {
+    $('body').on('click', '.table__gallery-download', function() {
         let btn = $(this)
         let files = []
+        let promises = []
 
-        btn.closest('.table').find('.table__body .table__row').each(function() {
-            files.push({name: $(this).find('.table__row-title').text().split('/').pop(), content: $(this)[0].src})
+        btn.closest('.table__gallery').find('figure').each(function() {
+            let img = $(this).find('img')[0]
+            let src = img.src
+            let name = src.split('/').pop()
+            promises.push(
+                fetch(src)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        files.push({ name: name, content: blob })
+                    })
+            )
         })
+
+        Promise.all(promises).then(function() {
+            var zip = new JSZip()
+            files.forEach(function(file) {
+                zip.file(file.name, file.content)
+            })
+
+            zip.generateAsync({ type: "blob" }).then(function(blob) {
+                var link = document.createElement("a")
+                link.href = URL.createObjectURL(blob)
+                link.download = $(document).attr('title').split('— ').pop() + ' - ' + btn.closest('.content').find('h2').text() + ".zip"
                 
-        var zip = new JSZip()
-        
-        files.forEach(function(file) {
-            zip.file(file.name, file.content)
-        })
-        
-        zip.generateAsync({ type: "blob" }).then(function (blob) {
-            var link = document.createElement("a")
-            link.href = URL.createObjectURL(blob)
-            link.download = $(document).attr('title').split('— ').pop() + ' - ' + btn.closest('.gallery').find('h4').text() + ".zip"
-            
-            document.body.appendChild(link)
-            
-            link.click()
-            
-            document.body.removeChild(link)
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            });
         });
     })
 }
@@ -363,7 +372,7 @@ function gallery() {
                 </figure>')
         })
 
-        table.closest('.content').find('.table__gallery').append('<span class="material-symbols-outlined table__gallery-close">close</span>')
+        table.closest('.content').find('.table__gallery').append('<span class="material-symbols-outlined table__gallery-close">close</span><button class="table__gallery-download">Download images<span class="material-symbols-outlined">download</span></button>')
     })
 
     $('body').on('click', '.table__gallery-close', function() {
