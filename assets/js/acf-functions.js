@@ -202,7 +202,6 @@ function deleteSingleFile(el) {
             }, 1000);
         },
         success: function(response) {
-            // Handle the success response
             let updatedHtml =
             '<div class="table__row">\
                 <div class="table__row-form">\
@@ -216,7 +215,6 @@ function deleteSingleFile(el) {
             el.replaceWith(updatedHtml)
         },
         error: function(error) {
-            // Handle the error response
             alert('Error removing file from field.')
         }
     })
@@ -320,7 +318,6 @@ function uploadFile(el) {
             titleChange(el)
         }
 
-        // Perform AJAX request with jQuery
         $.ajax({
             type: 'POST',
             url: '/wp-admin/admin-ajax.php?action=upload_and_update_field',
@@ -415,7 +412,6 @@ function colorFontAdd(el) {
             }, 1000);
         },
         success: function(response) {
-            // Update the table after successful addition of a new row
             if(btn.closest('form').find('.color-field').length !== 0) {
                 btn.closest('.table__row-form').html(
                 '<span class="table__row-title">\
@@ -471,7 +467,6 @@ function galllery(el) {
             form = btn.closest('tr');
         }
 
-        // Perform AJAX request with jQuery
         $.ajax({
             type: 'POST',
             url: '/wp-admin/admin-ajax.php?action=add_images_to_gallery',
@@ -554,7 +549,6 @@ function removeImages(el) {
             btn.remove()
         },
         error: function(error) {
-            // Handle error
             alert(error.responseText);
         }
     });

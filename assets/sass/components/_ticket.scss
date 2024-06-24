@@ -225,4 +225,26 @@ body:has(.content--ticket.content--active) {
             }
         }
     }
+
+    &[data-content="ticket"] {
+        article {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+
+            background-color: $gainsboro;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+
+            font-size: 2.2rem;
+
+            span {
+                display: flex;
+                justify-content: flex-end;
+                gap: 2rem;
+
+                font-size: 1.8rem;
+            }
+        }
+    }
 }

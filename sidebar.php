@@ -178,7 +178,7 @@
 			// 		<span data-menu="room-pricing"><h4>Room Pricing</h4></span>
 			// 		<span data-menu="occupancy-rate"><h4>Occupancy Rate</h4></span>
 			// 	</div>
-			// </div>';
+			// </div>';	
 			endif;
 			// if (in_array('contributor', (array) $user_roles)) { ?>
 				<div class="aside__menu">

@@ -173,8 +173,8 @@
 <section data-content="ticket" class="content content--ticket">
     <h2>Support Center</h2>
 
-    <div class="card">
-        <h3></h3>
-        <article></article>
+    <div class="card card--noresize">
+        <div class="card__header"><h3></h3></div>
+        <div class="card__body"><article></article></div>
     </div>
 </section>
