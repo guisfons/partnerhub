@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     if($('body').find('[data-content=request-new-ticket], .card__header select').length) { select() }
 
-    if($('[data-simplebar]').length) { scrollbars() }
+    // if($('[data-simplebar]').length) { scrollbar() }
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -1014,8 +1014,10 @@ function select() {
     NiceSelect.bind(document.getElementById('ticket-categories'))
 }
 
-function scrollbars() {
+function scrollbar() {
     $('[data-simplebar]').each(function() {
-        new SimpleBar($(this)[0])
+        if($(this).find('.simplebar-content').html().length > 0) {
+            new SimpleBar($(this)[0])
+        }
     })
 }
