@@ -442,7 +442,6 @@ function searchPosts() {
                 'search': query
             },
             success: function(response) {
-                // Response on functions.php
                 $('.notifications__tasks').html(response);
             }
         })
@@ -515,7 +514,6 @@ function dragNDrop() {
     });
 
     function handleFiles(files) {
-      // Handle dropped files here
       console.log(files);
     }
 }
@@ -639,9 +637,9 @@ function ticket() {
 
     createTicket()
     
-    // $('body').on('click', '.card__body-task', function() {
-    //     openTicket($(this), apiToken)
-    // })
+    $('body').on('click', '.card__body-task', function() {
+        openTicket($(this), apiToken)
+    })
 
     $('[data-menu="track-open-tickets"], [data-menu="closed-tickets"]').on('click', function() {
         loadTickets($(this).data('menu'), apiToken, listId)
@@ -744,14 +742,12 @@ function createTicket() {
 }
 
 function loadTickets(type, apiToken, listId) {
-    const API_TOKEN = 'pk_48787545_XGXTPIF1JZI88F2O3CDUZDMIQ1FGS5GO'
-    const LIST_ID = '901304034991'
     const tagsToFilter = $('body').data('hotel-code').toLowerCase()
 
-    const listUrl = `https://api.clickup.com/api/v2/list/${LIST_ID}/task`
+    const listUrl = `https://api.clickup.com/api/v2/list/${listId}/task`
 
     const headers = {
-        'Authorization': API_TOKEN,
+        'Authorization': apiToken,
         'Content-Type': 'application/json'
     }
 
@@ -842,23 +838,21 @@ function loadTickets(type, apiToken, listId) {
                 $('.card--tickets__open .card__body .card__body-content').append(openTasksHtml)
                 $('.card--tickets__closed .card__body .card__body-content').append(closedTasksHtml)
 
-                if($('.card--tickets__open .card__header .nice-select').length == 0) {
+                if($('.card--tickets__open .card__header .nice-select').length == 0 && $('.card--tickets__open .card__header select').length > 0) {
                     $.each(openTasksCategories, function(i, categ){
                         $('.card--tickets__open .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
                     })
-    
+                    
                     NiceSelect.bind(document.querySelector('.card--tickets__open .card__header select'))
                 }
 
-                if($('.card--tickets__closed .card__header .nice-select').length == 0) {
+                if($('.card--tickets__closed .card__header .nice-select').length == 0 && $('.card--tickets__closed .card__header select').length > 0) {
                     $.each(closedTasksCategories, function(i, categ){
                         $('.card--tickets__closed .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
                     })
-    
+
                     NiceSelect.bind(document.querySelector('.card--tickets__closed .card__header select'))
                 }
-
-
             } else {
                 $('[data-content="track-open-tickets"] h2, [data-content="closed-tickets"] h2').text('SUPPORT CENTER - No tasks found')
 
@@ -910,36 +904,43 @@ function ticketFilter() {
 
 function openTicket(btn, apiToken) {
     let taskId = btn.closest('.card__body-task').data('ticket-id')
-
-    const listUrl = `https://api.clickup.com/api/v2/list/${LIST_ID}/task`
+    const listUrl = `https://api.clickup.com/api/v2/task/${taskId}/`
 
     const headers = {
-        'Authorization': API_TOKEN,
+        'Authorization': apiToken,
         'Content-Type': 'application/json'
     }
 
-    const params = $.param({
-        'tags[]': tagsToFilter,
-        'include_closed': 'true'
-    })
-
     $.ajax({
-        url: listUrl+'?'+params,
+        url: listUrl,
         method: 'GET',
         headers: headers,
         beforeSend: function () {
             showLoadingScreen();
             $('[data-content="track-open-tickets"]').removeClass('content--active')
             $('[data-content="closed-tickets"]').removeClass('content--active')
+            $('[data-content="ticket"] .card article').empty()
         },
         complete: function () {
+            $('[data-content="ticket"]').addClass('content--active')
             setTimeout(function(){
                 hideLoadingScreen()
             }, 1000)
         },
         success: function(response) {
-            const task = response.tasks
+            let container = $('[data-content="ticket"] .card')
+            let task = response
+            let title = task.name
+            let description = task.description
+            let status = task.status.status
+            let statusColor = task.status.color
+            let date = task.date_updated
 
+            console.log(task);
+
+            container.find('h3').text(title)
+            container.find('.card__body article').append(description)
+            container.find('.card__body article').append('<span>'+unixConversion(date)+'<strong style="color: '+statusColor+'">'+status+'</strong></span>')
         },
         error: function(xhr, status, error) {
             alert('Task not found')
