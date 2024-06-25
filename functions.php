@@ -1353,7 +1353,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
     <div class="card__body">
         <?php
         if ($model == "") {
-            echo '<div class="table"><div class="table__header"></div><div class="table__body" data-simplebar>';
+            echo '<div class="table"><div class="table__header"></div><div class="table__body">';
             if ($rows):
                 $x = 1;
                 foreach ($rows as $row):
@@ -1386,7 +1386,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
 
                 echo '<div class="table">
                     <div class="table__header"></div>
-                    <div class="table__body" data-simplebar>
+                    <div class="table__body">
                         <div data-post-id="' .
                     $post_id .
                     '" data-field-key="' .
@@ -1408,7 +1408,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
             } else {
                 echo '<div class="table">
                     <div class="table__header"></div>
-                    <div class="table__body" data-simplebar>
+                    <div class="table__body">
                         <div class="table__row">
                             <div class="table__row-form">
                                 <form method="post" data-post-id="' .
@@ -1434,7 +1434,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
             $title_field_key = acf_get_field($field_name)["sub_fields"][0]["key"];
             $color_field_key = acf_get_field($field_name)["sub_fields"][1]["key"];
 
-            echo '<div class="table"><div class="table__header"></div><div class="table__body" data-simplebar>';
+            echo '<div class="table"><div class="table__header"></div><div class="table__body">';
 
             if (have_rows($field_name)):
                 $x = 1;
@@ -1526,7 +1526,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
             $title_field_key = acf_get_field($field_name)["sub_fields"][0]["key"];
             $color_field_key = acf_get_field($field_name)["sub_fields"][1]["key"];
 
-            echo '<div class="table"><div class="table__header"></div><div class="table__body" data-simplebar>';
+            echo '<div class="table"><div class="table__header"></div><div class="table__body">';
 
             if (have_rows($field_name)):
                 $x = 1;

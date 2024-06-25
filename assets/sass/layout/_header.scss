@@ -110,6 +110,13 @@
         gap: 1rem 2rem;
         width: 100%;
 
+        @include max (768) {
+            max-width: 90%;
+            margin: 0 auto 5rem;
+            position: relative;
+            justify-content: center;
+        }
+
         a {
             display: flex;
             flex-direction: column;
@@ -124,6 +131,11 @@
 
             max-width: 12rem;
             width: 100%;
+
+            @include max (400) {
+                font-size: 1.1rem;
+                max-width: 8.6rem;
+            }
 
             &.header-user__notification {
                 span {

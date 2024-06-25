@@ -67,20 +67,24 @@
     }
 
     & ~ main, & ~ .header-user {
-        margin-left: 0 !important;
-        transition: .3s ease-in-out;
-        padding: 5rem;
-        width: 100%;
-        max-width: 100%;
+        @include min (769) {
+            margin-left: 0 !important;
+            transition: .3s ease-in-out;
+            padding: 5rem;
+            width: 100%;
+            max-width: 100%;
+        }
     }
     
     &--active {
         transform: translateX(0);
         
         & ~ main, & ~ .header-user {
-            margin-left: 32.5rem !important;
-            max-width: calc(100% - 32.5rem);
-            width: 90%;
+            @include min (1024) {
+                margin-left: 32.5rem !important;
+                max-width: calc(100% - 32.5rem);
+                width: 90%;
+            }
         }
 
         .aside__button {

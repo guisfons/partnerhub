@@ -36,6 +36,10 @@ body {
 
     transition: .3s ease-in-out;
 
+    @include max (768) {
+        padding: 2rem 0;
+    }
+
     &:not(.hotel-select)::after {
         content: '';
         position: absolute;
@@ -57,13 +61,14 @@ body {
     }
 
     &:has(.header-user) {
-        padding-top: 13.8rem;
+        @include min (769) {
+            padding-top: 13.8rem;
+        }
     }
 }
 
 main {
     position: relative;
-    
     margin: 0 auto;
     width: 90%;
     max-width: 1280px;
