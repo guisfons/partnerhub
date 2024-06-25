@@ -63,10 +63,21 @@ body:has(.content--ticket.content--active) {
 
         &--sm {
             max-width: 29.3rem;
+            
+            @include max (600) {
+                flex: 1 0 calc(50% - 5rem);
+                max-width: initial;
+            }
         }
 
         &--ticket {
             transition: .3s ease-in-out;
+
+            &s {
+                @include max (768) {
+                    flex-wrap: wrap;
+                }
+            }
 
             select {
                 display: none;
@@ -113,9 +124,23 @@ body:has(.content--ticket.content--active) {
         }
 
         &__header {
+            @include max (768) {
+                flex-wrap: wrap;
+            }
+
+            h4 {
+                @include max (768) {
+                    width: 100%;
+                }
+            }
+
             .nice-select {
                 padding: 1.3rem 2rem;
-                margin-left: auto;
+
+                @include min (769) {
+                    margin-left: auto;
+                    flex: 1;
+                }
 
                 font-size: 1.8rem;
                 line-height: 1;
@@ -153,6 +178,11 @@ body:has(.content--ticket.content--active) {
                 max-width: 25.1rem;
                 padding: 1.3rem 2rem;
 
+                @include max (768) {
+                    flex: 1;
+                    max-width: initial;
+                }
+
                 background-color: $gainsboro;
                 border-radius: 1rem;
 
@@ -162,6 +192,10 @@ body:has(.content--ticket.content--active) {
         }
 
         &__body {
+            @include max (768) {
+                overflow-x: auto;
+            }
+            
             &-header {
                 display: flex;
                 justify-content: space-between;
@@ -176,6 +210,11 @@ body:has(.content--ticket.content--active) {
                     color: $dark_slate_gray;
                     padding: 1.3rem;
                     border-radius: 1rem;
+
+                    @include max (768) {
+                        flex: 1 0 calc(20% - 3rem);
+                        min-width: 15rem;
+                    }
                 }
             }
 
@@ -183,6 +222,10 @@ body:has(.content--ticket.content--active) {
                 display: flex;
                 flex-direction: column;
                 gap: 1.6rem;
+
+                @include max (768) {
+                    width: fit-content;
+                }
             }
 
             &-task {
@@ -201,6 +244,11 @@ body:has(.content--ticket.content--active) {
                 }
 
                 span {
+                    @include max (768) {
+                        flex: 1 0 calc(20% - 3rem);
+                        min-width: 15rem;
+                    }
+
                     &:not(:first-of-type) {
                         text-align: center
                     }
@@ -221,6 +269,10 @@ body:has(.content--ticket.content--active) {
                     background-color: $cyan;
                     border-radius: 1rem;
                     padding: 0;
+
+                    @include max (768) {
+                        padding: 0 1rem;
+                    }
                 }
             }
         }

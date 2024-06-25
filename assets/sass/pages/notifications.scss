@@ -54,6 +54,10 @@
             border-radius: 1.4rem;
             padding: 1.25rem 2.6rem;
 
+            @include max (500) {
+                flex-direction: column;
+            }
+
             & > figure {
                 width: 6.8rem;
                 min-width: 6.8rem;
@@ -126,9 +130,12 @@
         
         cursor: pointer;
 
+        word-break: break-all;
+
         figure {
             max-width: 3rem;
-            width: 100%;
+            min-width: 3rem;
+            width: 3rem;
             height: 3.8rem;
         }
     }

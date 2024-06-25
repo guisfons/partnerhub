@@ -42,6 +42,10 @@
     max-width: 1000px;
     width: 90%;
 
+    @include max (768) {
+        width: 100%;
+    }
+
     &[data-content=home] {
         flex-direction: row;
         flex-wrap: wrap;
@@ -114,6 +118,7 @@
 
 .breadcrumb {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 
     font-size: 2rem;
@@ -124,6 +129,10 @@
     max-width: 1000px;
     width: 90%;
     margin: 0 auto;
+
+    @include max (768) {
+        width: 100%;
+    }
 
     & * {
         display: flex;

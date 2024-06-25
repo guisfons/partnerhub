@@ -18,6 +18,7 @@
     &__body {
         display: flex;
         flex-direction: column;
+        flex-wrap: nowrap;
         gap: 1rem;
         max-height: 50vh;
         overflow-y: auto;
@@ -41,11 +42,19 @@
         gap: 1rem;
         width: 100%;
 
+        @include max (600) {
+            flex-wrap: wrap;
+        }
+
         &-title {
             display: flex;
             align-items: center;
             gap: 1rem;
             width: 50%;
+
+            @include max (600) {
+                width: 100%;
+            }
 
             font-size: 1.6rem;
             font-weight: 500;
@@ -55,6 +64,8 @@
 
             figure {
                 width: 3rem;
+                min-width: 3rem;
+                max-width: 3rem;
 
                 img {
                     width: 100%;
@@ -78,6 +89,10 @@
             justify-content: flex-end;
             gap: 1rem;
             width: 50%;
+
+            @include max (600) {
+                width: 100%;
+            }
 
             &-view, &-delete, &-upload { @include btn; }
 
@@ -114,7 +129,7 @@
                 .table__row-upload { display: none; }
             }
 
-            & ~ .table__row-controls { width: fit-content; }
+            & ~ .table__row-controls { @include min (600) { width: fit-content; } }
         }
 
         &-upload {
@@ -159,6 +174,7 @@
     &__foot {
         display: flex;
         justify-content: flex-end;
+        flex-wrap: wrap;
 
         &-addrow, &-submit, &-addgallery {
             @include btn;
@@ -292,6 +308,15 @@
             z-index: 1;
 
             max-width: calc(33.33% - .4rem);
+
+            @include max (768) {
+                max-width: calc(50% - .4rem);
+            }
+
+            @include max (600) {
+                max-width: 100%;
+            }
+
             width: 100%;
             height: auto;
             aspect-ratio: 362/229;

@@ -86,6 +86,10 @@
         max-width: calc(50% - 2.5rem);
         width: 100%;
 
+        @include max (700) {
+            max-width: 100%;
+        }
+
         &:not(:has(.card__body)) {
             margin-right: 50%;
         }
@@ -109,16 +113,28 @@
 
         &perdays {
             max-width: calc(60% - 2.5rem);
+
+            @include max (900) {
+                max-width: 100%;
+            }
         }
 
         &channelpie {
             max-width: calc(40% - 2.5rem);
+
+            @include max (900) {
+                max-width: 100%;
+            }
         }
     }
 
     &--geostats {
-        width: 45%;
+        max-width: calc(50% - 2.5rem);
         min-height: 53rem;
+
+        @include max (768) {
+            max-width: 100%;
+        }
     }
 
     &--trafficcomparison {
