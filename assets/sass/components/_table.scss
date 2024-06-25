@@ -27,6 +27,12 @@
             border-radius: 1.5rem;
             padding: 1.5rem;
         }
+
+        .simplebar-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
     }
 
     &__row {
