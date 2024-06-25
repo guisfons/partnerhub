@@ -20,11 +20,15 @@
     </div>
 
     <div class="card photos" id="bedroom-photos">
-        <?php
+        <div class="card__header"><h3>Rooms categories</h3></div>
+        <div class="card__body">
+            
+        </div>
+        <!-- <?php
         $section_title = 'Bedroom Photos';
         $field_name = 'bedrooms';
         show_gallery($post_id, $section_title, $field_name);
-        ?>
+        ?> -->
     </div>
 
     <div class="card photos" id="restaurant-photos">

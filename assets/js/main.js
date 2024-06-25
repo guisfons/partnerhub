@@ -23,6 +23,8 @@ $(document).ready(function() {
     hotelSelect()
 
     if($('body').find('[data-content=request-new-ticket], .card__header select').length) { select() }
+
+    // if($('[data-simplebar]').length) { scrollbar() }
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -1010,4 +1012,12 @@ function hideMenus() {
 
 function select() {
     NiceSelect.bind(document.getElementById('ticket-categories'))
+}
+
+function scrollbar() {
+    $('[data-simplebar]').each(function() {
+        if($(this).find('.simplebar-content').html().length > 0) {
+            new SimpleBar($(this)[0])
+        }
+    })
 }
