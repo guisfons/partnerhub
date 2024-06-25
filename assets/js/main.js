@@ -838,23 +838,21 @@ function loadTickets(type, apiToken, listId) {
                 $('.card--tickets__open .card__body .card__body-content').append(openTasksHtml)
                 $('.card--tickets__closed .card__body .card__body-content').append(closedTasksHtml)
 
-                if($('.card--tickets__open .card__header .nice-select').length == 0) {
+                if($('.card--tickets__open .card__header .nice-select').length == 0 && $('.card--tickets__open .card__header select').length > 0) {
                     $.each(openTasksCategories, function(i, categ){
                         $('.card--tickets__open .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
                     })
-    
+                    
                     NiceSelect.bind(document.querySelector('.card--tickets__open .card__header select'))
                 }
 
-                if($('.card--tickets__closed .card__header .nice-select').length == 0) {
+                if($('.card--tickets__closed .card__header .nice-select').length == 0 && $('.card--tickets__closed .card__header select').length > 0) {
                     $.each(closedTasksCategories, function(i, categ){
                         $('.card--tickets__closed .card__header select').append('<option value="'+categ+'">'+categ+'</option>')
                     })
-    
+
                     NiceSelect.bind(document.querySelector('.card--tickets__closed .card__header select'))
                 }
-
-
             } else {
                 $('[data-content="track-open-tickets"] h2, [data-content="closed-tickets"] h2').text('SUPPORT CENTER - No tasks found')
 
