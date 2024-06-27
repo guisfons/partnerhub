@@ -15,9 +15,7 @@ $( document ).ready(function() {
         }
     })
 
-    $('body').on('click', '.table__gallery-delete', function() {
-        deleteImageFromGallery($(this))
-    })
+    $('body').on('click', '.table__gallery-delete', function() { deleteImageFromGallery($(this)) })
 
     $('body').on('click', '.table__row-upload', function() { uploadFile($(this)) })
 
@@ -25,9 +23,11 @@ $( document ).ready(function() {
     
     $('body').on('click', '.table__row-controls-upload', function() { colorFontAdd($(this)) })
 
-    $('.gallery-field .upload-gallery').on('click', function() { galllery($(this)) })
+    $('body').on('click', '.gallery-field .upload-gallery', function() { galllery($(this)) })
 
     $('body').on('click', '.remove-images', function() { removeImages($(this)) })
+
+    $('.card__body-room-addroom').on('click', function() { addRoomCategorie($(this)) })
 })
 
 function getServiceUrl(url) {
@@ -448,24 +448,19 @@ function galllery(el) {
     let fieldKey = form.data('field-key')
     let fileFieldKey = form.data('file-field-key')
     let nameField = el.siblings('input[type=file]').attr('name').replace('[]', '')
-
-    let rowId = el.closest('tr').data('row-index')
+    let rowId = el.closest('.table').data('row')
 
     if (fileInput.files.length > 0) {
         for (let i = 0; i < fileInput.files.length; i++) {
             formData.append(type, fileInput.files[i]);
         }
 
-        formData.append('postId', postId);
-        formData.append('fieldKey', fieldKey);
-        formData.append('nameField', nameField);
+        formData.append('post_id', postId);
+        formData.append('field_key', fieldKey);
+        formData.append('name_field', nameField);
     
-        if (btn.hasClass('table__row-upload--repeater')) {
-            formData.append('rowId', rowId);
-            formData.append('fileFieldKey', fileFieldKey);
-    
-            form = btn.closest('tr');
-        }
+        formData.append('row_id', rowId);
+        formData.append('file_field_Key', fileFieldKey);
 
         $.ajax({
             type: 'POST',
@@ -519,14 +514,18 @@ function galllery(el) {
 }
 
 function removeImages(el) {
-    let btn = el    
+    let btn = el
     let postId = el.closest('.table').data('post-id')
     let fieldKey = el.closest('.table').data('field-key')
+    let repeaterFieldKey = el.closest('.table').data('repeater-field-key')
+    let rowId = el.closest('.table').data('row')
 
     let formData = new FormData()
 
-    formData.append('postId', postId);
-    formData.append('fieldKey', fieldKey);
+    formData.append('post_id', postId)
+    formData.append('fieldKey', fieldKey)
+    formData.append('repeater_field_Key', repeaterFieldKey)
+    formData.append('row_id', rowId)
 
     $.ajax({
         type: 'POST',
@@ -551,26 +550,26 @@ function removeImages(el) {
         error: function(error) {
             alert(error.responseText);
         }
-    });
+    })
 }
 
 function getFileIcon(url) {
     if (!url) {
-        return '';
+        return ''
     }
 
-    const extension = url.split('.').pop().toLowerCase();
-    let color = '#434343';
+    const extension = url.split('.').pop().toLowerCase()
+    let color = '#434343'
 
     switch (extension) {
         case 'pdf':
-            color = '#fc5f4c';
-            break;
+            color = '#fc5f4c'
+            break
         case 'xls':
         case 'xlsx':
         case 'xlsm':
-            color = '#107c41';
-            break;
+            color = '#107c41'
+            break
     }
 
     const svgIcon = `
@@ -581,9 +580,9 @@ function getFileIcon(url) {
                 <path d="M2.031101,24.296836L31.958601,24.5v14.422172h-29.9275v-14.625336Z" fill="${color}" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </figure>
-    `;
+    `
 
-    return svgIcon;
+    return svgIcon
 }
 
 function titleChange(el) {
@@ -594,4 +593,70 @@ function titleChange(el) {
     }
 
     el.closest('.card__body').find('.table__foot-addrow').text('Add ' + title)
+}
+
+function addRoomCategorie (el) {
+    if(el.siblings('input').val() == '') {
+        alert('Type the room category.')
+        el.siblings('input').focus().css('border', '1px solid #fd604c')
+        return
+    }
+
+    let btn = el
+    let postId = el.data('post-id')
+    let fieldKey = el.data('field-key')
+    let galleryFieldKey = el.data('gallery-field-key')
+    let category = el.closest('.card__body').find('.card__body-room input').val()
+
+    let formData = new FormData()
+    formData.append('post_id', postId)
+    formData.append('field_key', fieldKey)
+    formData.append('category', category)
+
+    $.ajax({
+        type: 'POST',
+        url: '/wp-admin/admin-ajax.php?action=add_room_category',
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function () {
+            showLoadingScreen();
+        },
+        complete: function () {
+            setTimeout(function(){
+                hideLoadingScreen()
+            }, 1000);
+        },
+        success: function(response) {
+            btn.siblings().val('')
+            btn.closest('.content').append(`
+            <div class="card photos" id="">
+                <div class="card__header"><h3>${category}</h3></div>
+                <div class="card__body">
+                    <div class="table table--gallery" data-post-id="${postId}" data-repeater-field-key="${fieldKey}" data-field-key="${galleryFieldKey}">
+                        <div class="table__header"></div>
+                        <div class="table__body" data-simplebar="init"></div>
+                        <div class="table__modal">
+                            <form method="post" data-post-id="${postId}" data-field-key="${galleryFieldKey}" class="gallery-field"
+                                enctype="multipart/form-data">
+                                <input type="file" accept="image/*" name="RestaurantPhotos[]" multiple="" required="">
+                                <button type="button" class="upload-gallery">Submit</button>
+                            </form>
+                        </div>
+                        <div class="table__foot">
+                            <span class="table__foot-back">Go back</span>
+                            <span class="remove-images" data-field-key="${fieldKey}">Remove images</span>
+                            <span class="table__foot-viewgallery">View in gallery</span>
+                            <span class="table__foot-addgallery">Upload new picture</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`)
+
+            btn.closest('.content').find('.card:last-of-type').get(0).scrollIntoView({behavior: 'smooth'})
+        },
+        error: function(error) {
+            alert(error.responseText);
+        }
+    });
 }

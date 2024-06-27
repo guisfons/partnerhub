@@ -74,6 +74,22 @@
             gap: 1rem;
             width: 100%;
         }
+
+        &-room {
+            display: flex;
+            align-items: stretch;
+            gap: 1rem;
+
+            input {
+                margin: 0;
+                max-width: initial;
+            }
+
+            &-addroom {
+                @include btn;
+                background-color: $mustard;
+            }
+        }
     }
 
     &--minimal {

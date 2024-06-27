@@ -19,18 +19,6 @@
         ?>
     </div>
 
-    <div class="card photos" id="bedroom-photos">
-        <div class="card__header"><h3>Rooms categories</h3></div>
-        <div class="card__body">
-            
-        </div>
-        <!-- <?php
-        $section_title = 'Bedroom Photos';
-        $field_name = 'bedrooms';
-        show_gallery($post_id, $section_title, $field_name);
-        ?> -->
-    </div>
-
     <div class="card photos" id="restaurant-photos">
         <?php
         $section_title = 'Restaurant Photos';
@@ -62,4 +50,29 @@
         show_gallery($post_id, $section_title, $field_name);
         ?>
     </div>
+</section>
+
+<section data-content="rooms" class="content">
+    <h2>Rooms</h2>
+    <?php
+	$user = wp_get_current_user();
+    if(!in_array('contributor', (array) $user->roles)) {
+        $section_title = 'Rooms';
+        $field_name = 'rooms';
+        $field_key = acf_get_field($field_name)['key'];
+        $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
+    ?>
+    <div class="card photos" id="rooms">
+        <div class="card__header"><h3>Add Room Category</h3></div>
+        <div class="card__body">
+            <div class="card__body-room">
+                <input type="text" placeholder="Room Category Name">
+                <span class="card__body-room-addroom" data-field-key="<?= $field_key; ?>" data-gallery-field-key="<?= $gallery_field_key; ?>" data-post-id="<?= $post_id; ?>">Submit</span>
+            </div>
+        </div>
+    </div>
+    <?php
+    }
+    show_gallery($post_id, $section_title, $field_name);
+    ?>
 </section>

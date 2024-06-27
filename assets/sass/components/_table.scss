@@ -92,6 +92,10 @@
 
             @include max (600) {
                 width: 100%;
+
+                & > * {
+                    flex: 1;
+                }
             }
 
             &-view, &-delete, &-upload { @include btn; }
@@ -243,8 +247,16 @@
             }
 
             &__body {
-                &:empty ~ .table__foot span:not(.table__foot-addgallery) {
-                    display: none;
+                &:not(:has(.table__row)) {
+                    padding: 0;
+
+                    & * {
+                        display: none;
+                    }
+
+                    & ~ .table__foot span:not(.table__foot-addgallery) {
+                        display: none;
+                    }
                 }
             }
 
@@ -265,6 +277,11 @@
                     font-weight: 700;
                     color: $darkblue;
                     cursor: pointer;
+
+                    @include max (768) {
+                        flex: 1 0 100%;
+                        text-align: center;
+                    }
                 }
 
                 &-back {
