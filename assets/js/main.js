@@ -319,7 +319,7 @@ function gallery() {
         $(this).parent().remove()
     })
 
-    $('.table__foot-addgallery').on('click', function() {
+    $('body').on('click', '.table__foot-addgallery', function() {
         $(this).closest('.table').find('.table__body').hide()
         $(this).closest('.table').find('.table__modal').addClass('table__modal--active')
 

@@ -108,7 +108,10 @@
 						<h4>Corporate Identity</h4>
 					</span>
 					<span data-menu="photos">
-						<h4>Photos</h4>
+						<h4>Hotel Photos</h4>
+					</span>
+					<span data-menu="rooms">
+						<h4>Room Photos</h4>
 					</span>
 					<span data-menu="menus">
 						<h4>Menus</h4>
