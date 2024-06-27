@@ -56,11 +56,12 @@
     <h2>Rooms</h2>
     <?php
 	$user = wp_get_current_user();
+    $section_title = 'Rooms';
+    $field_name = 'rooms';
+    $field_key = acf_get_field($field_name)['key'];
+    $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
+    
     if(!in_array('contributor', (array) $user->roles)) {
-        $section_title = 'Rooms';
-        $field_name = 'rooms';
-        $field_key = acf_get_field($field_name)['key'];
-        $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
     ?>
     <div class="card photos" id="rooms">
         <div class="card__header"><h3>Add Room Category</h3></div>
