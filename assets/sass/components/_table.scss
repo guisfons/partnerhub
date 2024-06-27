@@ -51,6 +51,7 @@
             align-items: center;
             gap: 1rem;
             width: 50%;
+            word-break: break-word;
 
             @include max (600) {
                 width: 100%;
@@ -220,6 +221,7 @@
                     width: 100%;
                     font-size: 2.2rem;
                     font-weight: 400;
+                    word-break: break-word;
 
                     figure {
                         max-width: 4.5rem;

@@ -6,7 +6,7 @@
     </div>
 </footer>
 
-<?php if(is_singular('hotels')) : get_template_part('template-parts/footer-script'); endif; ?>
+<?php if(is_singular('hotels')) : get_template_part('template-parts/canvas/canvas'); endif; ?>
 
 </body>
 
