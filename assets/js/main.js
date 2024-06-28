@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     if($('body').find('[data-content=request-new-ticket], .card__header select').length) { select() }
 
-    // if($('[data-simplebar]').length) { scrollbar() }
+    if($('[data-simplebar]').length) { scrollbar() }
     // feed('https://www.regiotels.com/feed/')
 })
 
@@ -967,7 +967,7 @@ function unixConversion(unix) {
 
 function hideMenus() {
     if($('body').data('role') == 'contributor') {
-        $('.table__foot-addrow, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .upload-file, form:has(.upload-file), .table__row-controls-delete, .table__body:has(.table__row .table__row-form)').remove()
+        $('.table__foot-addrow, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .table__foot-removeimages, .upload-file, form:has(.upload-file), .table__row-controls-delete, .table__body:has(.table__row .table__row-form)').remove()
 
         $('.table__body').each(function() {
             if($.trim($(this).html()) === '') {
@@ -1016,8 +1016,8 @@ function select() {
 
 function scrollbar() {
     $('[data-simplebar]').each(function() {
-        if($(this).find('.simplebar-content').html().length > 0) {
-            new SimpleBar($(this)[0])
-        }
+        new SimpleBar($(this)[0])
+        // if($(this).find('.simplebar-content').html().length > 0) {
+        // }
     })
 }

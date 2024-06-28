@@ -490,8 +490,8 @@ function fix_svg()
 }
 add_action("admin_head", "fix_svg");
 
-// add_action("wp_ajax_upload_and_update_field", "handle_file_upload_and_update_field");
-// add_action("wp_ajax_nopriv_upload_and_update_field", "handle_file_upload_and_update_field");
+add_action("wp_ajax_upload_and_update_field", "handle_file_upload_and_update_field");
+add_action("wp_ajax_nopriv_upload_and_update_field", "handle_file_upload_and_update_field");
 
 function handle_file_upload_and_update_field()
 {
@@ -520,30 +520,22 @@ function handle_file_upload_and_update_field()
         }
 
         if ($rowIndex == 0) {
-            if (
-                isset($_FILES["file"]) &&
-                $_FILES["file"]["error"] === UPLOAD_ERR_OK
-            ) {
+            if (isset($_FILES["file"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK) {
                 $uploaded_file = $_FILES["file"];
 
                 $file_name = sanitize_file_name($uploaded_file["name"]);
                 $file_tmp_name = $_FILES["file"]["tmp_name"];
                 $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
 
-                // Upload the file and get the attachment ID
                 $attachment_id = media_handle_upload("file", 0);
 
                 if (is_wp_error($attachment_id)) {
-                    // Error uploading the file
                     wp_send_json_error($attachment_id->get_error_message());
                 } else {
-                    // File uploaded successfully, you can access the file URL
                     $file_url = wp_get_attachment_url($attachment_id);
                     $file_path = get_attached_file($attachment_id);
 
-                    // Move the file to the post folder
-                    $destination =
-                        $year_month_folder_path . "/" . basename($file_path);
+                    $destination = $year_month_folder_path . "/" . basename($file_path);
 
                     if (rename($file_path, $destination)) {
                         update_attached_file($attachment_id, $destination);
@@ -571,12 +563,8 @@ function handle_file_upload_and_update_field()
                         "svg",
                         "webp",
                     ];
-                    if (
-                        !in_array(
-                            strtolower($file_extension),
-                            $image_extensions
-                        )
-                    ) {
+
+                    if (!in_array(strtolower($file_extension), $image_extensions)) {
                         $new_post = [
                             "post_title" => $file_name,
                             "post_content" => $post_name . "/" . $section_name,
@@ -595,62 +583,38 @@ function handle_file_upload_and_update_field()
                     ]);
                 }
             } else {
-                // File upload failed
                 wp_send_json_error("File upload failed.");
             }
         } else {
-            // Check if the post ID, field key, and row index are valid
             if ($postId > 0 && !empty($fieldKey) && $rowIndex > 0) {
                 $uploaded_file = $_FILES["file"];
-                // Get the existing repeater field values
                 $repeaterFieldValues = get_field($fieldKey, $postId);
 
-                // Check if the specified row index exists
                 $totalRows = count($repeaterFieldValues);
                 if ($rowIndex <= $totalRows) {
-                    // Update the file field
-                    $fileFieldKey = isset($_POST["file_field_Key"])
-                        ? sanitize_text_field($_POST["file_field_Key"])
-                        : "";
-                    $fileAttachmentId = media_handle_upload("file", $postId); // 'file_field' should be the name attribute of your file input
+                    $fileFieldKey = isset($_POST["file_field_Key"]) ? sanitize_text_field($_POST["file_field_Key"]) : "";
+                    $fileAttachmentId = media_handle_upload("file", $postId);
 
                     if (!is_wp_error($fileAttachmentId)) {
-                        // Update the file field value for the specified row
-                        $repeaterFieldValues[$rowIndex - 1][
-                            $fileFieldKey
-                        ] = $fileAttachmentId;
+                        $repeaterFieldValues[$rowIndex - 1][$fileFieldKey] = $fileAttachmentId;
 
-                        // File uploaded successfully, you can access the file URL
                         $file_url = wp_get_attachment_url($fileAttachmentId);
                         $file_path = get_attached_file($fileAttachmentId);
                         $filename = pathinfo($file_url, PATHINFO_BASENAME);
-                        $file_extension = pathinfo(
-                            $filename,
-                            PATHINFO_EXTENSION
-                        );
+                        $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-                        // Move the file to the post folder
-                        $destination =
-                            $year_month_folder_path .
-                            "/" .
-                            basename($file_path);
+                        $destination = $year_month_folder_path . "/" . basename($file_path);
 
                         if (rename($file_path, $destination)) {
                             update_attached_file($fileAttachmentId, $destination);
     
-                            $metadata = wp_generate_attachment_metadata(
-                                $fileAttachmentId,
-                                $destination
-                            );
-                            wp_update_attachment_metadata(
-                                $fileAttachmentId,
-                                $metadata
-                            );
+                            $metadata = wp_generate_attachment_metadata($fileAttachmentId, $destination);
+
+                            wp_update_attachment_metadata($fileAttachmentId, $metadata);
                         } else {
                             wp_send_json_error("Failed to move file.");
                         }
 
-                        // Update the ACF repeater field
                         update_field($fieldKey, $repeaterFieldValues, $postId);
 
                         $image_extensions = [
@@ -662,12 +626,8 @@ function handle_file_upload_and_update_field()
                             "svg",
                             "webp",
                         ];
-                        if (
-                            !in_array(
-                                strtolower($file_extension),
-                                $image_extensions
-                            )
-                        ) {
+
+                        if (!in_array(strtolower($file_extension), $image_extensions)) {
                             $new_post = [
                                 "post_title" => $filename,
                                 "post_content" =>
@@ -680,37 +640,19 @@ function handle_file_upload_and_update_field()
                             wp_insert_post($new_post);
                         }
 
-                        // Send a success response
                         wp_send_json_success([
                             "message" => "File uploaded successfully!",
                             "file_url" => $file_url,
                             "file_name" => $filename,
                         ]);
                     } else {
-                        // Error uploading the file
-                        wp_send_json_error(
-                            $fileAttachmentId->get_error_message()
-                        );
+                        wp_send_json_error($fileAttachmentId->get_error_message());
                     }
                 } else {
-                    // Invalid row index
-                    wp_send_json_error(
-                        "Invalid row index: " .
-                            $rowIndex .
-                            ", Total Rows: " .
-                            $totalRows
-                    );
+                    wp_send_json_error("Invalid row index: " . $rowIndex .", Total Rows: " . $totalRows);
                 }
             } else {
-                // Invalid post ID, field key, or row index
-                wp_send_json_error(
-                    "Invalid post ID, field key, or row index. postId: " .
-                        $postId .
-                        ", fieldKey: " .
-                        $fieldKey .
-                        ", rowIndex: " .
-                        $rowIndex
-                );
+                wp_send_json_error("Invalid post ID, field key, or row index. postId: " . $postId . ", fieldKey: " . $fieldKey . ", rowIndex: " . $rowIndex);
             }
         }
     }
@@ -925,35 +867,23 @@ add_action("wp_ajax_nopriv_delete_repeater_row", "handle_delete_repeater_row");
 
 function handle_delete_repeater_row()
 {
-    // Check if the request is a valid POST request
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $postId = isset($_POST["postId"]) ? intval($_POST["postId"]) : 0;
-        $fieldKey = isset($_POST["fieldKey"])
-            ? sanitize_text_field($_POST["fieldKey"])
-            : "";
-        $rowId = isset($_POST["rowId"]) ? intval($_POST["rowId"]) : 0;
-        $filename = isset($_POST["fileName"])
-            ? sanitize_text_field($_POST["fileName"])
-            : "";
+        $postId = isset($_POST['postId']) ? intval($_POST['postId']) : 0;
+        $fieldKey = isset($_POST['fieldKey']) ? sanitize_text_field($_POST['fieldKey']) : '';
+        $rowId = isset($_POST['rowId']) ? intval($_POST['rowId']) : 0;
+        $filename = isset($_POST['fileName']) ? sanitize_text_field($_POST['fileName']) : '';
 
-        // Check if the post ID, field key, and row index are valid
         if ($postId > 0 && !empty($fieldKey) && $rowId > 0) {
-            // Get the existing repeater field values
             $repeaterFieldValues = get_field($fieldKey, $postId);
 
-            // Remove the specified row from the repeater field
             if ($rowId <= count($repeaterFieldValues)) {
                 removeNotification($filename);
                 delete_row($fieldKey, $rowId, $postId);
-                wp_send_json_success(
-                    "Row removed from repeater field successfully!"
-                );
+                wp_send_json_success("Row removed from repeater field successfully!");
             } else {
-                // Invalid row index
                 wp_send_json_error("Invalid row index.");
             }
         } else {
-            // Invalid post ID, field key, or row index
             wp_send_json_error("Invalid post ID, field key, or row index.");
         }
     }
@@ -969,7 +899,7 @@ function handle_add_images_to_gallery()
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
         $gallery_field_key = isset($_POST['field_key']) ? sanitize_text_field($_POST['field_key']) : '';
-        $row_id = isset($_POST['row_id']) ? intval($_POST['row_id']) : '';
+        $row_id = isset($_POST['row_id']) ? intval($_POST['row_id']) - 1 : null;
         $current_year = date('Y');
         $current_month = date('m');
         $post = get_post($post_id);
@@ -989,17 +919,15 @@ function handle_add_images_to_gallery()
             if (!empty($files['name'][0])) {
                 $attach_ids = [];
 
-                if(!empty($row_id)) {
-                    $current_gallery = get_field($gallery_field_key, $post_id);
-                }
-
-                if(acf_get_field($gallery_field_key)['name'] == 'room_gallery') {
+                if (acf_get_field($gallery_field_key)['name'] == 'room_gallery') {
                     $rows = get_field('rooms', $post_id);
                     $specific_row = $rows[$row_id];
                     $current_gallery = $specific_row[acf_get_field($gallery_field_key)['name']];
+                } else {
+                    $current_gallery = get_field($gallery_field_key, $post_id);
                 }
 
-                if ($current_gallery || is_array($current_gallery)) {
+                if ($current_gallery && is_array($current_gallery)) {
                     $attach_ids = $current_gallery;
                 }
 
@@ -1019,7 +947,6 @@ function handle_add_images_to_gallery()
 
                         $_FILES = [$_POST['name_field'] => $file];
 
-                        // Use media_handle_upload to upload the file and get the attachment ID
                         $attach_id = media_handle_upload($_POST['name_field'], $post_id);
 
                         if (is_wp_error($attach_id)) {
@@ -1043,11 +970,19 @@ function handle_add_images_to_gallery()
                     }
                 }
 
-                if(acf_get_field($gallery_field_key)['name'] != 'room_gallery') {
+                if (acf_get_field($gallery_field_key)['name'] != 'room_gallery') {
+                    $existing_gallery = get_field($gallery_field_key, $post_id);
+                    if ($existing_gallery && is_array($existing_gallery)) {
+                        $attach_ids = array_merge($existing_gallery, $attach_ids);
+                    }
                     update_field($gallery_field_key, $attach_ids, $post_id);
                 } else {
                     $rows = get_field('rooms', $post_id);
-                    $rows[$row_id - 1][$gallery_field_key] = $attach_ids;
+                    $existing_gallery = $rows[$row_id][$gallery_field_key];
+                    if ($existing_gallery && is_array($existing_gallery)) {
+                        $attach_ids = array_merge($existing_gallery, $attach_ids);
+                    }
+                    $rows[$row_id][$gallery_field_key] = $attach_ids;
                     update_field('rooms', $rows, $post_id);
                 }
 
@@ -1224,6 +1159,9 @@ function get_file_icon($url)
             case "xlsm":
                 $color = "#107c41";
                 break;
+            case "docx":
+            case "doc":
+                $color = "285395";
             default:
                 $color = "#434343";
         }
@@ -1288,25 +1226,13 @@ function render_file_row($service, $x, $post_id, $field_key, $file_field_key)
 
 function render_empty_file_row($x, $post_id, $field_key, $file_field_key)
 {
-    echo '<div data-row-index="' .
-        $x .
-        '" data-post-id="' .
-        $post_id .
-        '" data-field-key="' .
-        $field_key .
-        '" data-file-field-key="' .
-        $file_field_key .
-        '" class="table__row">
+    echo
+    '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-file-field-key="' . $file_field_key . '" class="table__row">
+        <span class="table__row-title"></span>
         <div class="table__row-form">
-            <form method="post" data-post-id="' .
-        $post_id .
-        '" data-field-key="' .
-        $field_key .
-        '" data-file-field-key="' .
-        $file_field_key .
-        '" class="file-field" enctype="multipart/form-data">
+            <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-file-field-key="' . $file_field_key . '" class="file-field" enctype="multipart/form-data">
                 <input type="file" class="file" id="file" accept=".xls, .xlsm, .pdf, .docx">
-                <button type="button" class="table__row-upload">Upload file</button>
+                <button type="button" class="table__row-upload table__row-upload--repeater">Upload file</button>
             </form>
         </div>
         <div class="table__row-controls">
@@ -1345,15 +1271,12 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     $x++;
                 endforeach;
             endif;
-            echo '</div><div class="table__foot"><span class="table__foot-addrow" data-post-id="' .
-                $post_id .
-                '" data-field-key="' .
-                $field_key .
-                '" data-file-field-key="' .
-                $file_field_key .
-                '">Add ' .
-                $repeater_title .
-                '</span></div></div>';
+            echo
+            '</div>
+            <div class="table__foot">
+                <span class="table__foot-addrow" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-file-field-key="' . $file_field_key . '">Add ' . $repeater_title . '</span>
+                </div>
+            </div>';
         }
 
         if ($model == "single") {
@@ -1363,21 +1286,14 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                 $key = acf_get_field($field_name)["key"];
                 $icon = get_file_icon($url);
 
-                echo '<div class="table">
+                echo
+                '<div class="table">
                     <div class="table__header"></div>
                     <div class="table__body">
-                        <div data-post-id="' .
-                    $post_id .
-                    '" data-field-key="' .
-                    $key .
-                    '" class="table__row">
-                            <span class="table__row-title">' .
-                    $icon .
-                    $filename .
-                    '</span>
+                        <div data-post-id="' . $post_id . '" data-field-key="' . $key . '" class="table__row">
+                            <span class="table__row-title">' . $icon . $filename . '</span>
                             <div class="table__row-controls">
-                                <button class="table__row-controls-view" data-url="' . $url .
-                    '">View</button>
+                                <button class="table__row-controls-view" data-url="' . $url . '">View</button>
                                 <button class="table__row-controls-delete">Remove</button>
                                 <button class="table__row-controls-share"><span class="material-symbols-outlined">share</span></button>
                             </div>
@@ -1385,16 +1301,13 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     </div>
                 </div>';
             } else {
-                echo '<div class="table">
+                echo
+                '<div class="table">
                     <div class="table__header"></div>
                     <div class="table__body">
                         <div class="table__row">
                             <div class="table__row-form">
-                                <form method="post" data-post-id="' .
-                    $post_id .
-                    '" data-field-key="' .
-                    $field_key .
-                    '" class="file-field" enctype="multipart/form-data">
+                                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" class="file-field" enctype="multipart/form-data">
                                     <input type="file" class="file" id="file" accept=".xls, .xlsm, .pdf, .docx">
                                     <button type="button" class="table__row-upload">Upload file</button>
                                 </form>
@@ -1423,57 +1336,21 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     $colour = get_sub_field("colour");
 
                     if (!empty($title)) {
-                        echo '<div data-row-index="' .
-                            $x .
-                            '" data-post-id="' .
-                            $post_id .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-title-key="' .
-                            $title_field_key .
-                            '" data-color-key="' .
-                            $color_field_key .
-                            '" class="table__row">
-                            <span class="table__row-title">
-                                <span>
-                                    <input type="text" class="title-field" placeholder="' .
-                            $title .
-                            '" value="' .
-                            $title .
-                            '" disabled>
-                                    <span class="table__row-colour color-field" style="background-color: ' .
-                            $colour .
-                            '"></span>
-                                </span>
+                        echo
+                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '"  data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
+                            <span class="table__row-title"><span><input type="text" class="title-field" placeholder="' . $title . '" value="' . $title . '" disabled>
+                                <span class="table__row-colour color-field" style="background-color: ' . $colour . '"></span>
+                            </span>
                             </span>
                             <div class="table__row-controls">
                                 <button class="table__row-controls-delete">Remove</button>
                             </div>
                         </div>';
                     } else {
-                        echo '<div data-row-index="' .
-                            $x .
-                            '" data-post-id="' .
-                            $post_id .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-title-key="' .
-                            $title_field_key .
-                            '" data-color-key="' .
-                            $color_field_key .
-                            '" class="table__row">
+                        echo
+                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
                             <div class="table__row-form">
-                                <form method="post" data-post-id="' .
-                            $post_id .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-title-key="' .
-                            $title_field_key .
-                            '" data-color-key="' .
-                            $color_field_key .
-                            '">
+                                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '">
                                     <input type="text" class="title-field" placeholder="Colour Title" value="Colour Title" required>
                                     <input type="color" class="color-field" required>
                                     <button type="button" class="table__row-controls-upload">Submit</button>
@@ -1487,17 +1364,12 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     $x++;
                 endwhile;
             endif;
-            echo '</div><div class="table__foot"><span class="table__foot-addrow table__foot-addrow--color" data-post-id="' .
-                $post_id .
-                '" data-field-key="' .
-                $field_key .
-                '" data-title-key="' .
-                $title_field_key .
-                '" data-color-key="' .
-                $color_field_key .
-                '">Add ' .
-                $repeater_title .
-                '</span></div></div>';
+            echo
+                '</div>
+                <div class="table__foot">
+                    <span class="table__foot-addrow table__foot-addrow--color" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '">Add ' . $repeater_title . '</span>
+                </div>
+            </div>';
         }
 
         if ($model == "font") {
@@ -1515,24 +1387,12 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     $font = get_sub_field("font");
 
                     if (!empty($title)) {
-                        echo '<div data-row-index="' .
-                            $x .
-                            '" data-post-id="' .
-                            $post_id .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-title-key="' .
-                            $title_field_key .
-                            '" data-color-key="' .
-                            $color_field_key .
-                            '" class="table__row">
+                        echo
+                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
                             <span class="table__row-title">
                                 <span>
-                                    <strong>Font name:</strong> ' .
-                            $title .
-                            " <strong>Font family: </strong>" .
-                            $font .
-                            '
+                                    <strong>Font name:</strong> ' . $title . " <strong>
+                                    Font family: </strong>" . $font . '
                                 </span>
                             </span>
                             <div class="table__row-controls">
@@ -1540,29 +1400,10 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                             </div>
                         </div>';
                     } else {
-                        echo '<div data-row-index="' .
-                            $x .
-                            '" data-post-id="' .
-                            $post_id .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-title-key="' .
-                            $title_field_key .
-                            '" data-color-key="' .
-                            $color_field_key .
-                            '" class="table__row">
+                        echo
+                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
                             <div class="table__row-form">
-                                <form method="post" data-post-id="' .
-                            $post_id .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-field-key="' .
-                            $field_key .
-                            '" data-title-key="' .
-                            $title_field_key .
-                            '" data-font-key="' .
-                            $color_field_key .
-                            '">
+                                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-font-key="' . $color_field_key . '">
                                     <input type="text" class="title-field" placeholder="Font name" value="Font Title" required>
                                     <input type="text" class="font-field" placeholder="Font family" value="Font family" required>
                                     <button type="button" class="table__row-controls-upload">Submit</button>
@@ -1576,17 +1417,12 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     $x++;
                 endwhile;
             endif;
-            echo '</div><div class="table__foot"><span class="table__foot-addrow table__foot-addrow--font" data-post-id="' .
-                $post_id .
-                '" data-field-key="' .
-                $field_key .
-                '" data-title-key="' .
-                $title_field_key .
-                '" data-color-key="' .
-                $color_field_key .
-                '">Add ' .
-                $repeater_title .
-                '</span></div></div>';
+            echo
+                '</div>
+                <div class="table__foot">
+                    <span class="table__foot-addrow table__foot-addrow--font" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '">Add ' . $repeater_title . '</span>
+                </div>
+            </div>';
         }
 
         echo "</div></div>";
@@ -1641,7 +1477,7 @@ function show_gallery($post_id, $section_title, $field_name)
             </div>
             <div class="table__foot">
                 <span class="table__foot-back">Go back</span>
-                <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
+                <span class="table__foot-removeimages" data-field-key="' . $field_key . '">Remove images</span>
                 <span class="table__foot-viewgallery">View in gallery</span>
                 <span class="table__foot-addgallery">Upload new picture</span>
             </div>';
@@ -1655,7 +1491,7 @@ function show_gallery($post_id, $section_title, $field_name)
             </div>
             <div class="table__foot">
                 <span class="table__foot-back">Go back</span>
-                <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
+                <span class="table__foot-removeimages" data-field-key="' . $field_key . '">Remove images</span>
                 <span class="table__foot-viewgallery">View in gallery</span>
                 <span class="table__foot-addgallery">Upload new picture</span>
             </div>';
@@ -1710,7 +1546,8 @@ function show_gallery($post_id, $section_title, $field_name)
                     </div>
                     <div class="table__foot">
                         <span class="table__foot-back">Go back</span>
-                        <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
+                        <span class="table__foot-removecategory">Remove room category</span>
+                        <span class="table__foot-removeimages" data-field-key="' . $field_key . '">Remove images</span>
                         <span class="table__foot-viewgallery">View in gallery</span>
                         <span class="table__foot-addgallery">Upload new picture</span>
                     </div>';
@@ -1724,7 +1561,8 @@ function show_gallery($post_id, $section_title, $field_name)
                     </div>
                     <div class="table__foot">
                         <span class="table__foot-back">Go back</span>
-                        <span class="remove-images" data-field-key="' . $field_key . '">Remove images</span>
+                        <span class="table__foot-removecategory">Remove room category</span>
+                        <span class="table__foot-removeimages" data-field-key="' . $field_key . '">Remove images</span>
                         <span class="table__foot-viewgallery">View in gallery</span>
                         <span class="table__foot-addgallery">Upload new picture</span>
                     </div>';

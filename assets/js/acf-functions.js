@@ -15,6 +15,10 @@ $( document ).ready(function() {
         }
     })
 
+    $('body').on('click', '.table__foot-removecategory', function(){
+        deleteRepeater($(this))
+    })
+
     $('body').on('click', '.table__gallery-delete', function() { deleteImageFromGallery($(this)) })
 
     $('body').on('click', '.table__row-upload', function() { uploadFile($(this)) })
@@ -25,7 +29,7 @@ $( document ).ready(function() {
 
     $('body').on('click', '.gallery-field .upload-gallery', function() { galllery($(this)) })
 
-    $('body').on('click', '.remove-images', function() { removeImages($(this)) })
+    $('body').on('click', '.table__foot-removeimages', function() { removeImages($(this)) })
 
     $('.card__body-room-addroom').on('click', function() { addRoomCategorie($(this)) })
 })
@@ -222,37 +226,58 @@ function deleteSingleFile(el) {
 
 function deleteRepeater(el) {
     let rmBtn = el
-    let postId = el.closest('.table__row').data('post-id')
-    let fieldKey = el.closest('.table__row').data('field-key')
-    let rowId = parseInt(el.closest('.table__row').data('row-index'))
-    let fileName = el.closest('.table__row').find('.table__row-title').text()
+    let postId, fieldKey, rowId, fileName
+    if(!rmBtn.hasClass('table__foot-removecategory')) {
+        postId = rmBtn.closest('.table__row').data('post-id')
+        fieldKey = rmBtn.closest('.table__row').data('field-key')
+        rowId = parseInt(rmBtn.closest('.table__row').data('row-index'))
+        fileName = rmBtn.closest('.table__row').find('.table__row-title').text()
+    } else {
+        postId = rmBtn.closest('.table').data('post-id')
+        fieldKey = rmBtn.closest('.table').data('repeater-field-key')
+        rowId = parseInt(rmBtn.closest('.table').data('row'))
+        fileName = rmBtn.closest('.table').find('.table__row-title').text()
+    }
 
     $.ajax({
         type: 'POST',
         url: '/wp-admin/admin-ajax.php?action=delete_repeater_row',
         data: { postId: postId, fieldKey: fieldKey, rowId: rowId, fileName: fileName },
         beforeSend: function () {
-            // showLoadingScreen();
+            showLoadingScreen();
         },
         complete: function () {
-            // setTimeout(function(){
-            //     hideLoadingScreen()
-            // }, 1000);
+            setTimeout(function(){
+                hideLoadingScreen()
+            }, 700);
         },
         success: function(response) {
-            let currentRow = rmBtn.closest('.table__row')
+            let currentRow, rows
+            if(!rmBtn.hasClass('table__foot-removecategory')) {
+                currentRow = rmBtn.closest('.table__row')
 
-            if(rmBtn.closest('.table').hasClass('table--new')) {
-                currentRow.closest('.table--new').remove()
+                if(rmBtn.closest('.table').hasClass('table--new')) {
+                    currentRow.closest('.table--new').remove()
+                } else {
+                    currentRow.remove()
+                }
+
+                rows = rmBtn.closest('.table__body').find('[data-row-index]')
+                rows.each(function(i) {
+                    el.attr('data-row-index', i + 1)
+                })
             } else {
+                rows = rmBtn.closest('.content').find('.card.photos:not(#add-room-category)')
+
+                currentRow = rmBtn.closest('.card')
                 currentRow.remove()
+
+                let row = rmBtn.closest('.content').find('.card.photos:not(#add-room-category)').data('row')
+                rows.each(function(i) {
+                    $(this).find('[data-row]').attr('data-row', i)
+                })
             }
 
-            let rows = rmBtn.closest('.table__body').find('[data-row-index]')
-
-            rows.each(function(i) {
-                el.attr('data-row-index', i + 1)
-            })
         },
         error: function(error) {
             alert('Error deleting row.');
@@ -311,7 +336,7 @@ function uploadFile(el) {
 
         if(btn.hasClass('table__row-upload--repeater')) {
             formData.append('rowId', rowId)
-            formData.append('fileFieldKey', fileFieldKey)
+            formData.append('file_field_Key', fileFieldKey)
 
             form = btn.closest('.table__row')
 
@@ -359,6 +384,7 @@ function uploadFile(el) {
                     </div>';
 
                 if(btn.hasClass('table__row-upload--repeater')) {
+                    form.find('.table__row-controls').remove()
                     form.replaceWith(updatedRepeaterHtml)
                 } else {
                     form.replaceWith(updatedHtml)
@@ -505,7 +531,6 @@ function galllery(el) {
             },
             error: function(xhr, status, error) {
                 alert('Error uploading file.');
-                console.log(error);
             }
         })
     } else {
@@ -570,6 +595,9 @@ function getFileIcon(url) {
         case 'xlsm':
             color = '#107c41'
             break
+        case "docx":
+        case "doc":
+            $color = "#285395";
     }
 
     const svgIcon = `
@@ -607,6 +635,13 @@ function addRoomCategorie (el) {
     let fieldKey = el.data('field-key')
     let galleryFieldKey = el.data('gallery-field-key')
     let category = el.closest('.card__body').find('.card__body-room input').val()
+    let rowId
+
+    if(el.closest('.content').find('.card.photos:last-of-type .table').length > 0) {
+        rowId = parseInt(el.closest('.content').find('.card.photos:last-of-type .table').data('row') + 1)
+    } else {
+        rowId = 1
+    }
 
     let formData = new FormData()
     formData.append('post_id', postId)
@@ -633,7 +668,7 @@ function addRoomCategorie (el) {
             <div class="card photos" id="">
                 <div class="card__header"><h3>${category}</h3></div>
                 <div class="card__body">
-                    <div class="table table--gallery" data-post-id="${postId}" data-repeater-field-key="${fieldKey}" data-field-key="${galleryFieldKey}">
+                    <div class="table table--gallery" data-post-id="${postId}" data-repeater-field-key="${fieldKey}" data-field-key="${galleryFieldKey}" data-row="${rowId}">
                         <div class="table__header"></div>
                         <div class="table__body" data-simplebar="init"></div>
                         <div class="table__modal">
@@ -645,7 +680,8 @@ function addRoomCategorie (el) {
                         </div>
                         <div class="table__foot">
                             <span class="table__foot-back">Go back</span>
-                            <span class="remove-images" data-field-key="${fieldKey}">Remove images</span>
+                            <span class="table__foot-removecategory">Remove room category</span>
+                            <span class="table__foot-removeimages" data-field-key="${fieldKey}">Remove images</span>
                             <span class="table__foot-viewgallery">View in gallery</span>
                             <span class="table__foot-addgallery">Upload new picture</span>
                         </div>

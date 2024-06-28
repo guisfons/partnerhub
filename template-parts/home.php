@@ -76,7 +76,7 @@ if(is_user_logged_in()) {
 	}
 } else {
 	echo '<section class="login">';
-	if(isset($_GET['failed'])) {
+	if (isset($_GET['failed']) && $_GET['failed'] == 'true') {
 		echo '<div class="login__error"><strong>Error: </strong>The username or password provided is incorrect.</div>';
 	}
 	echo '<div class="login__form"><figure><img src="'.get_template_directory_uri().'/assets/img/regiotels-partnerhub.webp" alt="Regiotels Logo"></figure>';

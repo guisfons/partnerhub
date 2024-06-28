@@ -29,10 +29,18 @@
             padding: 1.5rem;
         }
 
+        &:has(.simplebar-content) {
+            padding: 0;
+        }
+
         .simplebar-content {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            padding: 1.5rem !important;
+
+            & > *:not(:last-of-type) {
+                margin-bottom: 1rem;
+            }
         }
     }
 
@@ -256,7 +264,7 @@
                         display: none;
                     }
 
-                    & ~ .table__foot span:not(.table__foot-addgallery) {
+                    & ~ .table__foot span:not(.table__foot-addgallery, .table__foot-removecategory) {
                         display: none;
                     }
                 }
