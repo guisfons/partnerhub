@@ -3,6 +3,23 @@
 <section data-content="photos" class="content">
     <h2>Property Info</h2>
 
+    <?php
+    $user = wp_get_current_user();
+    $section_title = 'Custom gallery';
+    $field_name = 'custom_gallery';
+    $field_key = acf_get_field($field_name)['key'];
+    $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
+    ?>
+    <div class="card custom-gallery" id="custom-gallery">
+        <div class="card__header"><h3>Add Custom Gallery</h3></div>
+        <div class="card__body">
+            <div class="card__body-room">
+                <input type="text" placeholder="Custom gallery Name">
+                <span class="card__body-room-addroom card__body-room-addroom--custom" data-field-key="<?= $field_key; ?>" data-gallery-field-key="<?= $gallery_field_key; ?>" data-post-id="<?= $post_id; ?>">Submit</span>
+            </div>
+        </div>
+    </div>
+
     <div class="card photos" id="exterior-photos">
         <?php
         $section_title = 'Exterior Photos';
@@ -50,6 +67,18 @@
         show_gallery($post_id, $section_title, $field_name);
         ?>
     </div>
+</section>
+
+<section data-content="photos" class="content content--customrooms">
+    <?php
+	$user = wp_get_current_user();
+    $section_title = 'Custom gallery';
+    $field_name = 'custom_gallery';
+    $field_key = acf_get_field($field_name)['key'];
+    $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
+
+    show_gallery($post_id, $section_title, $field_name);
+    ?>
 </section>
 
 <section data-content="rooms" class="content">

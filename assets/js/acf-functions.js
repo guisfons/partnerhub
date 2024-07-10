@@ -289,11 +289,13 @@ function deleteImageFromGallery(el) {
     let imageID = el.data('image-id');
     let postID = el.data('post-id');
     let fieldKey = el.data('field-key');
+    let rowId = el.closest('[data-row]').data('row')
+    let repeaterFieldKey = el.closest('[data-repeater-field-key]').data('repeater-field-key')
 
     $.ajax({
-        url: '/wp-admin/admin-ajax.php?action=delete_gallery_image', // Assuming ajaxurl is defined in your WordPress setup
+        url: '/wp-admin/admin-ajax.php?action=delete_gallery_image',
         type: 'POST',
-        data: { image_id: imageID, post_id: postID, field_key: fieldKey },
+        data: { image_id: imageID, post_id: postID, field_key: fieldKey, repeater_field_key: repeaterFieldKey, row_id: rowId },
         beforeSend: function () {
             showLoadingScreen();
         },
@@ -514,17 +516,31 @@ function galllery(el) {
                 btn.closest('.table').find('.table__body').css('display', 'flex')
 
                 $.each(filteredImageUrls, function(i, value) {
-                    btn.closest('.table--gallery').find('.table__body').append(
-                    '<div class="table__row">\
-                        <span class="table__row-title">\
-                            <figure data-image-id="'+attatchIds[i]+'"><img src="'+window.location.origin+'/wp-content/themes/partnerhub/assets/img/photo-icon.svg" alt="'+value.split('/').pop()+'"></figure>\
-                            '+value.split('/').pop()+'\
-                        </span>\
-                        <div class="table__row-controls">\
-                            <a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a>\
-                            <span class="table__row-controls-delete" data-image-id="'+attatchIds[i]+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span>\
-                        </div>\
-                    </div>')
+                    if(btn.closest('.table--gallery').find('.table__body .simplebar-content').length) {
+                        btn.closest('.table--gallery').find('.table__body .simplebar-content').append(
+                        '<div class="table__row">\
+                            <span class="table__row-title">\
+                                <figure data-image-id="'+attatchIds[i]+'"><img src="'+window.location.origin+'/wp-content/themes/partnerhub/assets/img/photo-icon.svg" alt="'+value.split('/').pop()+'"></figure>\
+                                '+value.split('/').pop()+'\
+                            </span>\
+                            <div class="table__row-controls">\
+                                <a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a>\
+                                <span class="table__row-controls-delete" data-image-id="'+attatchIds[i]+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span>\
+                            </div>\
+                        </div>')
+                    } else {
+                        btn.closest('.table--gallery').find('.table__body').append(
+                        '<div class="table__row">\
+                            <span class="table__row-title">\
+                                <figure data-image-id="'+attatchIds[i]+'"><img src="'+window.location.origin+'/wp-content/themes/partnerhub/assets/img/photo-icon.svg" alt="'+value.split('/').pop()+'"></figure>\
+                                '+value.split('/').pop()+'\
+                            </span>\
+                            <div class="table__row-controls">\
+                                <a href="'+value+'" title="'+value.split('/').pop()+'" target="_blank">View</a>\
+                                <span class="table__row-controls-delete" data-image-id="'+attatchIds[i]+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'">Remove</span>\
+                            </div>\
+                        </div>')
+                    }
                 })
 
                 btn.parent().find('input[type=file]').val('')
@@ -597,7 +613,8 @@ function getFileIcon(url) {
             break
         case "docx":
         case "doc":
-            $color = "#285395";
+            color = "#285395";
+            break
     }
 
     const svgIcon = `
@@ -625,7 +642,12 @@ function titleChange(el) {
 
 function addRoomCategorie (el) {
     if(el.siblings('input').val() == '') {
-        alert('Type the room category.')
+        if(!el.hasClass('card__body-room-addroom--custom')) {
+            alert('Type the room category.')
+        } else {
+            alert('Type the custom gallery name.')
+        }
+
         el.siblings('input').focus().css('border', '1px solid #fd604c')
         return
     }
@@ -636,9 +658,16 @@ function addRoomCategorie (el) {
     let galleryFieldKey = el.data('gallery-field-key')
     let category = el.closest('.card__body').find('.card__body-room input').val()
     let rowId
+    let cardTable
 
-    if(el.closest('.content').find('.card.photos:last-of-type .table').length > 0) {
-        rowId = parseInt(el.closest('.content').find('.card.photos:last-of-type .table').data('row') + 1)
+    if(!el.hasClass('card__body-room-addroom--custom')) {
+        cardTable = el.closest('.content').find('.card.photos:last-of-type .table')
+    } else {
+        cardTable = el.closest('.content').siblings('.content--customrooms').find('.card.photos:last-of-type .table')
+    }
+
+    if(cardTable.length > 0) {
+        rowId = parseInt(cardTable.data('row') + 1)
     } else {
         rowId = 1
     }
@@ -663,8 +692,16 @@ function addRoomCategorie (el) {
             }, 1000);
         },
         success: function(response) {
+            let btnAppend
             btn.siblings().val('')
-            btn.closest('.content').append(`
+
+            if(!el.hasClass('card__body-room-addroom--custom')) {
+                btnAppend = btn.closest('.content')
+            } else {
+                btnAppend = btn.closest('.content').siblings('.content--customrooms')
+            }
+
+            btnAppend.append(`
             <div class="card photos" id="">
                 <div class="card__header"><h3>${category}</h3></div>
                 <div class="card__body">
@@ -674,7 +711,7 @@ function addRoomCategorie (el) {
                         <div class="table__modal">
                             <form method="post" data-post-id="${postId}" data-field-key="${galleryFieldKey}" class="gallery-field"
                                 enctype="multipart/form-data">
-                                <input type="file" accept="image/*" name="RestaurantPhotos[]" multiple="" required="">
+                                <input type="file" accept="image/*" name="${category.replace(/\s/g, '')}[]" multiple="" required="">
                                 <button type="button" class="upload-gallery">Submit</button>
                             </form>
                         </div>

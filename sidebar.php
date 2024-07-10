@@ -23,7 +23,7 @@
 
 			$hotel_code = get_field('hotel_code');
 
-			if($hotel_code == 'THANA' || $hotel_code == 'LUTAN') {
+			if($hotel_code == 'LUTAN') {
 				echo
 				'<div class="aside__menu">
 					<button class="aside__item">Dashboards<span></span></button>

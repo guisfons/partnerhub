@@ -970,20 +970,29 @@ function handle_add_images_to_gallery()
                     }
                 }
 
-                if (acf_get_field($gallery_field_key)['name'] != 'room_gallery') {
+                if (acf_get_field($gallery_field_key)['name'] != 'room_gallery' && acf_get_field($gallery_field_key)['name'] != 'gallery') {
                     $existing_gallery = get_field($gallery_field_key, $post_id);
                     if ($existing_gallery && is_array($existing_gallery)) {
                         $attach_ids = array_merge($existing_gallery, $attach_ids);
                     }
                     update_field($gallery_field_key, $attach_ids, $post_id);
                 } else {
-                    $rows = get_field('rooms', $post_id);
+                    if(acf_get_field($gallery_field_key)['name'] == 'room_gallery') {
+                        $gallery = 'rooms';
+                    }
+                    
+                    if(acf_get_field($gallery_field_key)['name'] == 'gallery') {
+                        $gallery = 'custom_gallery';
+                    }
+                    
+                    $rows = get_field($gallery, $post_id);
                     $existing_gallery = $rows[$row_id][$gallery_field_key];
                     if ($existing_gallery && is_array($existing_gallery)) {
                         $attach_ids = array_merge($existing_gallery, $attach_ids);
                     }
                     $rows[$row_id][$gallery_field_key] = $attach_ids;
-                    update_field('rooms', $rows, $post_id);
+
+                    update_field($gallery, $rows, $post_id);
                 }
 
                 $imageUrls = array_map('wp_get_attachment_url', $attach_ids);
@@ -1001,39 +1010,59 @@ function handle_add_images_to_gallery()
 }
 
 add_action("wp_ajax_delete_gallery_image", "handle_delete_gallery_image");
-add_action(
-    "wp_ajax_nopriv_delete_gallery_image",
-    "handle_delete_gallery_image"
-);
+add_action("wp_ajax_nopriv_delete_gallery_image", "handle_delete_gallery_image");
 
 function handle_delete_gallery_image()
 {
-    if (
-        isset($_POST["image_id"]) &&
-        isset($_POST["post_id"]) &&
-        isset($_POST["field_key"])
-    ) {
-        $image_id = intval($_POST["image_id"]);
-        $post_id = intval($_POST["post_id"]);
-        $field_key = sanitize_text_field($_POST["field_key"]);
+    if (isset($_POST['image_id']) && isset($_POST['post_id']) && isset($_POST['field_key'])) {
+        $image_id = intval($_POST['image_id']);
+        $post_id = intval($_POST['post_id']);
+        $field_key = sanitize_text_field($_POST['field_key']);
 
-        $images = get_field($field_key, $post_id);
+        if(!isset($_POST['repeater_field_key'])) {
+            $images = get_field($field_key, $post_id);
 
-        if ($images) {
-            foreach ($images as $key => $image) {
-                if ($image["ID"] == $image_id) {
-                    unset($images[$key]);
-                    break;
+            if ($images) {
+                foreach ($images as $key => $image) {
+                    if ($image["ID"] == $image_id) {
+                        unset($images[$key]);
+                        break;
+                    }
                 }
+
+                $images = array_values($images);
+
+                update_field($field_key, $images, $post_id);
+
+                wp_send_json_success("Image deleted successfully!");
+            } else {
+                wp_send_json_error("No images found.");
             }
-
-            $images = array_values($images);
-
-            update_field($field_key, $images, $post_id);
-
-            wp_send_json_success("Image deleted successfully!");
         } else {
-            wp_send_json_error("No images found.");
+            $repeater_field_key = sanitize_text_field($_POST['repeater_field_key']);
+            $row_id = intval($_POST['row_id']);
+
+            $rows = get_field(acf_get_field($repeater_field_key)['name'], $post_id);
+            $rows[$row_id - 1][$field_key] = [];
+            update_field(acf_get_field($repeater_field_key)['name'], $rows, $post_id);
+
+            $images = get_field(acf_get_field($repeater_field_key)['name'], $post_id);
+            if ($images) {
+                foreach ($images as $key => $image) {
+                    if ($image["ID"] == $image_id) {
+                        unset($images[$key]);
+                        break;
+                    }
+                }
+
+                $images = array_values($images);
+
+                update_field($images[$row_id - 1][$field_key], $images, $post_id);
+
+                wp_send_json_success("Image deleted successfully!");
+            } else {
+                wp_send_json_error("No images found.");
+            }
         }
     } else {
         wp_send_json_error("Invalid request.");
@@ -1054,9 +1083,9 @@ function handle_empty_gallery_field()
         
         if ($post_id > 0) {
             if(!empty($repeater_field_key)) {
-                $rows = get_field('rooms', $post_id);
+                $rows = get_field(acf_get_field($repeater_field_key)['name'], $post_id);
                 $rows[$row_id - 1][$gallery_field_key] = [];
-                update_field('rooms', $rows, $post_id);
+                update_field(acf_get_field($repeater_field_key)['name'], $rows, $post_id);
             } else {
                 wp_send_json_error('Invalid repeater field key.');
             }
@@ -1161,7 +1190,8 @@ function get_file_icon($url)
                 break;
             case "docx":
             case "doc":
-                $color = "285395";
+                $color = "#285395";
+                break;
             default:
                 $color = "#434343";
         }
@@ -1439,7 +1469,7 @@ function show_gallery($post_id, $section_title, $field_name)
     $subfield_name_category = '';
     $subfield_name_gallery = '';
 
-    if($field_name != 'rooms') {
+    if($field_name != 'rooms' && $field_name != 'custom_gallery') {
         echo
         '<div class="card__header"><h3>' . $section_title . '</h3></div>
             <div class="card__body">
@@ -1500,24 +1530,25 @@ function show_gallery($post_id, $section_title, $field_name)
     } else {
         $repeater_field = $field_key;
         $field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
+        // $field_name = acf_get_field($field_name)['sub_fields']['1']['key'];
         // $subfield_name_category = acf_get_field($field_name)['sub_fields']['0']['name'];
         // $subfield_name_gallery = acf_get_field($field_name)['sub_fields']['1']['name'];
         // $images = get_field($subfield_name_gallery, $post_id);
         if( have_rows($field_name, $post_id) ):
             while( have_rows($field_name, $post_id) ) : the_row();
                 $x = get_row_index();
-                $room_category = get_sub_field('room_category');
-                $room_gallery = get_sub_field('room_gallery');
+                $category = get_sub_field(acf_get_field($field_name)['sub_fields']['0']['name']);
+                $gallery = get_sub_field(acf_get_field($field_name)['sub_fields']['1']['name']);
 
                 echo
                 '<div class="card photos" id="rooms">
-                    <div class="card__header"><h3>' . $room_category . '</h3></div>
+                    <div class="card__header"><h3>' . $category . '</h3></div>
                     <div class="card__body">
                         <div class="table table--gallery" data-post-id="' . $post_id . '" data-repeater-field-key="'.$repeater_field.'" data-field-key="' . $field_key . '" data-row="'.$x.'">
                             <div class="table__body" data-simplebar>';
 
-                if ($room_gallery):
-                    foreach ($room_gallery as $image):
+                if ($gallery):
+                    foreach ($gallery as $image):
                         $image_title = $image["alt"];
                         $image_url = $image["url"];
                         $image_filename = $image["filename"];

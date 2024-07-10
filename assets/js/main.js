@@ -184,12 +184,10 @@ function bulletinboard() {
 
 function feed(feedUrl) {
     fetch(feedUrl)
-        .then(response => response.text()) // Get the raw XML response
+        .then(response => response.text())
         .then(xml => {
-            // Parse the XML response
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xml, 'text/xml');
-            // Extract feed information from the XML document
             const title = xmlDoc.querySelector('channel > title').textContent;
             const link = xmlDoc.querySelector('channel > link').textContent;
             const items = xmlDoc.querySelectorAll('item');
@@ -197,14 +195,10 @@ function feed(feedUrl) {
             items.forEach(item => {
                 const itemTitle = item.querySelector('title').textContent;
                 const itemLink = item.querySelector('link').textContent;
-                // You can extract more item information here if needed
                 feedItems.push({ title: itemTitle, link: itemLink });
             });
-            // Construct the feed information object
             const feedInfo = { title, link, items: feedItems };
-            // Process the feed information
             console.log(feedInfo);
-            // Display feed information on your web page
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
