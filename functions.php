@@ -1690,6 +1690,59 @@ function handle_edit_user_password()
     }
 }
 
+add_action('wp_ajax_profile_image_upload', 'handle_profile_image_upload');
+
+function handle_profile_image_upload() {
+    $user_id = get_current_user_id();
+    $upload = wp_handle_upload($_FILES['profile_image'], array('test_form' => false));
+
+    if (isset($upload['error'])) {
+        wp_send_json_error(array('message' => 'Error: ' . $upload['error']));
+    } else {
+        $filename = $upload['file'];
+        $filetype = wp_check_filetype($filename);
+        $attachment = array(
+            'guid' => $upload['url'],
+            'post_mime_type' => $filetype['type'],
+            'post_title' => sanitize_file_name($filename),
+            'post_content' => '',
+            'post_status' => 'inherit'
+        );
+
+        $attach_id = wp_insert_attachment($attachment, $filename);
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attach_data = wp_generate_attachment_metadata($attach_id, $filename);
+        wp_update_attachment_metadata($attach_id, $attach_data);
+
+        update_user_meta($user_id, 'profile_image', $upload['url']);
+
+        wp_send_json_success(array('image_url' => $upload['url'], 'message' => 'Profile image uploaded successfully.'));
+    }
+    wp_die();
+}
+
+function custom_user_avatar($avatar, $id_or_email, $size, $default, $alt) {
+    if (is_numeric($id_or_email)) {
+        $user_id = (int) $id_or_email;
+    } elseif (is_object($id_or_email)) {
+        if (!empty($id_or_email->user_id)) {
+            $user_id = (int) $id_or_email->user_id;
+        }
+    } else {
+        $user = get_user_by('email', $id_or_email);
+        $user_id = $user ? $user->ID : '';
+    }
+
+    $custom_avatar = get_user_meta($user_id, 'profile_image', true);
+
+    if ($custom_avatar) {
+        $avatar = '<img src="' . esc_url($custom_avatar) . '" alt="' . esc_attr($alt) . '" width="' . esc_attr($size) . '" height="' . esc_attr($size) . '" />';
+    }
+
+    return $avatar;
+}
+add_filter('get_avatar', 'custom_user_avatar', 10, 5);
+
 add_action("wp_ajax_create_new_ticket", "create_new_ticket");
 add_action("wp_ajax_nopriv_create_new_ticket", "create_new_ticket");
 

@@ -21,11 +21,22 @@ $user = wp_get_current_user();
     <div class="card card--profile">
         <div class="card--profile__header">
             <figure>
-                <img src="<?= esc_url(get_avatar_url($user_id)); ?>" alt="<?= $user->first_name; ?>">
+                <?= get_avatar($user_id, 128); ?>
                 <span class="material-symbols-outlined">edit</span>
             </figure>
             <span><span></span> Active</span>
             <a href="mailto:<?= $user->user_email; ?>" target="_blank"><?= $user->user_email; ?></a>
+
+            <div class="card--profile__modal">
+                <span class="material-symbols-outlined">close</span>
+                <div class="card--profile__avatar">
+                    <figure><?= get_avatar($user_id, 128); ?></figure>
+                    <form enctype="multipart/form-data" data-user-id="<?php echo get_current_user_id(); ?>">
+                        <input type="file" name="profile_image" accept="image/*">
+                        <input type="submit" value="Upload Image">
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="card--profile__body">
             <input type="hidden" name="userId" value="<?= $user_id; ?>">

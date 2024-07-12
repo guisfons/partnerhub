@@ -625,7 +625,73 @@ function profile() {
         }
     })
 
-    $('.card--profile__header figure span')
+    $('.card--profile__header figure span').on('click', function() {
+        $('.aside').css('z-index', '1')
+        $('.card--profile__modal').addClass('card--profile__modal--active')
+    })
+
+    $('.card--profile__modal > span').on('click', function() {
+        $('.aside').css('z-index', '9999')
+        $('.card--profile__modal').removeClass('card--profile__modal--active')
+    })
+
+    $('.card--profile__avatar form').on('change', function() {
+        var fileInput = $(this).find('input[name=profile_image]')[0]
+        var maxSize = 1 * 1024 * 1024
+
+        fileUrl = window.URL.createObjectURL(fileInput.files[0])
+
+        if (fileInput.files[0].size > maxSize) {
+            alert('File size exceeds 2MB.')
+            $(this).find('input[name=profile_image]').val('')
+            return
+        }
+
+        $('.card--profile__avatar figure img').attr('src', fileUrl)
+    })
+
+    $('.card--profile__avatar form').on('submit', function(e) {
+        e.preventDefault();
+
+        var fileInput = $(this).find('input[name=profile_image]')[0];
+        var maxSize = 1 * 1024 * 1024;
+
+        if (fileInput.files[0].size > maxSize) {
+            alert('File size exceeds 2MB.')
+            $(this).find('input[name=profile_image]').val('')
+            return;
+        }
+        
+        let formData = new FormData()
+        formData.append('profile_image', fileInput.files[0])
+
+        $.ajax({
+            type: 'POST',
+            url: '/wp-admin/admin-ajax.php?action=profile_image_upload',
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                showLoadingScreen();
+            },
+            complete: function () {
+                $('.card--profile__avatar form input[name=profile_image]').val('')
+                $('.card--profile__modal').removeClass('card--profile__modal--active')
+                
+                setTimeout(function(){
+                    hideLoadingScreen()
+                }, 1000);
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('.card--profile__header figure img').attr('src', response.data.image_url)
+                    alert(response.data.message)
+                } else {
+                    alert('Image upload failed.')
+                }
+            }
+        });
+    });
 }
 
 function ticket() {
