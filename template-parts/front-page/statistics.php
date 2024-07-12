@@ -12,7 +12,7 @@
         <?php } ?>
     </div>
 </div> -->
-<?php $post_id = get_queried_object_id(); ?>
+<?php $post_id = get_the_ID(); ?>
 <div class="card card--medium monthly-dashboard-report">
     <?php
     $section_title = 'Monthly Dashboard Report'; $repeater_title = 'Monthly Dashboard Report'; $field_name = 'monthly_reports_documents'; $subfield_name = 'file';

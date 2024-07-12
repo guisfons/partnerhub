@@ -1,4 +1,4 @@
-<?php $post_id = get_queried_object_id(); ?>
+<?php $post_id = get_the_ID(); ?>
 
 <section data-content="photos" class="content">
     <h2>Property Info</h2>
@@ -67,18 +67,18 @@
         show_gallery($post_id, $section_title, $field_name);
         ?>
     </div>
-</section>
 
-<section data-content="photos" class="content content--customrooms">
-    <?php
-	$user = wp_get_current_user();
-    $section_title = 'Custom gallery';
-    $field_name = 'custom_gallery';
-    $field_key = acf_get_field($field_name)['key'];
-    $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
+    <div class="content__customrooms">
+        <?php
+        $user = wp_get_current_user();
+        $section_title = 'Custom gallery';
+        $field_name = 'custom_gallery';
+        $field_key = acf_get_field($field_name)['key'];
+        $gallery_field_key = acf_get_field($field_name)['sub_fields']['1']['key'];
 
-    show_gallery($post_id, $section_title, $field_name);
-    ?>
+        show_gallery($post_id, $section_title, $field_name);
+        ?>
+    </div>
 </section>
 
 <section data-content="rooms" class="content">

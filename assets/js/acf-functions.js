@@ -156,10 +156,10 @@ function addRow(el) {
                 title = addBtn.data('title-key')
                 font = addBtn.data('font-key')
                 addBtn.closest('.table').find('.table__body').prepend(
-                    '<div data-row-index="'+rowIdAdded+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+font+'" class="table__row">\
+                    '<div data-row-index="'+rowIdAdded+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-font-key="'+font+'" class="table__row">\
                         <span class="table__row-title"></span>\
-                        <div class="table__row-form">\
-                            <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'">\
+                        <div class="table__row-form table__row-form--font">\
+                            <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-font-key="'+font+'">\
                                 <input type="text" class="title-field" placeholder="Font name" value="Font Title" required="">\
                                 <input type="text" class="font-field" placeholder="Font family" value="Font family" required="">\
                                 <button type="button" class="table__row-controls-upload">Submit</button>\
@@ -663,7 +663,7 @@ function addRoomCategorie (el) {
     if(!el.hasClass('card__body-room-addroom--custom')) {
         cardTable = el.closest('.content').find('.card.photos:last-of-type .table')
     } else {
-        cardTable = el.closest('.content').siblings('.content--customrooms').find('.card.photos:last-of-type .table')
+        cardTable = el.closest('.content').find('.content__customrooms .card.photos:last-of-type .table')
     }
 
     if(cardTable.length > 0) {
@@ -698,7 +698,7 @@ function addRoomCategorie (el) {
             if(!el.hasClass('card__body-room-addroom--custom')) {
                 btnAppend = btn.closest('.content')
             } else {
-                btnAppend = btn.closest('.content').siblings('.content--customrooms')
+                btnAppend = btn.closest('.content').find('.content__customrooms')
             }
 
             btnAppend.append(`

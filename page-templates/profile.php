@@ -20,7 +20,10 @@ $user = wp_get_current_user();
 
     <div class="card card--profile">
         <div class="card--profile__header">
-            <figure><img src="<?= esc_url(get_avatar_url($user_id)); ?>" alt="<?= $user->first_name; ?>"></figure>
+            <figure>
+                <img src="<?= esc_url(get_avatar_url($user_id)); ?>" alt="<?= $user->first_name; ?>">
+                <span class="material-symbols-outlined">edit</span>
+            </figure>
             <span><span></span> Active</span>
             <a href="mailto:<?= $user->user_email; ?>" target="_blank"><?= $user->user_email; ?></a>
         </div>

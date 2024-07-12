@@ -1379,7 +1379,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                     } else {
                         echo
                         '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
-                            <div class="table__row-form">
+                            <div class="table__row-form table__row-form--colour">
                                 <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '">
                                     <input type="text" class="title-field" placeholder="Colour Title" value="Colour Title" required>
                                     <input type="color" class="color-field" required>
@@ -1405,7 +1405,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
         if ($model == "font") {
             $field_key = acf_get_field($field_name)["key"];
             $title_field_key = acf_get_field($field_name)["sub_fields"][0]["key"];
-            $color_field_key = acf_get_field($field_name)["sub_fields"][1]["key"];
+            $font_field_key = acf_get_field($field_name)["sub_fields"][1]["key"];
 
             echo '<div class="table"><div class="table__header"></div><div class="table__body">';
 
@@ -1418,7 +1418,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
 
                     if (!empty($title)) {
                         echo
-                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
+                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-font-key="' . $font_field_key . '" class="table__row">
                             <span class="table__row-title">
                                 <span>
                                     <strong>Font name:</strong> ' . $title . " <strong>
@@ -1431,9 +1431,9 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
                         </div>';
                     } else {
                         echo
-                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '" class="table__row">
-                            <div class="table__row-form">
-                                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-font-key="' . $color_field_key . '">
+                        '<div data-row-index="' . $x . '" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-font-key="' . $font_field_key . '" class="table__row">
+                            <div class="table__row-form table__row-form--font">
+                                <form method="post" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-font-key="' . $font_field_key . '">
                                     <input type="text" class="title-field" placeholder="Font name" value="Font Title" required>
                                     <input type="text" class="font-field" placeholder="Font family" value="Font family" required>
                                     <button type="button" class="table__row-controls-upload">Submit</button>
@@ -1450,7 +1450,7 @@ function show_tables($post_id, $section_title, $repeater_title, $field_name, $su
             echo
                 '</div>
                 <div class="table__foot">
-                    <span class="table__foot-addrow table__foot-addrow--font" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-color-key="' . $color_field_key . '">Add ' . $repeater_title . '</span>
+                    <span class="table__foot-addrow table__foot-addrow--font" data-post-id="' . $post_id . '" data-field-key="' . $field_key . '" data-title-key="' . $title_field_key . '" data-font-key="' . $font_field_key . '">Add ' . $repeater_title . '</span>
                 </div>
             </div>';
         }

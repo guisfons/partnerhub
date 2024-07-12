@@ -1,4 +1,4 @@
-<?php $post_id = get_queried_object_id(); ?>
+<?php $post_id = get_the_ID(); ?>
 <section data-content="monthly-dashboard-report" class="content">
 	<h2>Revenue & Distribution</h2>
 

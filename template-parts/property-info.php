@@ -1,4 +1,4 @@
-<?php $post_id = get_queried_object_id(); ?>
+<?php $post_id = get_the_ID(); ?>
 <section data-content="onboarding" class="content">
     <h2>Property Info</h2>
 

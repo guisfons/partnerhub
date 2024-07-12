@@ -220,7 +220,7 @@ function actions() {
         copyToClipboard($(this).parent().find('.table__row-controls-view').data('url'))
     })
 
-    $('body').on('change', '.table__row-form form', function() {
+    $('body').on('change', '.table__row-form:not(.table__row-form--colour):not(.table__row-form--font) form', function() {
         $(this).closest('.card__body').find('.table__foot-addrow').text('Upload file')
     })
 
@@ -623,8 +623,9 @@ function profile() {
                 });
             }
         }
-
     })
+
+    $('.card--profile__header figure span')
 }
 
 function ticket() {
@@ -963,6 +964,19 @@ function hideMenus() {
     if($('body').data('role') == 'contributor') {
         $('.table__foot-addrow, .deleteRowBtn, .remove-file, .upload-file, .remove-images, .table__foot-removeimages, .upload-file, form:has(.upload-file), .table__row-controls-delete, .table__body:has(.table__row .table__row-form)').remove()
 
+        $('.aside__menu .aside__item-submenu').each(function() {
+            if($(this).children().length == 0) {
+                $(this).closest('.aside__menu').remove()
+            }
+        })
+
+        $('.aside__item-submenu-sub').each(function() {
+            if($(this).children().length == 0) {
+                $(this).prev('.aside__item-head').remove()
+                $(this).remove()
+            }
+        })
+
         $('.table__body').each(function() {
             if($.trim($(this).html()) === '') {
                 $(this).closest('.card').remove()
@@ -984,21 +998,7 @@ function hideMenus() {
         $('.content').each(function() {
             if($(this).find('h2').siblings().length == 0) {
                 let content = $(this).data('content')
-
                 $('[data-content="'+content+'"]:not([data-content="home"]), [data-menu="'+content+'"]:not([data-menu="home"])').remove()
-            }
-        })
-
-        $('.aside__menu .aside__item-submenu').each(function() {
-            if($(this).children().length == 0) {
-                $(this).closest('.aside__menu').remove()
-            }
-        })
-
-        $('.aside__item-submenu-sub').each(function() {
-            if($(this).children().length == 0) {
-                $(this).prev('.aside__item-head').remove()
-                $(this).remove()
             }
         })
     }
