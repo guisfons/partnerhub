@@ -82,7 +82,7 @@ function addRow(el) {
     }
 
     if(el.closest('.table').find('.table__body .table__row').length > 1) {
-        if(addBtn.hasClass('table__foot-addrow--color') || addBtn.hasClass('table__foot-addrow--font')) {
+        if(addBtn.hasClass('table__foot-addrow--colour') || addBtn.hasClass('table__foot-addrow--font')) {
             rowIdAdded = parseInt(el.closest('.table').find('.table__row:first-of-type').data('row-index'))+parseInt(1)
         } else {
             rowIdAdded = parseInt(el.closest('.card__body').find('.table--new .table__row').data('row-index'))+parseInt(1)
@@ -134,14 +134,14 @@ function addRow(el) {
                 <div class="table__body">'+tableRowNew+'</div>\
             </div>';
 
-            if(addBtn.hasClass('table__foot-addrow--color')) {
+            if(addBtn.hasClass('table__foot-addrow--colour')) {
                 title = addBtn.data('title-key')
-                color = addBtn.data('color-key')
+                color = addBtn.data('colour-key')
                 addBtn.closest('.card__body').find('.table__body').prepend(
-                    '<div data-row-index="'+rowIdAdded+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'" class="table__row">\
+                    '<div data-row-index="'+rowIdAdded+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-colour-key="'+color+'" class="table__row">\
                         <span class="table__row-title"></span>\
                         <div class="table__row-form">\
-                            <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-color-key="'+color+'">\
+                            <form method="post" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+title+'" data-colour-key="'+color+'">\
                                 <input type="text" class="title-field" placeholder="Colour Title" value="Colour Title" required>\
                                 <input type="color" class="color-field" required>\
                                 <button type="button" class="table__row-controls-upload">Submit</button>\
@@ -407,7 +407,7 @@ function colorFontAdd(el) {
     let postId = form.data('post-id')
     let fieldKey = form.data('field-key')
     let titleFieldKey = form.data('title-key')
-    let colorFieldKey = form.data('color-key')
+    let colorFieldKey = form.data('colour-key')
     let fontFieldKey = form.data('font-key')
     let rowId = el.closest('.table__row').data('row-index')
     let title = el.parent().find('.title-field').val()
@@ -450,7 +450,7 @@ function colorFontAdd(el) {
                 </span>')
             } else if(btn.closest('form').find('.font-field').length !== 0) {
                 btn.closest('.table__row-form').html(
-                '<div data-row-index="'+rowId+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+titleFieldKey+'" data-color-key="'+fontFieldKey+'" class="table__row">\
+                '<div data-row-index="'+rowId+'" data-post-id="'+postId+'" data-field-key="'+fieldKey+'" data-title-key="'+titleFieldKey+'" data-colour-key="'+fontFieldKey+'" class="table__row">\
                     <span class="table__row-title">\
                         <span>\
                             <strong>Font name:</strong> '+title+' <strong>Font family: </strong>'+font+'\

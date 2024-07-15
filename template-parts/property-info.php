@@ -1,4 +1,6 @@
-<?php $post_id = get_the_ID(); ?>
+<?php
+$post_id = get_the_ID();
+?>
 <section data-content="onboarding" class="content">
     <h2>Property Info</h2>
 
@@ -56,7 +58,7 @@
     </div>
 </section>
 
-<section data-content="corporate-identity" class="content">
+<section data-content="corporate-identity" class="content" data-post-id="<?= $post_id; ?>">
     <h2>Property Info</h2>
 
     <div class="card corporate-identity">
