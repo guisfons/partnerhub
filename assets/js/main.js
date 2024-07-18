@@ -541,8 +541,12 @@ function hotelSelect() {
         let value = $(this).closest('.hotel-select__container').find('.hotel-select__selection [data-selected="selected"]').val()
         let url = $(this).closest('.hotel-select__container').find('.hotel-select__selection [data-selected="selected"]').data('url')
         
-        if($(this).closest('.hotel-select__select').find('select').val() != '') {
+        console.log(url);
+        if(url != undefined) {
             window.location.replace(url)
+        } else {
+            alert('Select a hotel to proceed.')
+            $(this).closest('.hotel-select__container').find('.hotel-select__selection > span').css('border', '1px solid red')
         }
     })
 }
@@ -836,7 +840,7 @@ function loadTickets(type, apiToken, listId) {
         success: function(response) {
             const tasks = response.tasks
 
-            if (tasks && tasks.length > 0) {
+            // if (tasks && tasks.length > 0) {
                 let openTasks = 0, doneTasks = 0
                 let openTasksHtml = '', closedTasksHtml = ''
                 let openTasksCategories = [], closedTasksCategories = []
@@ -916,11 +920,11 @@ function loadTickets(type, apiToken, listId) {
 
                     NiceSelect.bind(document.querySelector('.card--tickets__closed .card__header select'))
                 }
-            } else {
-                $('[data-content="track-open-tickets"] h2, [data-content="closed-tickets"] h2').text('SUPPORT CENTER - No tasks found')
+            // } else {
+            //     $('[data-content="track-open-tickets"] h2, [data-content="closed-tickets"] h2').text('SUPPORT CENTER - No tasks found')
 
-                $('[data-content="track-open-tickets"], [data-content="closed-tickets"]').find('.card').remove()
-            }
+            //     $('[data-content="track-open-tickets"], [data-content="closed-tickets"]').find('.card').remove()
+            // }
 
             if(type == 'track-open-tickets') {
                 $('[data-content="track-open-tickets"]').addClass('content--active')

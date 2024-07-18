@@ -15,12 +15,12 @@
             yValues = [1.81, 2.29, 2.13, 0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [0, 0];
             yValues = [0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [1.82, 1.95, 2.22, 1.79];
         <?php } ?>
@@ -115,7 +115,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [5694.94, 5835.52];
             formatter = new Intl.NumberFormat('th-TH', {
@@ -126,7 +126,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [116.57, 110.08, 104.13, 117.98];
             formatter = new Intl.NumberFormat('de-DE', {
@@ -240,7 +240,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [2184.29, 3022.70];
             formatter = new Intl.NumberFormat('th-TH', {
@@ -251,7 +251,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [67.89, 69.50, 53.29, 59.34];
             formatter = new Intl.NumberFormat('de-DE', {
@@ -365,7 +365,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [5045717.11, 6891754.67];
             formatter = new Intl.NumberFormat('th-TH', {
@@ -376,7 +376,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [69244.76, 70889.94, 54357.90, 60526.30];
             formatter = new Intl.NumberFormat('de-DE', {
@@ -486,12 +486,12 @@
             yValues = [89, 151, 217, 0, 0, 393];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [4259, 4455];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [1692, 1952, 1528, 1363];
         <?php } ?>
@@ -584,12 +584,12 @@
             yValues = [21, 36, 52, 0, 0, 94];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [45.71, 47.90];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [41, 48, 37, 33];
         <?php } ?>
@@ -687,12 +687,12 @@
             yValues = [1.81, 2.29, 2.13, 0, 0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [1.73, 1.74, 1.26, 1.62];
         <?php } ?>
@@ -788,7 +788,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [5536.84, 5029.35];
             formatter = new Intl.NumberFormat('th-TH', {
@@ -799,7 +799,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [110.28, 103.08, 93.90, 108.04];
             formatter = new Intl.NumberFormat('de-DE', {
@@ -913,7 +913,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [2531.01, 2409.22];
             formatter = new Intl.NumberFormat('th-TH', {
@@ -924,7 +924,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [45.37, 49.32, 35.17, 36.09];
             formatter = new Intl.NumberFormat('de-DE', {
@@ -1038,7 +1038,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023];
             yValues = [23581416.86, 22405764.36];
             formatter = new Intl.NumberFormat('th-TH', {
@@ -1049,7 +1049,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [189593.00, 201219.74, 143476.74, 147258.42];
             formatter = new Intl.NumberFormat('de-DE', {
@@ -1161,7 +1161,7 @@
         var dataHotelbeds = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             dataHotelDirect = [638, 874, 569, 512, 196, 43, 59, 26, 12, 31, 65, 175];
             dataHotelWebDirect = [134, 195, 110, 102, 33, 4, 15, 10, 0, 0, 0, 5];
@@ -1172,7 +1172,7 @@
             dataHotelbeds = [25, 6, 7, 2, 0, 0, 0, 0, 20, 0, 0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             dataHotelDirect = [142, 97, 171, 254, 220, 166, 51, 99, 90, 115, 2, 9];
             dataHotelWebDirect = [18, 36, 45, 57, 61, 15, 0, 11, 10, 0, 0, 4];
@@ -1302,13 +1302,13 @@
         var data2024 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [866, 107, 61, 112, 4, 31];
             data2024 = [512, 102, 21, 124, 53, 67];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [186, 166, 153, 6];
             data2022 = [131, 55, 285, 8];
@@ -1430,7 +1430,7 @@
         var formatter;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [5925.10, 4447.64, 5053.18, 6438.85, 3916.91, 7730.84];
             data2024 = [5589.18, 6049.79, 4214.65, 6217.26, 3687.06, 6738.44];
@@ -1444,7 +1444,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [78.46, 153.30, 124.91, 197.33];
             data2022 = [67.14, 146.40, 110.21, 116.75];
@@ -1582,7 +1582,7 @@
         var formatter;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [5131138.64, 475897.27, 308243.94, 721151.16, 15667.63, 239656.03];
             data2024 = [2861661.05, 617078.43, 88507.57, 770939.72, 195414.25, 451475.22];
@@ -1596,7 +1596,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [14594.10, 25447, 19111.30, 1184];
             data2022 = [8794.70, 8052, 31409.50, 934];
@@ -1733,13 +1733,13 @@
         var data2024 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [73, 9, 5, 9, 0, 3];
             data2024 = [58, 12, 2, 14, 6, 8];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [36, 32, 30, 1];
             data2022 = [25, 11, 55, 2];
@@ -1862,14 +1862,14 @@
         var dataOther = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['2024', '2023'];
             dataHotelDirect = [58, 73];
             dataHotelWebDirect = [12, 9];
             dataOther = [31, 18];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['2024', '2023', '2022', '2021'];
             dataHotelDirect = [43, 31, 25, 36];
             dataHotelWebDirect = [10, 8, 11, 32];
@@ -1885,7 +1885,7 @@
         const datasets = [];
 
         // Add datasets based on the hotel code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: 'Hotel Direct',
                 data: dataHotelDirect,
@@ -1901,7 +1901,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: 'Hotel Direct',
                 data: dataHotelDirect,
@@ -1993,12 +1993,12 @@
         var data2024 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia', 'Airbnb', 'Hotelbeds', 'Tiket', 'Traveloka'];
             data2024 = [58, 12, 2, 0, 6, 8, 0, 0, 0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia', 'Other'];
             data2024 = [43, 10, 37, 3, 7];
         <?php } ?>
@@ -2019,7 +2019,7 @@
 
         // Create datasets based on the filtered data
         const datasets = [];
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2024',
                 data: filteredData,
@@ -2031,7 +2031,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2024',
                 data: filteredData,
@@ -2108,13 +2108,13 @@
         var data2022 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [2969, 520, 225, 593, 8, 136];
             data2024 = [2593, 541, 107, 590, 89, 269];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [594, 367, 366, 28];
             data2022 = [514, 166, 709, 21];
@@ -2129,7 +2129,7 @@
         const datasets = [];
 
         // Add datasets based on the hotel code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2023',
                 data: data2023,
@@ -2141,7 +2141,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2021',
                 data: data2021,
@@ -2230,7 +2230,7 @@
         var formatter;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [4690.32, 4768.96, 5658.61, 6274.02, 6458.53, 6913.96];
             data2024 = [5355.88, 5768.32, 7963.97, 6016.40, 3934.84, 5650.00];
@@ -2244,7 +2244,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [76.64, 149.54, 116.28, 115.39];
             data2022 = [62.15, 141.89, 102.29, 109.57];
@@ -2267,7 +2267,7 @@
         const datasets = [];
 
         // Add datasets based on the hotel code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2023',
                 data: data2023,
@@ -2279,7 +2279,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2021',
                 data: data2021,
@@ -2380,7 +2380,7 @@
         var formatter;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [13925572.92, 2479857.48, 1273186.84, 3720492.92, 51668.24, 940297.96];
             data2024 = [13887787.38, 3120663.57, 852144.79, 3549677.83, 350200.66, 1519850.19];
@@ -2394,7 +2394,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [45522.82, 54883.00, 42557.00, 3321.00];
             data2022 = [31946.94, 23554.00, 72526.20, 2301.00];
@@ -2417,7 +2417,7 @@
         const datasets = [];
 
         // Add datasets based on the hotel code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2023',
                 data: data2023,
@@ -2429,7 +2429,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2021',
                 data: data2021,
@@ -2530,13 +2530,13 @@
         var data2022 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia'];
             data2023 = [5, 10, 3, 15, 2, 6];
             data2024 = [60, 12, 8, 20, 10, 15];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia'];
             data2021 = [44, 27, 27, 2];
             data2022 = [34, 11, 46, 1];
@@ -2551,7 +2551,7 @@
         const datasets = [];
 
         // Add datasets based on the hotel code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2023',
                 data: data2023,
@@ -2563,7 +2563,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2021',
                 data: data2021,
@@ -2658,14 +2658,14 @@
         var data2024 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['2024', '2023'];
             dataHotelDirect = [61, 67];
             dataHotelWebDirect = [13, 12];
             dataOther = [26, 22];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['2024', '2023', '2022', '2021'];
             dataHotelDirect = [39, 33, 34, 44];
             dataHotelWebDirect = [9, 11, 11, 27];
@@ -2681,7 +2681,7 @@
         const datasets = [];
 
         // Add datasets based on the hotel code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: 'Hotel Direct',
                 data: dataHotelDirect,
@@ -2697,7 +2697,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: 'Hotel Direct',
                 data: dataHotelDirect,
@@ -2789,12 +2789,12 @@
         var data2024 = [];
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Agoda', 'Booking.com', 'Ctrip/Trip.com', 'Expedia', 'Airbnb', 'Hotelbeds', 'Tiket', 'Traveloka', 'Wholesalers/Agents', 'Corporate', 'Group'];
             data2024 = [61, 13, 2, 14, 2, 6, 0, 6, 1, 0, 0, 0, 0];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             channelLabels = ['Hotel Direct', 'Hotelweb Direct', 'Booking.com', 'Expedia', 'Other'];
             data2024 = [39, 9, 41, 3, 8];
         <?php } ?>
@@ -2815,7 +2815,7 @@
 
         // Create datasets based on the filtered data
         const datasets = [];
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2024',
                 data: filteredData,
@@ -2828,7 +2828,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             datasets.push({
                 label: '2024',
                 data: filteredData,
@@ -2901,13 +2901,13 @@
         var monthlyValues, yValues2021, yValues2022, yValues2023, yValues2024;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2023 = [1138, 1105, 1031, 1181, 504, 544, 1019, 694, 452, 697, 758, 1227];
             yValues2024 = [1167, 1343, 863, 886, 306, 74, 116, 57, 12, 34, 70, 274];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2021 = [156, 304, 390, 513, 620, 327, 745, 894, 756, 603, 396, 361];
             yValues2022 = [267, 377, 362, 522, 654, 744, 937, 987, 816, 684, 660, 568];
@@ -3045,7 +3045,7 @@
         var formatter;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2023 = [5148.45, 4214.96, 4847.27, 5835.52, 4654.18, 4800.48, 5206.47, 5660.83, 4152.22, 4821.77, 4035.19, 5849.93];
             yValues2024 = [5736.76, 5779.33, 4726.83, 5694.94, 5164.97, 5026.19, 4953.32, 9106.84, 4054.36, 3519.78, 6117.45, 7722.61];
@@ -3059,7 +3059,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2021 = [98.15, 113.05, 95.01, 117.98, 110.01, 111.68, 107.53, 107.86, 104.78, 100.70, 96.78, 103.88];
             yValues2022 = [92.15, 90.15, 84.33, 104.13, 102.52, 106.86, 118.05, 117.48, 108.95, 107.92, 100.73, 112.00];
@@ -3217,7 +3217,7 @@
         var formatter;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'THANA') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2023 = [5858937.79, 4657534.29, 4997537.61, 6891754.67, 2345706.16, 2611461.48, 5305393.60, 3928613.86, 1876802.61, 3360773.19, 3058671.75, 7177868.35];
             yValues2024 = [6694796.26, 7761645.09, 4079258.40, 5045717.11, 1580482.09, 371938.27, 574584.65, 519089.70, 48652.36, 119672.68, 428221.15, 2115995.90];
@@ -3231,7 +3231,7 @@
             });
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2021 = [15311.21, 34368.21, 37052.71, 60526.30, 68204.30, 36519.45, 80110.50, 96431.03, 79211.75, 60719.74, 38323.50, 37499.10];
             yValues2022 = [24603.50, 33986.98, 30528.37, 54357.90, 67047.80, 79500.40, 110614.75, 115925.55, 88902.27, 73817.09, 66481.50, 63617.70];
@@ -3388,7 +3388,7 @@
         var monthlyValues, yValues2021, yValues2022, yValues2023, yValues2024;
 
         // Assign values based on the hotel_code
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             monthlyValues = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             yValues2021 = [1.39, 1.47, 1.64, 1.79, 1.68, 1.78, 2.16, 2.30, 2.35, 2.28, 1.95, 2.09];
             yValues2022 = [1.85, 1.36, 1.51, 2.22, 2.17, 2.07, 1.98, 2.42, 2.31, 1.90, 1.89, 2.20];
@@ -3876,7 +3876,7 @@
     // Map Loader - 1
 
     (function() {
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             var mapData = [
                 ['Country', 'Website Visitors'],
                 ['Luxembourg', 1544],
@@ -3957,7 +3957,7 @@
     // Map loader 2
 
     (function() {
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             var mapData = [
                 ['Country', 'Website Visitors'],
                 ['Luxembourg', 2202],
@@ -4038,7 +4038,7 @@
     // Map loader 3
 
     (function() {
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             var mapData = [
                 ['Country', 'Website Visitors'],
                 ['Luxembourg', 2525],

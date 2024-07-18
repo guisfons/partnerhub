@@ -16,7 +16,7 @@
             yValues = [886, 1181];
         <?php } ?>
 
-        <?php if (get_field('hotel_code') == 'LUTAN') { ?>
+        <?php if (get_field('hotel_code') == 'EXA') { ?>
             xValues = [2024, 2023, 2022, 2021];
             yValues = [594, 644, 522, 513];
         <?php } ?>

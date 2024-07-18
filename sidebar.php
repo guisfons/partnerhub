@@ -23,7 +23,7 @@
 
 			$hotel_code = get_field('hotel_code');
 
-			if($hotel_code == 'OPAKKKK') {
+			if($hotel_code == 'EXA') {
 				echo
 				'<div class="aside__menu">
 					<button class="aside__item">Dashboards<span></span></button>
