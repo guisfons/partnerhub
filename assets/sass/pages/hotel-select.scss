@@ -180,6 +180,7 @@
 
     &__btn {
         @include btn;
+        align-self: flex-start;
         background-color: $cyan;
     }
 }

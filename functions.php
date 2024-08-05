@@ -574,6 +574,8 @@ function handle_file_upload_and_update_field()
                         ];
 
                         wp_insert_post($new_post);
+
+                        
                     }
 
                     wp_send_json_success([
@@ -1924,3 +1926,106 @@ function render_quarterly_sales_canvas() {
 
 add_shortcode('quarterly_sales_canvas', 'render_quarterly_sales_canvas');
 */
+
+// Function to add emails to ACF repeater field
+function add_emails_to_acf($hotel_code, $emails) {
+    $args = array(
+        'post_type' => 'hotels',
+        'meta_query' => array(
+            array(
+                'key' => 'hotel_code',
+                'value' => $hotel_code,
+                'compare' => '='
+            )
+        )
+    );
+    
+    $query = new WP_Query($args);
+    
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $post_id = get_the_ID();
+            delete_field('emails', $post_id);
+            if (!empty($emails)) {
+                foreach ($emails as $email) {
+                    add_row('emails', array('email' => $email), $post_id);
+                }
+            }
+        }
+    }
+    
+    wp_reset_postdata();
+}
+
+$data = [
+    ["code" => "DEAYL", "emails" => ["info@saarwein-hotel.de"]],
+    ["code" => "DEFRI", "emails" => ["info@waldhotel-friedrichroda.de"]],
+    ["code" => "DEGRA", "emails" => ["karsten@grashof.de"]],
+    ["code" => "DEJOH", "emails" => ["info@johannishof.eu"]],
+    ["code" => "DEKRO", "emails" => ["d.krolik@landhotelkrolik.de"]],
+    ["code" => "DEIMP", "emails" => ["j.loew@loew.ag", "lars.beutler-vetter@imperial-ruegen.de"]],
+    ["code" => "DEVAK", "emails" => ["j.loew@loew.ag"]],
+    ["code" => "DEVIB", "emails" => ["j.loew@loew.ag"]],
+    ["code" => "DERIN", "emails" => ["info@ringelsteiner-muehle.de"]],
+    ["code" => "DESAA", "emails" => ["michael@saarschleife.eu", "desk@saarschleife.eu"]],
+    ["code" => "DESCH", "emails" => ["info@hotelschneider.de"]],
+    ["code" => "DESON", "emails" => ["i.adams@parkhotel-sonnenberg.de"]],
+    ["code" => "DETHD", "emails" => ["woelki@stadthotel-roemerturm.de"]],
+    ["code" => "BEAUB", "emails" => ["l.d@laurentdethier.be", "info@hotel-thermes.be"]],
+    ["code" => "BEBON", "emails" => ["info@hotelbonhomme.be"]],
+    ["code" => "BECOM", "emails" => ["info@hoteldescomtes.com"]],
+    ["code" => "BEESP", "emails" => ["info@espritsain.be"]],
+    ["code" => "BEFDS", "emails" => ["info@fontainedusabotier.be"]],
+    ["code" => "BEHDP", "emails" => ["contact@hoteldespostes.eu"]],
+    ["code" => "BEMYR", "emails" => ["info@lesmyrtilles.be", "michel@mcehi.net"]],
+    ["code" => "BERHO", "emails" => ["lesrhodos@icloud.com"]],
+    ["code" => "BEVDF", "emails" => ["info@hotel-thermes.be", "l.d@laurentdethier.be"]],
+    ["code" => "LUBEAU", "emails" => ["sylvie@beau-sejour.lu", "bonjour@nid-gourmand.lu"]],
+    ["code" => "LUBEI", "emails" => ["info@beimschlass.lu", "crowleykillian@gmail.com"]],
+    ["code" => "LUCIG", "emails" => ["cigalon@pt.lu"]],
+    ["code" => "LUESP", "emails" => ["fredfrey@pt.lu", "contact@hotel-esplanade.lu"]],
+    ["code" => "LUHER", "emails" => ["fredfrey@pt.lu"]],
+    ["code" => "LULPP", "emails" => ["contact@lepetitpoete.lu"]],
+    ["code" => "LUTAN", "emails" => ["c.roemer@auxtanneriesdewiltz.com"]],
+    ["code" => "LUPOS", "emails" => ["conrad@lepostillon.lu"]],
+    ["code" => "CHELF", "emails" => ["info@elfe-apartments.ch"]],
+    ["code" => "THANA", "emails" => ["dgm.joy@anantasila.com", "dgm.kayla@anantasila.com"]],
+    ["code" => "THBHS", "emails" => ["r.benyasri@gmail.com", "info@baanhinsairesort.com"]],
+    ["code" => "THROP", "emails" => ["r.benyasri@gmail.com", "artornben@gmail.com"]],
+    ["code" => "THSSB", "emails" => ["r.benyasri@gmail.com", "artornben@gmail.com"]],
+    ["code" => "THKHA", "emails" => ["md@khaolaklaguna.com", "rm@khaolaklaguna.com", "dos@khaolaklaguna.com"]],
+    ["code" => "KHPAC", "emails" => ["ga@pacifichotel.com.kh", "e-commerce@pacifichotel.com.kh", "mm@pacifichotel.asia"]],
+];
+
+foreach ($data as $row) {
+    $hotel_code = $row['code'];
+    $emails = $row['emails'];
+    add_emails_to_acf($hotel_code, $emails);
+}
+
+function send_email_on_post_save($post_id) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    if (get_post_type($post_id) != 'hotels') return;
+
+    $emails = get_field('emails', $post_id);
+
+    if (!empty($emails)) {
+        $to = [];
+        foreach ($emails as $email) {
+            $to[] = $email['email'];
+        }
+
+        $subject = 'New Hotel Post Inserted';
+        $message = "A new post with ID $post_id has been inserted. Here are the email addresses associated with it:\n\n";
+        foreach ($to as $email) {
+            $message .= $email . "\n";
+        }
+        $headers = array('Content-Type: text/plain; charset=UTF-8');
+
+        wp_mail($to, $subject, $message, $headers);
+    }
+}
+
+add_action('save_post', 'send_email_on_post_save');
